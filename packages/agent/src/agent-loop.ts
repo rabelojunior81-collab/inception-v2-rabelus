@@ -114,11 +114,14 @@ export class AgentLoop {
     });
 
     // Build the LLM tool list from registry
+    // IMPORTANT: use def.id (not def.name) as function.name — the LLM returns
+    // tc.function.name on tool calls, and the registry is keyed by def.id.
+    // def.name is human-readable ("Read File"), def.id is the stable key ("read_file").
     const toolDefs: LLMToolDefinition[] = this.cfg.toolRegistry.list().map(
       (def) => ({
         type: 'function' as const,
         function: {
-          name: def.name,
+          name: def.id,
           description: def.description,
           parameters: {
             type: 'object' as const,
