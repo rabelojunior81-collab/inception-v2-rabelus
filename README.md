@@ -23,45 +23,71 @@ Inception Framework is a **production-ready runtime for autonomous AI agents**, 
 - 📦 **Lightweight** — ~15MB runtime, single binary distribution
 
 ```bash
-# Create an agent in 60 seconds
-npx @inception/cli init
-npx @inception/cli start
+# Clone e configure em menos de 3 minutos
+git clone https://github.com/rabelojunior81-collab/inception-v2-rabelus.git
+cd inception-v2-rabelus
+pnpm install && pnpm turbo run build
+node --experimental-sqlite apps/cli/dist/index.js init
+node --experimental-sqlite apps/cli/dist/index.js start
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Pré-requisitos
 
-- Node.js 20+ ([Download](https://nodejs.org/))
-- pnpm 8+ (`npm install -g pnpm`)
+- **Node.js 22+** — obrigatório (`node:sqlite` é built-in do Node 22)
+  - [Download](https://nodejs.org/) ou `nvm install 22`
+- **pnpm 8+** — `npm install -g pnpm`
 
-### Installation
+### Instalação
 
 ```bash
-# Clone the repository
-git clone https://github.com/rabeluslab/inception.git
-cd inception
+# 1. Clone
+git clone https://github.com/rabelojunior81-collab/inception-v2-rabelus.git
+cd inception-v2-rabelus
 
-# Install dependencies
+# 2. Instalar dependências
 pnpm install
 
-# Build all packages
-pnpm build
+# 3. Build de todos os pacotes
+pnpm turbo run build
 
-# Run the CLI
-pnpm --filter=@inception/cli dev
+# 4. Wizard de configuração (interativo — precisa de terminal real)
+node --experimental-sqlite apps/cli/dist/index.js init
+
+# 5. Iniciar o agente
+node --experimental-sqlite apps/cli/dist/index.js start
 ```
 
-### One-Liner Setup
+### Atalhos (após clone + build)
 
 ```bash
-# Using npm (when published)
-npm install -g @inception/cli
-inception init
-inception start
+pnpm inception:init    # wizard de configuração
+pnpm inception:start   # iniciar agente
+pnpm inception status  # verificar ambiente
+pnpm inception config  # exibir config resolvida
 ```
+
+### Providers suportados (configure no `inception init`)
+
+| Provider | Slug | Nota |
+|----------|------|------|
+| Kimi (Moonshot AI) | `kimi` | PAYG — api.moonshot.ai |
+| Kimi Coding Plan | `kimi-coding` | Subscription — api.kimi.com/coding |
+| Z.AI (Zhipu) | `zai` | PAYG — api.z.ai/paas |
+| Z.AI Coding Plan | `zai-coding` | Subscription — api.z.ai/coding |
+| Bailian Coding Plan | `bailian` | Hub multi-marca: Qwen+GLM+Kimi+MiniMax |
+| Bailian PAYG | `bailian-payg` | DashScope pay-per-token |
+| Anthropic Claude | `anthropic` | claude-sonnet-4-6, opus, haiku |
+| OpenAI API | `openai` | gpt-5.4 series + o-series |
+| OpenAI OAuth | `openai-oauth` | ChatGPT Plus/Pro via Bearer token |
+| Google Gemini | `gemini` | gemini-2.5-flash + gemini-3 preview |
+| Ollama Cloud | `ollama` | Pro $20/mês, Max $100/mês |
+| Ollama Local | `ollama` | Grátis, sem API key, localhost:11434 |
+| OpenRouter | `openrouter` | Gateway 300+ modelos |
+| Kilo | `kilo` | Gateway com controle de custo |
 
 ---
 
