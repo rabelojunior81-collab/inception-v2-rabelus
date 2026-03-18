@@ -33,9 +33,12 @@ export interface AgentLoopConfig {
   readonly toolRegistry: IToolRegistry;
   readonly approvalHandler: ApprovalHandler;
   readonly model: string;
-  readonly modelTokenBudget?: number; // default: 128_000
-  readonly maxToolRounds?: number;    // default: 10
+  readonly modelTokenBudget?: number;       // default: 128_000
+  readonly maxToolRounds?: number;          // default: 10
   readonly activeMission?: Mission;
+  readonly allowedCommands?: readonly string[]; // shell tool allowlist
+  readonly allowedPaths?: readonly string[];    // filesystem allowlist
+  readonly allowedUrls?: readonly string[];     // http tool allowlist
 }
 
 export interface TurnResult {
@@ -202,13 +205,17 @@ export class AgentLoop {
         break;
       }
 
-      // Build execution context
+      // Build execution context — propagate allowlists from config
       const execCtx: ExecutionContext = {
         missionId,
         threadId,
         agentId: this.cfg.identity.id,
         workspacePath: process.cwd(),
-        allowlist: {},
+        allowlist: {
+          commands: this.cfg.allowedCommands,
+          paths:    this.cfg.allowedPaths,
+          urls:     this.cfg.allowedUrls,
+        },
         signal: new AbortController().signal,
         logger: {
           debug: (_m: string) => undefined,

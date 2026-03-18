@@ -102,6 +102,8 @@ export async function runStart(options: StartOptions): Promise<void> {
     approvalHandler,
     model,
     maxToolRounds: 10,
+    allowedCommands: cfg.security.execution.allowedCommands,
+    allowedPaths:    cfg.security.filesystem.allowedPaths,
   });
 
   // ── Wire inbound messages ──────────────────────────────────────────────────

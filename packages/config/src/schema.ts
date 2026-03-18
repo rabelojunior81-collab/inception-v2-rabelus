@@ -126,7 +126,31 @@ export const FilesystemPolicySchema = z.object({
 
 export const ExecutionPolicySchema = z.object({
   sandbox: z.enum(['none', 'docker', 'vm']).default('none'),
-  allowedCommands: z.array(z.string()).default([]),
+  allowedCommands: z.array(z.string()).default([
+    // Version control
+    'git',
+    // Node.js ecosystem
+    'node', 'npm', 'npx', 'pnpm', 'yarn', 'bun', 'bunx',
+    // Python
+    'python', 'python3', 'pip', 'pip3', 'uv',
+    // Build / task runners
+    'make', 'cmake', 'turbo', 'nx',
+    // Info & navigation
+    'ls', 'dir', 'pwd', 'cat', 'head', 'tail', 'grep', 'find',
+    'echo', 'printf', 'wc', 'sort', 'uniq', 'diff',
+    // File ops (non-destructive by default)
+    'cp', 'mv', 'mkdir', 'touch',
+    // Archive
+    'zip', 'unzip', 'tar', 'gzip', 'gunzip',
+    // Network (read-only)
+    'curl', 'wget', 'ping', 'nslookup', 'dig',
+    // Env / process
+    'env', 'printenv', 'which', 'type', 'whoami', 'hostname',
+    // Text processing
+    'sed', 'awk', 'jq', 'yq', 'xargs',
+    // Misc dev tools
+    'gh', 'docker', 'docker-compose', 'kubectl',
+  ]),
   blockedCommands: z
     .array(z.string())
     .default(['rm', 'del', 'format', 'mkfs', 'dd', 'shutdown', 'reboot']),
