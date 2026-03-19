@@ -173,7 +173,7 @@ export class TelegramChannel implements IChannel {
         direction: MessageDirection.Inbound,
         sender: {
           id: String(from.id),
-          name: [from.first_name, from.last_name].filter(Boolean).join(' ') || from.username ?? String(from.id),
+          name: [from.first_name, from.last_name].filter(Boolean).join(' ') || (from.username ?? String(from.id)),
           role: 'operator',
         },
         content: {
