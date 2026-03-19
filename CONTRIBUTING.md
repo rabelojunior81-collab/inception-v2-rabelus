@@ -51,6 +51,7 @@ pnpm dev
 ### 1. Create an Issue
 
 Before starting work, create an issue to discuss:
+
 - Bug reports
 - Feature requests
 - Documentation improvements
@@ -73,6 +74,7 @@ refactor/channel-interface
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation only
@@ -116,6 +118,7 @@ footer (optional)
 ```
 
 Examples:
+
 ```
 feat(providers): add Gemini embedding provider
 
@@ -169,40 +172,40 @@ export function badGetUser(id) {
 
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Interfaces | PascalCase with 'I' prefix | `IProvider`, `IChannel` |
-| Abstract Classes | PascalCase with 'Base' suffix | `BaseProvider`, `BaseChannel` |
-| Concrete Classes | PascalCase, descriptive | `OpenAIProvider`, `TelegramChannel` |
-| Types | PascalCase | `AgentConfig`, `ToolResult` |
-| Enums | PascalCase, singular | `AutonomyLevel`, `ChannelId` |
-| Constants | UPPER_SNAKE_CASE | `DEFAULT_PROVIDER`, `MAX_RETRIES` |
-| Functions | camelCase, verb-first | `initializeRuntime`, `executeTool` |
-| Files | kebab-case.ts | `agent-context.ts`, `memory-backend.ts` |
+| Element          | Convention                    | Example                                 |
+| ---------------- | ----------------------------- | --------------------------------------- |
+| Interfaces       | PascalCase with 'I' prefix    | `IProvider`, `IChannel`                 |
+| Abstract Classes | PascalCase with 'Base' suffix | `BaseProvider`, `BaseChannel`           |
+| Concrete Classes | PascalCase, descriptive       | `OpenAIProvider`, `TelegramChannel`     |
+| Types            | PascalCase                    | `AgentConfig`, `ToolResult`             |
+| Enums            | PascalCase, singular          | `AutonomyLevel`, `ChannelId`            |
+| Constants        | UPPER_SNAKE_CASE              | `DEFAULT_PROVIDER`, `MAX_RETRIES`       |
+| Functions        | camelCase, verb-first         | `initializeRuntime`, `executeTool`      |
+| Files            | kebab-case.ts                 | `agent-context.ts`, `memory-backend.ts` |
 
 ### Documentation
 
-```typescript
+````typescript
 /**
  * Brief description of the function.
- * 
+ *
  * Detailed explanation if needed. Can include:
  * - Usage examples
  * - Parameter details
  * - Return value description
  * - Edge cases
- * 
+ *
  * @param id - Unique identifier for the user
  * @param options - Configuration options
  * @returns The user object if found, null otherwise
  * @throws {UserNotFoundError} When user doesn't exist
- * 
+ *
  * @example
  * ```ts
  * const user = await getUser('123', { includeMetadata: true });
  * ```
  */
-```
+````
 
 ### Error Handling
 
@@ -306,21 +309,25 @@ Fixes #567
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation
 
 ## Checklist
+
 - [ ] Tests added/updated
 - [ ] Documentation updated
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 
 ## Related Issues
+
 Fixes #(issue)
 ```
 
@@ -336,14 +343,17 @@ Fixes #(issue)
 ### Documentation
 
 All documentation must be provided in at least 2 languages:
+
 - **English** (primary)
 - **Portuguese** (source, as Rabelus Lab is Brazilian)
 
 Additional welcome:
+
 - Spanish
 - Chinese (Simplified)
 
 Structure:
+
 ```
 docs/
 ├── en/
@@ -385,6 +395,7 @@ const errors = {
 Instead, email: security@rabeluslab.dev
 
 Include:
+
 - Description of vulnerability
 - Steps to reproduce
 - Potential impact
@@ -408,6 +419,7 @@ Include:
 ## 🙏 Recognition
 
 Contributors will be:
+
 - Listed in CONTRIBUTORS.md
 - Mentioned in release notes
 - Added to our hall of fame
@@ -416,4 +428,4 @@ Thank you for making Inception Framework better!
 
 ---
 
-*Last updated: 2026-03-12*
+_Last updated: 2026-03-12_

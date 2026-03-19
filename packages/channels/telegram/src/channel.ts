@@ -34,7 +34,9 @@ export class TelegramChannel implements IChannel {
   private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private approvalResolver: ApprovalResolverFn | undefined;
 
-  get state(): ChannelState { return this._state; }
+  get state(): ChannelState {
+    return this._state;
+  }
 
   async initialize(config: ChannelConfig): Promise<void> {
     const tgConfig = config as TelegramConfig;
@@ -56,12 +58,14 @@ export class TelegramChannel implements IChannel {
 
     if (this.config.polling !== false) {
       // Default: long polling
-      void this.bot.start({
-        onStart: () => this._setState(ChannelState.Ready),
-      }).catch((err: unknown) => {
-        this._setState(ChannelState.Error);
-        this.errorHandlers.forEach(h => h(err instanceof Error ? err : new Error(String(err))));
-      });
+      void this.bot
+        .start({
+          onStart: () => this._setState(ChannelState.Ready),
+        })
+        .catch((err: unknown) => {
+          this._setState(ChannelState.Error);
+          this.errorHandlers.forEach((h) => h(err instanceof Error ? err : new Error(String(err))));
+        });
     } else {
       // Webhook mode — caller must set up HTTP server and call handleUpdate()
       this._setState(ChannelState.Ready);
@@ -144,7 +148,10 @@ export class TelegramChannel implements IChannel {
   /** Webhook handler — use when polling: false */
   getWebhookHandler(): (req: unknown, res: unknown) => Promise<void> {
     if (!this.bot) throw new ChannelError('Not initialized', ChannelId.Telegram);
-    return webhookCallback(this.bot, 'http') as unknown as (req: unknown, res: unknown) => Promise<void>;
+    return webhookCallback(this.bot, 'http') as unknown as (
+      req: unknown,
+      res: unknown
+    ) => Promise<void>;
   }
 
   // ── Private ──────────────────────────────────────────────────────────────
@@ -173,7 +180,9 @@ export class TelegramChannel implements IChannel {
         direction: MessageDirection.Inbound,
         sender: {
           id: String(from.id),
-          name: [from.first_name, from.last_name].filter(Boolean).join(' ') || (from.username ?? String(from.id)),
+          name:
+            [from.first_name, from.last_name].filter(Boolean).join(' ') ||
+            (from.username ?? String(from.id)),
           role: 'operator',
         },
         content: {
@@ -188,7 +197,7 @@ export class TelegramChannel implements IChannel {
 
       if (this.inboundHandler) {
         await this.inboundHandler(inbound).catch((err: unknown) => {
-          this.errorHandlers.forEach(h => h(err instanceof Error ? err : new Error(String(err))));
+          this.errorHandlers.forEach((h) => h(err instanceof Error ? err : new Error(String(err))));
         });
       }
     });
@@ -209,12 +218,12 @@ export class TelegramChannel implements IChannel {
 
     // Error handler
     this.bot.catch((err: unknown) => {
-      this.errorHandlers.forEach(h => h(err instanceof Error ? err : new Error(String(err))));
+      this.errorHandlers.forEach((h) => h(err instanceof Error ? err : new Error(String(err))));
     });
   }
 
   private _setState(state: ChannelState): void {
     this._state = state;
-    this.stateHandlers.forEach(h => h(state));
+    this.stateHandlers.forEach((h) => h(state));
   }
 }

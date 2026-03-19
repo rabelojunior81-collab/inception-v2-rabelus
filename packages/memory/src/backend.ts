@@ -37,21 +37,16 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
 
   async initialize(config: MemoryConfig): Promise<void> {
     this.config = config;
-    const dbPath =
-      config.connectionString ?? join(homedir(), '.inception', 'memory.db');
+    const dbPath = config.connectionString ?? join(homedir(), '.inception', 'memory.db');
     this.db = openDatabase(dbPath);
     this.messageStore = new MessageStore(this.db);
     this.sessionStore = new SessionStore(this.db);
     this.assembler = new ContextAssembler(this.db);
     this.retrieval = new RetrievalEngine(this.db, this.embeddingProvider);
-    this.compaction = new CompactionEngine(
-      this.db,
-      this.summarizeFn ?? defaultSummarizeFn,
-      {
-        freshTailCount: 32,
-        compactionThreshold: config.compactionThreshold ?? 0.75,
-      },
-    );
+    this.compaction = new CompactionEngine(this.db, this.summarizeFn ?? defaultSummarizeFn, {
+      freshTailCount: 32,
+      compactionThreshold: config.compactionThreshold ?? 0.75,
+    });
   }
 
   /** Wire up an embedding provider after initialize() */
@@ -110,7 +105,7 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
       keywordWeight: options.hybridWeights?.keyword ?? 0.4,
     });
 
-    return results.map(r => ({
+    return results.map((r) => ({
       id: r.id,
       threadId: r.threadId,
       timestamp: r.createdAt,
@@ -162,32 +157,32 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
 
   async getStats(): Promise<MemoryStats> {
     const total = (
-      this.db
-        .prepare('SELECT COUNT(*) as cnt FROM messages')
-        .get() as unknown as { cnt: number }
+      this.db.prepare('SELECT COUNT(*) as cnt FROM messages').get() as unknown as { cnt: number }
     ).cnt;
 
     const byType: Partial<Record<MemoryEntryType, number>> = {};
 
-    const oldest = (
-      this.db
-        .prepare('SELECT MIN(created_at) as t FROM messages')
-        .get() as unknown as { t: string | null }
-    ).t ?? '';
+    const oldest =
+      (
+        this.db.prepare('SELECT MIN(created_at) as t FROM messages').get() as unknown as {
+          t: string | null;
+        }
+      ).t ?? '';
 
-    const newest = (
-      this.db
-        .prepare('SELECT MAX(created_at) as t FROM messages')
-        .get() as unknown as { t: string | null }
-    ).t ?? '';
+    const newest =
+      (
+        this.db.prepare('SELECT MAX(created_at) as t FROM messages').get() as unknown as {
+          t: string | null;
+        }
+      ).t ?? '';
 
     // SQLite page_count * page_size = DB size estimate
-    const pageCount = (
-      this.db.prepare('PRAGMA page_count').get() as unknown as { page_count: number }
-    ).page_count ?? 0;
-    const pageSize = (
-      this.db.prepare('PRAGMA page_size').get() as unknown as { page_size: number }
-    ).page_size ?? 4096;
+    const pageCount =
+      (this.db.prepare('PRAGMA page_count').get() as unknown as { page_count: number })
+        .page_count ?? 0;
+    const pageSize =
+      (this.db.prepare('PRAGMA page_size').get() as unknown as { page_size: number }).page_size ??
+      4096;
 
     return {
       totalEntries: total,
@@ -206,11 +201,7 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
       .all() as unknown as Array<{ thread_id: string }>;
     for (const { thread_id } of threads) {
       const seq = this.messageStore.last_sequence(thread_id);
-      this.sessionStore.update_end(
-        this.currentSessionId,
-        new Date().toISOString(),
-        seq,
-      );
+      this.sessionStore.update_end(this.currentSessionId, new Date().toISOString(), seq);
     }
     closeDatabase();
   }
@@ -218,11 +209,7 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
   // ── Extended public API (used by AgentLoop) ──────────────────────────────────
 
   /** Assemble context window for a thread */
-  assembleContext(
-    threadId: string,
-    tokenBudget: number,
-    freshTailCount?: number,
-  ) {
+  assembleContext(threadId: string, tokenBudget: number, freshTailCount?: number) {
     return this.assembler.assemble(threadId, tokenBudget, freshTailCount);
   }
 
@@ -259,9 +246,9 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
 // Fallback summarizer when no LLM is wired up yet (deterministic truncation)
 const defaultSummarizeFn: SummarizeFn = async (
   content: string,
-  _isCondensed: boolean,
+  _isCondensed: boolean
 ): Promise<string> => {
-  const lines = content.split('\n').filter(l => l.trim());
+  const lines = content.split('\n').filter((l) => l.trim());
   const truncated = lines.slice(0, 20).join('\n');
   return `[Resumo automático — ${lines.length} linhas]\n${truncated}${lines.length > 20 ? '\n...' : ''}`;
 };

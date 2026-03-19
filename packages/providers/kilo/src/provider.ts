@@ -39,7 +39,7 @@ function extractText(content: string | ContentPart[]): string {
 }
 
 function buildUserContent(
-  content: string | ContentPart[],
+  content: string | ContentPart[]
 ): string | OpenAI.ChatCompletionContentPart[] {
   if (typeof content === 'string') return content;
   return content.map((p) => {
@@ -59,7 +59,7 @@ function buildUserContent(
 
 function toOpenAIMessages(
   messages: readonly Message[],
-  system?: string,
+  system?: string
 ): OpenAI.ChatCompletionMessageParam[] {
   const result: OpenAI.ChatCompletionMessageParam[] = [];
   if (system) result.push({ role: 'system', content: system });
@@ -98,15 +98,18 @@ function toOpenAIMessages(
 
 // ── Finish reason mapping ────────────────────────────────────────────────────
 
-function mapFinishReason(
-  reason: string | null | undefined,
-): GenerateResponse['finishReason'] {
+function mapFinishReason(reason: string | null | undefined): GenerateResponse['finishReason'] {
   switch (reason) {
-    case 'stop':           return 'stop';
-    case 'length':         return 'length';
-    case 'tool_calls':     return 'tool_calls';
-    case 'content_filter': return 'content_filter';
-    default:               return 'stop';
+    case 'stop':
+      return 'stop';
+    case 'length':
+      return 'length';
+    case 'tool_calls':
+      return 'tool_calls';
+    case 'content_filter':
+      return 'content_filter';
+    default:
+      return 'stop';
   }
 }
 
@@ -184,11 +187,9 @@ export class KiloProvider implements IProvider {
 
       const choice = response.choices[0];
       if (!choice) {
-        throw new ProviderError(
-          'Kilo Gateway returned no choices',
-          ProviderId.KiloGateway,
-          { model: request.model },
-        );
+        throw new ProviderError('Kilo Gateway returned no choices', ProviderId.KiloGateway, {
+          model: request.model,
+        });
       }
 
       const toolCalls: ToolCall[] | undefined = choice.message.tool_calls?.map((tc) => ({
@@ -218,7 +219,7 @@ export class KiloProvider implements IProvider {
       throw new ProviderError(
         `Kilo Gateway generate failed: ${String(err)}`,
         ProviderId.KiloGateway,
-        { model: request.model },
+        { model: request.model }
       );
     }
   }
@@ -278,9 +279,7 @@ export class KiloProvider implements IProvider {
           model: chunk.model,
           delta: delta?.content ?? '',
           toolCalls,
-          finishReason: choice?.finish_reason
-            ? mapFinishReason(choice.finish_reason)
-            : undefined,
+          finishReason: choice?.finish_reason ? mapFinishReason(choice.finish_reason) : undefined,
           usage,
         };
       }
@@ -288,7 +287,7 @@ export class KiloProvider implements IProvider {
       throw new ProviderError(
         `Kilo Gateway stream failed: ${String(err)}`,
         ProviderId.KiloGateway,
-        { model: request.model },
+        { model: request.model }
       );
     }
   }
@@ -308,9 +307,7 @@ export class KiloProvider implements IProvider {
         input,
       });
 
-      const embeddings = response.data.map(
-        (item) => new Float32Array(item.embedding),
-      );
+      const embeddings = response.data.map((item) => new Float32Array(item.embedding));
 
       const usage: TokenUsage = {
         promptTokens: response.usage.prompt_tokens,
@@ -324,11 +321,9 @@ export class KiloProvider implements IProvider {
         usage,
       };
     } catch (err) {
-      throw new ProviderError(
-        `Kilo Gateway embed failed: ${String(err)}`,
-        ProviderId.KiloGateway,
-        { model: request.model },
-      );
+      throw new ProviderError(`Kilo Gateway embed failed: ${String(err)}`, ProviderId.KiloGateway, {
+        model: request.model,
+      });
     }
   }
 
@@ -350,7 +345,7 @@ export class KiloProvider implements IProvider {
     if (!this.client) {
       throw new ProviderError(
         'KiloProvider not initialized. Call initialize(config) first.',
-        ProviderId.KiloGateway,
+        ProviderId.KiloGateway
       );
     }
     return this.client;

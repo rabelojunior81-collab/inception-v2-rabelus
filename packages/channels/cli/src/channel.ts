@@ -41,7 +41,9 @@ export class CliChannel implements IChannel {
   // React state setter injected by Ink
   private setUiState: ((updater: (prev: CliAppState) => CliAppState) => void) | undefined;
 
-  get state(): ChannelState { return this._state; }
+  get state(): ChannelState {
+    return this._state;
+  }
 
   async initialize(_config: ChannelConfig): Promise<void> {
     this.uiState = {

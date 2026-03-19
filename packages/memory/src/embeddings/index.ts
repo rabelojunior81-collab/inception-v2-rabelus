@@ -1,7 +1,7 @@
 export { GeminiEmbeddingProvider } from './gemini.js';
 export { OllamaEmbeddingProvider } from './ollama.js';
 
-import type { IEmbeddingProvider , MemoryConfig } from '@rabeluslab/inception-types';
+import type { IEmbeddingProvider, MemoryConfig } from '@rabeluslab/inception-types';
 
 import { GeminiEmbeddingProvider } from './gemini.js';
 import { OllamaEmbeddingProvider } from './ollama.js';

@@ -14,19 +14,15 @@ export class ContextBuilder {
   constructor(
     private readonly memory: SQLiteMemoryBackend,
     private readonly modelTokenBudget: number = 128_000,
-    private readonly freshTailCount: number = 32,
+    private readonly freshTailCount: number = 32
   ) {}
 
-  build(
-    threadId: string,
-    newUserMessage: Message,
-    systemCtx: SystemPromptContext,
-  ): BuiltContext {
+  build(threadId: string, newUserMessage: Message, systemCtx: SystemPromptContext): BuiltContext {
     // 1. Assemble stored history
     const assembled: AssembledContext = this.memory.assembleContext(
       threadId,
       this.modelTokenBudget,
-      this.freshTailCount,
+      this.freshTailCount
     );
 
     // 2. Inject summary guidance into system prompt if present

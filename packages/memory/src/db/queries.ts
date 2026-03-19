@@ -23,7 +23,9 @@ export class MessageStore {
     );
     this.countByThread = db.prepare('SELECT COUNT(*) as cnt FROM messages WHERE thread_id = ?');
     this.lastSeq = db.prepare('SELECT MAX(sequence) as seq FROM messages WHERE thread_id = ?');
-    this.sumTokens = db.prepare('SELECT COALESCE(SUM(token_count), 0) as total FROM messages WHERE thread_id = ?');
+    this.sumTokens = db.prepare(
+      'SELECT COALESCE(SUM(token_count), 0) as total FROM messages WHERE thread_id = ?'
+    );
   }
 
   insert_one(row: MessageRow): void {
@@ -82,9 +84,15 @@ export class SummaryStore {
         (@id, @thread_id, @parent_id, @depth, @covers_msg_ids, @covers_sum_ids, @content, @token_count, @period_start, @period_end, @ordinal, @created_at)
     `);
     this.byId = db.prepare('SELECT * FROM summaries WHERE id = ?');
-    this.byThread = db.prepare('SELECT * FROM summaries WHERE thread_id = ? ORDER BY depth ASC, ordinal ASC');
-    this.byDepth = db.prepare('SELECT * FROM summaries WHERE thread_id = ? AND depth = ? ORDER BY ordinal ASC');
-    this.countAtDepth = db.prepare('SELECT COUNT(*) as cnt FROM summaries WHERE thread_id = ? AND depth = ?');
+    this.byThread = db.prepare(
+      'SELECT * FROM summaries WHERE thread_id = ? ORDER BY depth ASC, ordinal ASC'
+    );
+    this.byDepth = db.prepare(
+      'SELECT * FROM summaries WHERE thread_id = ? AND depth = ? ORDER BY ordinal ASC'
+    );
+    this.countAtDepth = db.prepare(
+      'SELECT COUNT(*) as cnt FROM summaries WHERE thread_id = ? AND depth = ?'
+    );
   }
 
   insert_one(row: SummaryRow): void {

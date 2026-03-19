@@ -26,9 +26,17 @@ program
   .option('-m, --model <name>', 'Modelo a usar (ex: claude-sonnet-4-6, gpt-4o, qwen2.5)')
   .option('--memory <path>', 'Caminho para o banco de dados de memória SQLite')
   .option('-d, --debug', 'Exibe informações de debug ao iniciar')
-  .action(async (opts: { config?: string; provider?: string; model?: string; memory?: string; debug?: boolean }) => {
-    await runStart(opts);
-  });
+  .action(
+    async (opts: {
+      config?: string;
+      provider?: string;
+      model?: string;
+      memory?: string;
+      debug?: boolean;
+    }) => {
+      await runStart(opts);
+    }
+  );
 
 // ── inception init ─────────────────────────────────────────────────────────
 

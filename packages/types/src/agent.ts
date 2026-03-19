@@ -44,13 +44,13 @@ export enum AutonomyLevel {
    * Mode D in IMP terminology.
    */
   Readonly = 'readonly',
-  
+
   /**
    * Supervised mode. Agent requests approval for high-risk actions.
    * Default recommended mode.
    */
   Supervised = 'supervised',
-  
+
   /**
    * Full autonomy. Agent acts independently and reports after.
    * Use with caution.

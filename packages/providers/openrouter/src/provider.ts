@@ -39,7 +39,7 @@ function extractText(content: string | ContentPart[]): string {
 }
 
 function buildUserContent(
-  content: string | ContentPart[],
+  content: string | ContentPart[]
 ): string | OpenAI.ChatCompletionContentPart[] {
   if (typeof content === 'string') return content;
   return content.map((p) => {
@@ -59,7 +59,7 @@ function buildUserContent(
 
 function toOpenAIMessages(
   messages: readonly Message[],
-  system?: string,
+  system?: string
 ): OpenAI.ChatCompletionMessageParam[] {
   const result: OpenAI.ChatCompletionMessageParam[] = [];
   if (system) result.push({ role: 'system', content: system });
@@ -98,15 +98,18 @@ function toOpenAIMessages(
 
 // ── Finish reason mapping ────────────────────────────────────────────────────
 
-function mapFinishReason(
-  reason: string | null | undefined,
-): GenerateResponse['finishReason'] {
+function mapFinishReason(reason: string | null | undefined): GenerateResponse['finishReason'] {
   switch (reason) {
-    case 'stop':           return 'stop';
-    case 'length':         return 'length';
-    case 'tool_calls':     return 'tool_calls';
-    case 'content_filter': return 'content_filter';
-    default:               return 'stop';
+    case 'stop':
+      return 'stop';
+    case 'length':
+      return 'length';
+    case 'tool_calls':
+      return 'tool_calls';
+    case 'content_filter':
+      return 'content_filter';
+    default:
+      return 'stop';
   }
 }
 
@@ -181,11 +184,9 @@ export class OpenRouterProvider implements IProvider {
 
       const choice = response.choices[0];
       if (!choice) {
-        throw new ProviderError(
-          'OpenRouter returned no choices',
-          ProviderId.OpenRouter,
-          { model: request.model },
-        );
+        throw new ProviderError('OpenRouter returned no choices', ProviderId.OpenRouter, {
+          model: request.model,
+        });
       }
 
       const toolCalls: ToolCall[] | undefined = choice.message.tool_calls?.map((tc) => ({
@@ -212,11 +213,9 @@ export class OpenRouterProvider implements IProvider {
       };
     } catch (err) {
       if (err instanceof ProviderError) throw err;
-      throw new ProviderError(
-        `OpenRouter generate failed: ${String(err)}`,
-        ProviderId.OpenRouter,
-        { model: request.model },
-      );
+      throw new ProviderError(`OpenRouter generate failed: ${String(err)}`, ProviderId.OpenRouter, {
+        model: request.model,
+      });
     }
   }
 
@@ -275,18 +274,14 @@ export class OpenRouterProvider implements IProvider {
           model: chunk.model,
           delta: delta?.content ?? '',
           toolCalls,
-          finishReason: choice?.finish_reason
-            ? mapFinishReason(choice.finish_reason)
-            : undefined,
+          finishReason: choice?.finish_reason ? mapFinishReason(choice.finish_reason) : undefined,
           usage,
         };
       }
     } catch (err) {
-      throw new ProviderError(
-        `OpenRouter stream failed: ${String(err)}`,
-        ProviderId.OpenRouter,
-        { model: request.model },
-      );
+      throw new ProviderError(`OpenRouter stream failed: ${String(err)}`, ProviderId.OpenRouter, {
+        model: request.model,
+      });
     }
   }
 
@@ -295,7 +290,7 @@ export class OpenRouterProvider implements IProvider {
   async embed(_request: EmbeddingRequest): Promise<EmbeddingResponse> {
     throw new ProviderError(
       'OpenRouter does not support embeddings directly',
-      ProviderId.OpenRouter,
+      ProviderId.OpenRouter
     );
   }
 
@@ -317,7 +312,7 @@ export class OpenRouterProvider implements IProvider {
     if (!this.client) {
       throw new ProviderError(
         'OpenRouterProvider not initialized. Call initialize(config) first.',
-        ProviderId.OpenRouter,
+        ProviderId.OpenRouter
       );
     }
     return this.client;

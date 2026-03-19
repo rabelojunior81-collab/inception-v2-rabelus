@@ -38,7 +38,9 @@ export async function runStart(options: StartOptions): Promise<void> {
   try {
     providerSelection = await createProvider(cfg, options.provider, options.model);
   } catch (err) {
-    console.error(`[inception] Provider init error: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(
+      `[inception] Provider init error: ${err instanceof Error ? err.message : String(err)}`
+    );
     process.exit(1);
   }
   const { provider, model } = providerSelection;
@@ -105,7 +107,7 @@ export async function runStart(options: StartOptions): Promise<void> {
     model,
     maxToolRounds: 10,
     allowedCommands: cfg.security.execution.allowedCommands,
-    allowedPaths:    cfg.security.filesystem.allowedPaths,
+    allowedPaths: cfg.security.filesystem.allowedPaths,
   });
 
   // ── Wire inbound messages ──────────────────────────────────────────────────
@@ -138,15 +140,24 @@ export async function runStart(options: StartOptions): Promise<void> {
   if (options.debug) {
     console.error(`[inception] Provider: ${provider.id} / Model: ${model}`);
     console.error(`[inception] Memory DB: ${dbPath}`);
-    console.error(`[inception] Tools: ${toolRegistry.list().map((t) => t.id).join(', ')}`);
+    console.error(
+      `[inception] Tools: ${toolRegistry
+        .list()
+        .map((t) => t.id)
+        .join(', ')}`
+    );
   }
 
   // ── Handle approval decisions from the UI ─────────────────────────────────
   // CliChannel calls _handleApprovalDecision which only clears the UI.
   // We need to also resolve the pending promise.
   // Override the channel's approval handler by monkey-patching the private method:
-  const originalHandleDecision = (cliChannel as unknown as { _handleApprovalDecision: (id: string, approved: boolean) => void })._handleApprovalDecision.bind(cliChannel);
-  (cliChannel as unknown as { _handleApprovalDecision: (id: string, approved: boolean) => void })._handleApprovalDecision = (approvalId: string, approved: boolean): void => {
+  const originalHandleDecision = (
+    cliChannel as unknown as { _handleApprovalDecision: (id: string, approved: boolean) => void }
+  )._handleApprovalDecision.bind(cliChannel);
+  (
+    cliChannel as unknown as { _handleApprovalDecision: (id: string, approved: boolean) => void }
+  )._handleApprovalDecision = (approvalId: string, approved: boolean): void => {
     originalHandleDecision(approvalId, approved);
     // Resolve the pending AgentLoop approval promise
     const resolver = pendingResolvers.get(approvalId);
@@ -170,5 +181,7 @@ export async function runStart(options: StartOptions): Promise<void> {
   process.on('SIGTERM', () => void shutdown());
 
   // Block until exit
-  await new Promise<void>(() => { /* keep process alive */ });
+  await new Promise<void>(() => {
+    /* keep process alive */
+  });
 }

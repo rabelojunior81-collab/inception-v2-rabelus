@@ -12,7 +12,7 @@
 import { createRequire } from 'node:module';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const _m = (createRequire(import.meta.url))('node:sqlite') as typeof import('node:sqlite');
+const _m = createRequire(import.meta.url)('node:sqlite') as typeof import('node:sqlite');
 
 export const DatabaseSync: typeof import('node:sqlite').DatabaseSync = _m.DatabaseSync;
 

@@ -39,11 +39,7 @@ export class RuntimeError extends InceptionError {
 export class ProviderError extends InceptionError {
   readonly providerId: string;
 
-  constructor(
-    message: string,
-    providerId: string,
-    context?: Record<string, unknown>,
-  ) {
+  constructor(message: string, providerId: string, context?: Record<string, unknown>) {
     super(message, 'PROVIDER_ERROR', { ...context, providerId });
     this.name = 'ProviderError';
     this.providerId = providerId;
@@ -56,11 +52,7 @@ export class ProviderError extends InceptionError {
 export class ChannelError extends InceptionError {
   readonly channelId: string;
 
-  constructor(
-    message: string,
-    channelId: string,
-    context?: Record<string, unknown>,
-  ) {
+  constructor(message: string, channelId: string, context?: Record<string, unknown>) {
     super(message, 'CHANNEL_ERROR', { ...context, channelId });
     this.name = 'ChannelError';
     this.channelId = channelId;
@@ -86,11 +78,7 @@ export class ToolError extends InceptionError {
 export class SecurityError extends InceptionError {
   readonly violationType: string;
 
-  constructor(
-    message: string,
-    violationType: string,
-    context?: Record<string, unknown>,
-  ) {
+  constructor(message: string, violationType: string, context?: Record<string, unknown>) {
     super(message, 'SECURITY_ERROR', { ...context, violationType });
     this.name = 'SecurityError';
     this.violationType = violationType;

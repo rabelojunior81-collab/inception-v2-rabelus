@@ -32,7 +32,6 @@ interface ProviderEntry {
 // PROVIDERS — March 2026 — all models, all endpoints, all brands
 // ─────────────────────────────────────────────────────────────────────────────
 const PROVIDERS: ProviderEntry[] = [
-
   // ── 1. KIMI (Moonshot AI) — PAYG ─────────────────────────────────────────
   // endpoint: https://api.moonshot.ai/v1  |  key: sk-...
   // docs: https://platform.moonshot.ai/docs
@@ -43,15 +42,15 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'kimi-k2.5',
     models: [
       // ── K2.5 series (Jan 2026) ──────────────────────────────────────────
-      { id: 'kimi-k2.5',              label: 'kimi-k2.5              — flagship multimodal agentic, 256K ctx' },
-      { id: 'kimi-k2-thinking',        label: 'kimi-k2-thinking        — extended thinking mode' },
-      { id: 'kimi-k2-thinking-turbo',  label: 'kimi-k2-thinking-turbo  — thinking, mais rápido' },
-      { id: 'kimi-k2-turbo-preview',   label: 'kimi-k2-turbo-preview   — menor custo' },
-      { id: 'kimi-k2-0905-preview',    label: 'kimi-k2-0905-preview    — preview estável' },
+      { id: 'kimi-k2.5', label: 'kimi-k2.5              — flagship multimodal agentic, 256K ctx' },
+      { id: 'kimi-k2-thinking', label: 'kimi-k2-thinking        — extended thinking mode' },
+      { id: 'kimi-k2-thinking-turbo', label: 'kimi-k2-thinking-turbo  — thinking, mais rápido' },
+      { id: 'kimi-k2-turbo-preview', label: 'kimi-k2-turbo-preview   — menor custo' },
+      { id: 'kimi-k2-0905-preview', label: 'kimi-k2-0905-preview    — preview estável' },
       // ── Moonshot V1 legacy ───────────────────────────────────────────────
-      { id: 'moonshot-v1-128k',        label: 'moonshot-v1-128k        — 128K ctx (legacy)' },
-      { id: 'moonshot-v1-32k',         label: 'moonshot-v1-32k         — 32K ctx  (legacy)' },
-      { id: 'moonshot-v1-8k',          label: 'moonshot-v1-8k          — 8K ctx   (legacy)' },
+      { id: 'moonshot-v1-128k', label: 'moonshot-v1-128k        — 128K ctx (legacy)' },
+      { id: 'moonshot-v1-32k', label: 'moonshot-v1-32k         — 32K ctx  (legacy)' },
+      { id: 'moonshot-v1-8k', label: 'moonshot-v1-8k          — 8K ctx   (legacy)' },
     ],
     needsKey: true,
     keyEnvHint: 'KIMI_API_KEY',
@@ -67,8 +66,8 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'api.kimi.com/coding/v1 · kimi-for-coding · subscription mensal',
     defaultModel: 'kimi-for-coding',
     models: [
-      { id: 'kimi-for-coding',         label: 'kimi-for-coding         — otimizado para código' },
-      { id: 'kimi-k2-thinking-turbo',  label: 'kimi-k2-thinking-turbo  — raciocínio + código' },
+      { id: 'kimi-for-coding', label: 'kimi-for-coding         — otimizado para código' },
+      { id: 'kimi-k2-thinking-turbo', label: 'kimi-k2-thinking-turbo  — raciocínio + código' },
     ],
     needsKey: true,
     keyEnvHint: 'KIMI_API_KEY',
@@ -86,19 +85,19 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'glm-4.7',
     models: [
       // ── GLM-5 series (2026) ──────────────────────────────────────────────
-      { id: 'GLM-5',              label: 'GLM-5              — next-gen flagship, Agentic Engineering' },
-      { id: 'GLM-5-Turbo',        label: 'GLM-5-Turbo        — fast long-chain workloads (Mar 2026)' },
+      { id: 'GLM-5', label: 'GLM-5              — next-gen flagship, Agentic Engineering' },
+      { id: 'GLM-5-Turbo', label: 'GLM-5-Turbo        — fast long-chain workloads (Mar 2026)' },
       // ── GLM-4 series ────────────────────────────────────────────────────
-      { id: 'GLM-4.7',            label: 'GLM-4.7            — flagship reasoning + coding' },
-      { id: 'GLM-4.6',            label: 'GLM-4.6            — agentic + reasoning' },
-      { id: 'GLM-4.5',            label: 'GLM-4.5            — general purpose' },
-      { id: 'GLM-4.5-air',        label: 'GLM-4.5-air        — lightweight (free tier)' },
+      { id: 'GLM-4.7', label: 'GLM-4.7            — flagship reasoning + coding' },
+      { id: 'GLM-4.6', label: 'GLM-4.6            — agentic + reasoning' },
+      { id: 'GLM-4.5', label: 'GLM-4.5            — general purpose' },
+      { id: 'GLM-4.5-air', label: 'GLM-4.5-air        — lightweight (free tier)' },
       // ── Vision ──────────────────────────────────────────────────────────
-      { id: 'GLM-4.6V',           label: 'GLM-4.6V           — vision-language (latest)' },
-      { id: 'GLM-4.5V',           label: 'GLM-4.5V           — vision-language 106B MoE' },
+      { id: 'GLM-4.6V', label: 'GLM-4.6V           — vision-language (latest)' },
+      { id: 'GLM-4.5V', label: 'GLM-4.5V           — vision-language 106B MoE' },
       // ── Especializado ────────────────────────────────────────────────────
-      { id: 'GLM-OCR',            label: 'GLM-OCR            — optical character recognition' },
-      { id: 'GLM-4-32B-0414-128K',label: 'GLM-4-32B-0414-128K— 32B, 128K ctx' },
+      { id: 'GLM-OCR', label: 'GLM-OCR            — optical character recognition' },
+      { id: 'GLM-4-32B-0414-128K', label: 'GLM-4-32B-0414-128K— 32B, 128K ctx' },
     ],
     needsKey: true,
     keyEnvHint: 'ZAI_API_KEY',
@@ -115,8 +114,8 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'api.z.ai/api/coding/paas/v4 · IDs em MAIÚSCULAS · plano coding dedicado',
     defaultModel: 'GLM-4.7',
     models: [
-      { id: 'GLM-4.7',       label: 'GLM-4.7       — principal (MAIÚSCULAS obrigatório neste endpoint)' },
-      { id: 'GLM-4.5-air',   label: 'GLM-4.5-air   — leve, resposta rápida' },
+      { id: 'GLM-4.7', label: 'GLM-4.7       — principal (MAIÚSCULAS obrigatório neste endpoint)' },
+      { id: 'GLM-4.5-air', label: 'GLM-4.5-air   — leve, resposta rápida' },
     ],
     needsKey: true,
     keyEnvHint: 'ZAI_API_KEY',
@@ -136,22 +135,35 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'qwen3.5-plus',
     models: [
       // ── Qwen (Alibaba) ──────────────────────────────────────────────────
-      { id: 'qwen3.5-plus',         label: '[Qwen]    qwen3.5-plus         — flagship vision + deep thinking' },
-      { id: 'qwen3-max-2026-01-23', label: '[Qwen]    qwen3-max-2026-01-23 — Qwen3 Max snapshot estável' },
-      { id: 'qwen3-coder-next',     label: '[Qwen]    qwen3-coder-next     — coding specialist (next-gen)' },
-      { id: 'qwen3-coder-plus',     label: '[Qwen]    qwen3-coder-plus     — coding specialist (plus)' },
+      {
+        id: 'qwen3.5-plus',
+        label: '[Qwen]    qwen3.5-plus         — flagship vision + deep thinking',
+      },
+      {
+        id: 'qwen3-max-2026-01-23',
+        label: '[Qwen]    qwen3-max-2026-01-23 — Qwen3 Max snapshot estável',
+      },
+      {
+        id: 'qwen3-coder-next',
+        label: '[Qwen]    qwen3-coder-next     — coding specialist (next-gen)',
+      },
+      {
+        id: 'qwen3-coder-plus',
+        label: '[Qwen]    qwen3-coder-plus     — coding specialist (plus)',
+      },
       // ── Zhipu (GLM) ─────────────────────────────────────────────────────
-      { id: 'glm-5',                label: '[Zhipu]   glm-5                — 744B raciocínio (40B active)' },
-      { id: 'glm-4.7',              label: '[Zhipu]   glm-4.7              — reasoning + coding' },
+      { id: 'glm-5', label: '[Zhipu]   glm-5                — 744B raciocínio (40B active)' },
+      { id: 'glm-4.7', label: '[Zhipu]   glm-4.7              — reasoning + coding' },
       // ── Moonshot (Kimi) ─────────────────────────────────────────────────
-      { id: 'kimi-k2.5',            label: '[Moonshot] kimi-k2.5           — multimodal agentic, 256K ctx' },
+      { id: 'kimi-k2.5', label: '[Moonshot] kimi-k2.5           — multimodal agentic, 256K ctx' },
       // ── MiniMax ─────────────────────────────────────────────────────────
-      { id: 'MiniMax-M2.5',         label: '[MiniMax] MiniMax-M2.5         — produtividade + coding' },
+      { id: 'MiniMax-M2.5', label: '[MiniMax] MiniMax-M2.5         — produtividade + coding' },
     ],
     needsKey: true,
     keyEnvHint: 'DASHSCOPE_API_KEY',
     defaultBaseUrl: 'https://coding-intl.dashscope.aliyuncs.com/v1',
-    keyHint: 'Key EXCLUSIVA do Coding Plan: formato sk-sp-xxxxx\n  DIFERENTE da key PAYG (sk-xxxxx) — não intercambiáveis!\n  Obtenha em: https://modelstudio.console.alibabacloud.com → Coding Plan',
+    keyHint:
+      'Key EXCLUSIVA do Coding Plan: formato sk-sp-xxxxx\n  DIFERENTE da key PAYG (sk-xxxxx) — não intercambiáveis!\n  Obtenha em: https://modelstudio.console.alibabacloud.com → Coding Plan',
   },
 
   // ── 6. BAILIAN — PAYG (DashScope) ────────────────────────────────────────
@@ -164,32 +176,33 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'qwen3-max',
     models: [
       // ── Qwen3.5 (2026) ───────────────────────────────────────────────────
-      { id: 'qwen3.5-plus',              label: 'qwen3.5-plus              — multimodal flagship (Feb 2026)' },
-      { id: 'qwen3.5-plus-2026-02-15',   label: 'qwen3.5-plus-2026-02-15   — snapshot estável' },
-      { id: 'qwen3.5-flash',             label: 'qwen3.5-flash             — rápido e econômico' },
+      { id: 'qwen3.5-plus', label: 'qwen3.5-plus              — multimodal flagship (Feb 2026)' },
+      { id: 'qwen3.5-plus-2026-02-15', label: 'qwen3.5-plus-2026-02-15   — snapshot estável' },
+      { id: 'qwen3.5-flash', label: 'qwen3.5-flash             — rápido e econômico' },
       // ── Qwen3 ───────────────────────────────────────────────────────────
-      { id: 'qwen3-max',                 label: 'qwen3-max                 — Qwen3 flagship' },
-      { id: 'qwen3-max-2026-01-23',      label: 'qwen3-max-2026-01-23      — snapshot' },
-      { id: 'qwen3-coder-plus',          label: 'qwen3-coder-plus          — coding specialist' },
-      { id: 'qwen3-coder-flash',         label: 'qwen3-coder-flash         — coding, econômico' },
+      { id: 'qwen3-max', label: 'qwen3-max                 — Qwen3 flagship' },
+      { id: 'qwen3-max-2026-01-23', label: 'qwen3-max-2026-01-23      — snapshot' },
+      { id: 'qwen3-coder-plus', label: 'qwen3-coder-plus          — coding specialist' },
+      { id: 'qwen3-coder-flash', label: 'qwen3-coder-flash         — coding, econômico' },
       // ── Vision / Multimodal ──────────────────────────────────────────────
-      { id: 'qwen3-vl-plus',             label: 'qwen3-vl-plus             — vision-language (latest)' },
-      { id: 'qwen3-vl-flash',            label: 'qwen3-vl-flash            — vision, rápido' },
-      { id: 'qwen3-omni-flash',          label: 'qwen3-omni-flash          — audio + visão + texto' },
+      { id: 'qwen3-vl-plus', label: 'qwen3-vl-plus             — vision-language (latest)' },
+      { id: 'qwen3-vl-flash', label: 'qwen3-vl-flash            — vision, rápido' },
+      { id: 'qwen3-omni-flash', label: 'qwen3-omni-flash          — audio + visão + texto' },
       // ── Reasoning especializado ─────────────────────────────────────────
-      { id: 'qwq-plus',                  label: 'qwq-plus                  — raciocínio profundo (QwQ)' },
-      { id: 'qvq-max',                   label: 'qvq-max                   — visual reasoning (QvQ)' },
+      { id: 'qwq-plus', label: 'qwq-plus                  — raciocínio profundo (QwQ)' },
+      { id: 'qvq-max', label: 'qvq-max                   — visual reasoning (QvQ)' },
       // ── Long context ────────────────────────────────────────────────────
-      { id: 'qwen-long-2025-01-25',      label: 'qwen-long-2025-01-25      — long document processing' },
+      { id: 'qwen-long-2025-01-25', label: 'qwen-long-2025-01-25      — long document processing' },
       // ── Legacy ──────────────────────────────────────────────────────────
-      { id: 'qwen-max',                  label: 'qwen-max                  — Qwen2.5 flagship (legacy)' },
-      { id: 'qwen-plus',                 label: 'qwen-plus                 — Qwen2.5 balanced (legacy)' },
-      { id: 'qwen-flash',                label: 'qwen-flash                — Qwen2.5 fast (legacy)' },
+      { id: 'qwen-max', label: 'qwen-max                  — Qwen2.5 flagship (legacy)' },
+      { id: 'qwen-plus', label: 'qwen-plus                 — Qwen2.5 balanced (legacy)' },
+      { id: 'qwen-flash', label: 'qwen-flash                — Qwen2.5 fast (legacy)' },
     ],
     needsKey: true,
     keyEnvHint: 'DASHSCOPE_API_KEY',
     defaultBaseUrl: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',
-    keyHint: 'Key PAYG DashScope: formato sk-xxxxx\n  Obtenha em: https://dashscope.console.aliyun.com/apiKey',
+    keyHint:
+      'Key PAYG DashScope: formato sk-xxxxx\n  Obtenha em: https://dashscope.console.aliyun.com/apiKey',
   },
 
   // ── 7. ANTHROPIC (Claude) ────────────────────────────────────────────────
@@ -201,16 +214,28 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'claude-sonnet-4-6',
     models: [
       // ── Claude 4.6 (latest) ──────────────────────────────────────────────
-      { id: 'claude-opus-4-6',            label: 'claude-opus-4-6            — mais capaz, 1M ctx, $5/$25 MTok' },
-      { id: 'claude-sonnet-4-6',          label: 'claude-sonnet-4-6          — balanceado, 1M ctx, $3/$15 MTok' },
-      { id: 'claude-haiku-4-5-20251001',  label: 'claude-haiku-4-5-20251001  — mais rápido, 200K ctx, $1/$5 MTok' },
+      {
+        id: 'claude-opus-4-6',
+        label: 'claude-opus-4-6            — mais capaz, 1M ctx, $5/$25 MTok',
+      },
+      {
+        id: 'claude-sonnet-4-6',
+        label: 'claude-sonnet-4-6          — balanceado, 1M ctx, $3/$15 MTok',
+      },
+      {
+        id: 'claude-haiku-4-5-20251001',
+        label: 'claude-haiku-4-5-20251001  — mais rápido, 200K ctx, $1/$5 MTok',
+      },
       // ── Claude 4.5 ──────────────────────────────────────────────────────
-      { id: 'claude-sonnet-4-5-20250929', label: 'claude-sonnet-4-5-20250929 — Sonnet 4.5 (legacy)' },
-      { id: 'claude-opus-4-5-20251101',   label: 'claude-opus-4-5-20251101   — Opus 4.5 (legacy)' },
+      {
+        id: 'claude-sonnet-4-5-20250929',
+        label: 'claude-sonnet-4-5-20250929 — Sonnet 4.5 (legacy)',
+      },
+      { id: 'claude-opus-4-5-20251101', label: 'claude-opus-4-5-20251101   — Opus 4.5 (legacy)' },
       // ── Claude 4.1 / 4.0 ────────────────────────────────────────────────
-      { id: 'claude-opus-4-1-20250805',   label: 'claude-opus-4-1-20250805   — Opus 4.1 (legacy)' },
-      { id: 'claude-sonnet-4-20250514',   label: 'claude-sonnet-4-20250514   — Sonnet 4.0 (legacy)' },
-      { id: 'claude-opus-4-20250514',     label: 'claude-opus-4-20250514     — Opus 4.0 (legacy)' },
+      { id: 'claude-opus-4-1-20250805', label: 'claude-opus-4-1-20250805   — Opus 4.1 (legacy)' },
+      { id: 'claude-sonnet-4-20250514', label: 'claude-sonnet-4-20250514   — Sonnet 4.0 (legacy)' },
+      { id: 'claude-opus-4-20250514', label: 'claude-opus-4-20250514     — Opus 4.0 (legacy)' },
     ],
     needsKey: true,
     keyEnvHint: 'ANTHROPIC_API_KEY',
@@ -226,15 +251,15 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'gpt-5.4',
     models: [
       // ── GPT-5.4 series (frontier, Mar 2026) ─────────────────────────────
-      { id: 'gpt-5.4',       label: 'gpt-5.4       — flagship, 1M ctx ($2.50/$15 MTok)' },
-      { id: 'gpt-5.4-mini',  label: 'gpt-5.4-mini  — mini forte, 400K ctx ($0.75/$4.50 MTok)' },
-      { id: 'gpt-5.4-nano',  label: 'gpt-5.4-nano  — mais barato, 400K ctx ($0.20/$1.25 MTok)' },
+      { id: 'gpt-5.4', label: 'gpt-5.4       — flagship, 1M ctx ($2.50/$15 MTok)' },
+      { id: 'gpt-5.4-mini', label: 'gpt-5.4-mini  — mini forte, 400K ctx ($0.75/$4.50 MTok)' },
+      { id: 'gpt-5.4-nano', label: 'gpt-5.4-nano  — mais barato, 400K ctx ($0.20/$1.25 MTok)' },
       // ── GPT-4o (stable) ─────────────────────────────────────────────────
-      { id: 'gpt-4o',        label: 'gpt-4o        — stable multimodal (legacy)' },
-      { id: 'gpt-4o-mini',   label: 'gpt-4o-mini   — stable mini (legacy)' },
+      { id: 'gpt-4o', label: 'gpt-4o        — stable multimodal (legacy)' },
+      { id: 'gpt-4o-mini', label: 'gpt-4o-mini   — stable mini (legacy)' },
       // ── o-series (reasoning) ────────────────────────────────────────────
-      { id: 'o4-mini',       label: 'o4-mini       — reasoning eficiente' },
-      { id: 'o3',            label: 'o3            — reasoning avançado' },
+      { id: 'o4-mini', label: 'o4-mini       — reasoning eficiente' },
+      { id: 'o3', label: 'o3            — reasoning avançado' },
     ],
     needsKey: true,
     keyEnvHint: 'OPENAI_API_KEY',
@@ -249,13 +274,14 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'OAuth Bearer token · usa subscription sem pagar por token adicional',
     defaultModel: 'gpt-5.4',
     models: [
-      { id: 'gpt-5.4',        label: 'gpt-5.4        — acesso via subscription' },
-      { id: 'gpt-5.3-codex',  label: 'gpt-5.3-codex  — modelo Codex' },
-      { id: 'gpt-4o',         label: 'gpt-4o         — stable' },
+      { id: 'gpt-5.4', label: 'gpt-5.4        — acesso via subscription' },
+      { id: 'gpt-5.3-codex', label: 'gpt-5.3-codex  — modelo Codex' },
+      { id: 'gpt-4o', label: 'gpt-4o         — stable' },
     ],
     needsKey: true,
     keyEnvHint: 'OPENAI_BEARER_TOKEN',
-    keyHint: 'Bearer token OAuth da sua conta ChatGPT Plus/Pro.\n  Extraia com: npx openai-oauth\n  GitHub: https://github.com/EvanZhouDev/openai-oauth',
+    keyHint:
+      'Bearer token OAuth da sua conta ChatGPT Plus/Pro.\n  Extraia com: npx openai-oauth\n  GitHub: https://github.com/EvanZhouDev/openai-oauth',
   },
 
   // ── 10. GOOGLE — Gemini ───────────────────────────────────────────────────
@@ -267,16 +293,34 @@ const PROVIDERS: ProviderEntry[] = [
     defaultModel: 'gemini-2.5-flash',
     models: [
       // ── Gemini 3 (preview, 2026) ─────────────────────────────────────────
-      { id: 'gemini-3.1-pro-preview',        label: 'gemini-3.1-pro-preview        — mais capaz (preview)' },
-      { id: 'gemini-3-flash-preview',         label: 'gemini-3-flash-preview         — frontier perf (preview)' },
-      { id: 'gemini-3.1-flash-lite-preview',  label: 'gemini-3.1-flash-lite-preview  — econômico (preview)' },
+      {
+        id: 'gemini-3.1-pro-preview',
+        label: 'gemini-3.1-pro-preview        — mais capaz (preview)',
+      },
+      {
+        id: 'gemini-3-flash-preview',
+        label: 'gemini-3-flash-preview         — frontier perf (preview)',
+      },
+      {
+        id: 'gemini-3.1-flash-lite-preview',
+        label: 'gemini-3.1-flash-lite-preview  — econômico (preview)',
+      },
       // ── Gemini 2.5 (stable) ──────────────────────────────────────────────
-      { id: 'gemini-2.5-pro',                label: 'gemini-2.5-pro                — mais capaz estável' },
-      { id: 'gemini-2.5-flash',              label: 'gemini-2.5-flash              — custo-benefício (recomendado)' },
-      { id: 'gemini-2.5-flash-lite',         label: 'gemini-2.5-flash-lite         — mais rápido, mais barato' },
+      { id: 'gemini-2.5-pro', label: 'gemini-2.5-pro                — mais capaz estável' },
+      {
+        id: 'gemini-2.5-flash',
+        label: 'gemini-2.5-flash              — custo-benefício (recomendado)',
+      },
+      {
+        id: 'gemini-2.5-flash-lite',
+        label: 'gemini-2.5-flash-lite         — mais rápido, mais barato',
+      },
       // ── Gemini 2.0 (legacy) ──────────────────────────────────────────────
-      { id: 'gemini-2.0-flash',              label: 'gemini-2.0-flash              — 2ª geração (legacy)' },
-      { id: 'gemini-2.0-flash-lite',         label: 'gemini-2.0-flash-lite         — 2ª geração econômico (legacy)' },
+      { id: 'gemini-2.0-flash', label: 'gemini-2.0-flash              — 2ª geração (legacy)' },
+      {
+        id: 'gemini-2.0-flash-lite',
+        label: 'gemini-2.0-flash-lite         — 2ª geração econômico (legacy)',
+      },
     ],
     needsKey: true,
     keyEnvHint: 'GOOGLE_API_KEY',
@@ -293,29 +337,30 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'ollama.com · kimi-k2.5 · glm-5 · deepseek-v3.2 · qwen3-coder · gemini-3',
     defaultModel: 'kimi-k2.5',
     models: [
-      { id: 'kimi-k2.5',              label: 'kimi-k2.5              — Moonshot, multimodal agentic' },
-      { id: 'glm-5',                  label: 'glm-5                  — Zhipu, 744B (40B active)' },
-      { id: 'glm-4.7',                label: 'glm-4.7                — Zhipu, coding-focused' },
-      { id: 'glm-4.6',                label: 'glm-4.6                — Zhipu, agentic + reasoning' },
-      { id: 'deepseek-v3.2',          label: 'deepseek-v3.2          — DeepSeek, efficiency' },
-      { id: 'qwen3-coder-next',       label: 'qwen3-coder-next       — Qwen, coding next-gen' },
-      { id: 'qwen3.5',                label: 'qwen3.5                — Qwen3.5 multimodal' },
-      { id: 'qwen3-next',             label: 'qwen3-next             — Qwen3 80B' },
+      { id: 'kimi-k2.5', label: 'kimi-k2.5              — Moonshot, multimodal agentic' },
+      { id: 'glm-5', label: 'glm-5                  — Zhipu, 744B (40B active)' },
+      { id: 'glm-4.7', label: 'glm-4.7                — Zhipu, coding-focused' },
+      { id: 'glm-4.6', label: 'glm-4.6                — Zhipu, agentic + reasoning' },
+      { id: 'deepseek-v3.2', label: 'deepseek-v3.2          — DeepSeek, efficiency' },
+      { id: 'qwen3-coder-next', label: 'qwen3-coder-next       — Qwen, coding next-gen' },
+      { id: 'qwen3.5', label: 'qwen3.5                — Qwen3.5 multimodal' },
+      { id: 'qwen3-next', label: 'qwen3-next             — Qwen3 80B' },
       { id: 'gemini-3-flash-preview', label: 'gemini-3-flash-preview — Google Gemini 3 Flash' },
-      { id: 'minimax-m2.5',           label: 'minimax-m2.5           — MiniMax, produtividade' },
-      { id: 'minimax-m2.1',           label: 'minimax-m2.1           — MiniMax, multilingual' },
-      { id: 'minimax-m2',             label: 'minimax-m2             — MiniMax, high-efficiency' },
-      { id: 'gpt-oss:120b-cloud',     label: 'gpt-oss:120b-cloud     — NVIDIA NeMo 120B MoE' },
-      { id: 'nemotron-3-super',       label: 'nemotron-3-super       — NVIDIA NeMo 120B' },
-      { id: 'devstral-2',             label: 'devstral-2             — Mistral 123B software eng' },
-      { id: 'devstral-small-2',       label: 'devstral-small-2       — Mistral 24B software eng' },
-      { id: 'cogito-2.1',             label: 'cogito-2.1             — Deep Cogito 671B' },
-      { id: 'rnj-1',                  label: 'rnj-1                  — 8B code + STEM' },
+      { id: 'minimax-m2.5', label: 'minimax-m2.5           — MiniMax, produtividade' },
+      { id: 'minimax-m2.1', label: 'minimax-m2.1           — MiniMax, multilingual' },
+      { id: 'minimax-m2', label: 'minimax-m2             — MiniMax, high-efficiency' },
+      { id: 'gpt-oss:120b-cloud', label: 'gpt-oss:120b-cloud     — NVIDIA NeMo 120B MoE' },
+      { id: 'nemotron-3-super', label: 'nemotron-3-super       — NVIDIA NeMo 120B' },
+      { id: 'devstral-2', label: 'devstral-2             — Mistral 123B software eng' },
+      { id: 'devstral-small-2', label: 'devstral-small-2       — Mistral 24B software eng' },
+      { id: 'cogito-2.1', label: 'cogito-2.1             — Deep Cogito 671B' },
+      { id: 'rnj-1', label: 'rnj-1                  — 8B code + STEM' },
     ],
     needsKey: true,
     keyEnvHint: 'OLLAMA_API_KEY',
     defaultBaseUrl: 'https://ollama.com',
-    keyHint: 'Crie em: https://ollama.com/settings/keys\n  Requer subscription Pro ($20/mês) ou Max ($100/mês)',
+    keyHint:
+      'Crie em: https://ollama.com/settings/keys\n  Requer subscription Pro ($20/mês) ou Max ($100/mês)',
   },
 
   // ── 12. OPENROUTER ───────────────────────────────────────────────────────
@@ -327,17 +372,23 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'openrouter.ai · sem markup · rota automática · fallback entre providers',
     defaultModel: 'openai/gpt-5.4',
     models: [
-      { id: 'openai/gpt-5.4',                         label: 'OpenAI      / gpt-5.4' },
-      { id: 'openai/gpt-5.4-mini',                    label: 'OpenAI      / gpt-5.4-mini' },
-      { id: 'anthropic/claude-opus-4-6',              label: 'Anthropic   / claude-opus-4-6' },
-      { id: 'anthropic/claude-sonnet-4-6',            label: 'Anthropic   / claude-sonnet-4-6' },
-      { id: 'google/gemini-3.1-pro-preview',          label: 'Google      / gemini-3.1-pro-preview' },
-      { id: 'google/gemini-2.5-flash',                label: 'Google      / gemini-2.5-flash' },
-      { id: 'moonshotai/kimi-k2.5',                   label: 'Moonshot    / kimi-k2.5' },
-      { id: 'deepseek/deepseek-v3.2',                 label: 'DeepSeek    / deepseek-v3.2  (melhor custo-benefício 2026)' },
-      { id: 'qwen/qwen3-coder-480b-a35b',             label: 'Qwen        / qwen3-coder-480b-a35b  (GRATUITO!)' },
-      { id: 'meta-llama/llama-3.3-70b-instruct',      label: 'Meta        / llama-3.3-70b-instruct' },
-      { id: 'mistralai/mistral-large-2',              label: 'Mistral     / mistral-large-2' },
+      { id: 'openai/gpt-5.4', label: 'OpenAI      / gpt-5.4' },
+      { id: 'openai/gpt-5.4-mini', label: 'OpenAI      / gpt-5.4-mini' },
+      { id: 'anthropic/claude-opus-4-6', label: 'Anthropic   / claude-opus-4-6' },
+      { id: 'anthropic/claude-sonnet-4-6', label: 'Anthropic   / claude-sonnet-4-6' },
+      { id: 'google/gemini-3.1-pro-preview', label: 'Google      / gemini-3.1-pro-preview' },
+      { id: 'google/gemini-2.5-flash', label: 'Google      / gemini-2.5-flash' },
+      { id: 'moonshotai/kimi-k2.5', label: 'Moonshot    / kimi-k2.5' },
+      {
+        id: 'deepseek/deepseek-v3.2',
+        label: 'DeepSeek    / deepseek-v3.2  (melhor custo-benefício 2026)',
+      },
+      {
+        id: 'qwen/qwen3-coder-480b-a35b',
+        label: 'Qwen        / qwen3-coder-480b-a35b  (GRATUITO!)',
+      },
+      { id: 'meta-llama/llama-3.3-70b-instruct', label: 'Meta        / llama-3.3-70b-instruct' },
+      { id: 'mistralai/mistral-large-2', label: 'Mistral     / mistral-large-2' },
     ],
     needsKey: true,
     keyEnvHint: 'OPENROUTER_API_KEY',
@@ -351,10 +402,10 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'kilo.ai · controle de custo + fallback automático',
     defaultModel: 'gpt-5.4',
     models: [
-      { id: 'gpt-5.4',       label: 'gpt-5.4      (via Kilo)' },
-      { id: 'gpt-5.4-mini',  label: 'gpt-5.4-mini (via Kilo)' },
-      { id: 'gpt-4o',        label: 'gpt-4o       (via Kilo)' },
-      { id: 'gpt-4o-mini',   label: 'gpt-4o-mini  (via Kilo)' },
+      { id: 'gpt-5.4', label: 'gpt-5.4      (via Kilo)' },
+      { id: 'gpt-5.4-mini', label: 'gpt-5.4-mini (via Kilo)' },
+      { id: 'gpt-4o', label: 'gpt-4o       (via Kilo)' },
+      { id: 'gpt-4o-mini', label: 'gpt-4o-mini  (via Kilo)' },
     ],
     needsKey: true,
     keyEnvHint: 'KILO_API_KEY',
@@ -368,20 +419,20 @@ const PROVIDERS: ProviderEntry[] = [
     description: 'localhost:11434 · modelos rodando localmente · privacidade total',
     defaultModel: 'qwen2.5',
     models: [
-      { id: 'qwen2.5',             label: 'qwen2.5          — Qwen2.5 7B/14B/72B, excelente custo-benefício' },
-      { id: 'qwen3:32b',           label: 'qwen3:32b        — Qwen3 32B local' },
-      { id: 'qwen3:14b',           label: 'qwen3:14b        — Qwen3 14B, rápido' },
-      { id: 'qwen3:8b',            label: 'qwen3:8b         — Qwen3 8B, muito rápido' },
-      { id: 'llama3.2',            label: 'llama3.2         — Meta Llama 3.2 3B/11B' },
-      { id: 'llama3.2:11b',        label: 'llama3.2:11b     — Meta Llama 3.2 11B vision' },
-      { id: 'mistral',             label: 'mistral          — Mistral 7B' },
-      { id: 'phi4',                label: 'phi4             — Microsoft Phi-4 (14B)' },
-      { id: 'phi4-mini',           label: 'phi4-mini        — Microsoft Phi-4 Mini (3.8B)' },
-      { id: 'deepseek-r1:32b',     label: 'deepseek-r1:32b  — DeepSeek R1, raciocínio estendido' },
-      { id: 'deepseek-r1:14b',     label: 'deepseek-r1:14b  — DeepSeek R1, mais leve' },
-      { id: 'deepseek-r1:8b',      label: 'deepseek-r1:8b   — DeepSeek R1, mais rápido' },
-      { id: 'gemma3:27b',          label: 'gemma3:27b       — Google Gemma 3 27B' },
-      { id: 'codestral:22b',       label: 'codestral:22b    — Mistral Codestral, coding' },
+      { id: 'qwen2.5', label: 'qwen2.5          — Qwen2.5 7B/14B/72B, excelente custo-benefício' },
+      { id: 'qwen3:32b', label: 'qwen3:32b        — Qwen3 32B local' },
+      { id: 'qwen3:14b', label: 'qwen3:14b        — Qwen3 14B, rápido' },
+      { id: 'qwen3:8b', label: 'qwen3:8b         — Qwen3 8B, muito rápido' },
+      { id: 'llama3.2', label: 'llama3.2         — Meta Llama 3.2 3B/11B' },
+      { id: 'llama3.2:11b', label: 'llama3.2:11b     — Meta Llama 3.2 11B vision' },
+      { id: 'mistral', label: 'mistral          — Mistral 7B' },
+      { id: 'phi4', label: 'phi4             — Microsoft Phi-4 (14B)' },
+      { id: 'phi4-mini', label: 'phi4-mini        — Microsoft Phi-4 Mini (3.8B)' },
+      { id: 'deepseek-r1:32b', label: 'deepseek-r1:32b  — DeepSeek R1, raciocínio estendido' },
+      { id: 'deepseek-r1:14b', label: 'deepseek-r1:14b  — DeepSeek R1, mais leve' },
+      { id: 'deepseek-r1:8b', label: 'deepseek-r1:8b   — DeepSeek R1, mais rápido' },
+      { id: 'gemma3:27b', label: 'gemma3:27b       — Google Gemma 3 27B' },
+      { id: 'codestral:22b', label: 'codestral:22b    — Mistral Codestral, coding' },
     ],
     needsKey: false,
     keyEnvHint: '',
@@ -390,7 +441,9 @@ const PROVIDERS: ProviderEntry[] = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function line(char = '─', width = 66): string { return char.repeat(width); }
+function line(char = '─', width = 66): string {
+  return char.repeat(width);
+}
 
 function printBanner(): void {
   console.log('');
@@ -439,7 +492,9 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
       console.error(`\n  [inception] Configuração já existe em: ${configPath}`);
       console.error('  Use --force para sobrescrever.\n');
       process.exit(1);
-    } catch { /* file doesn't exist, proceed */ }
+    } catch {
+      /* file doesn't exist, proceed */
+    }
   }
 
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -452,9 +507,11 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
 
     // ── Passo 1: Agente ─────────────────────────────────────────────────────
     printStep(1, TOTAL_STEPS, 'Identidade do Agente');
-    const agentName    = (await ask(rl, 'Nome do agente [Inception Agent]: '))  || 'Inception Agent';
-    const agentPurpose = (await ask(rl, 'Propósito [Assistente autônomo de uso geral]: ')) || 'Assistente autônomo de uso geral.';
-    const language     = (await ask(rl, 'Idioma principal [pt-BR]: '))          || 'pt-BR';
+    const agentName = (await ask(rl, 'Nome do agente [Inception Agent]: ')) || 'Inception Agent';
+    const agentPurpose =
+      (await ask(rl, 'Propósito [Assistente autônomo de uso geral]: ')) ||
+      'Assistente autônomo de uso geral.';
+    const language = (await ask(rl, 'Idioma principal [pt-BR]: ')) || 'pt-BR';
 
     // ── Passo 2: Operador ───────────────────────────────────────────────────
     printStep(2, TOTAL_STEPS, 'Configuração do Operador');
@@ -465,9 +522,12 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
     console.log('    3. full        — execução sem aprovação humana');
     const autonomyRaw = (await ask(rl, 'Nível [1]: ')) || '1';
     const autonomyMap: Record<string, string> = {
-      '1': 'supervised', supervised: 'supervised',
-      '2': 'autonomous', autonomous: 'autonomous',
-      '3': 'full',       full: 'full',
+      '1': 'supervised',
+      supervised: 'supervised',
+      '2': 'autonomous',
+      autonomous: 'autonomous',
+      '3': 'full',
+      full: 'full',
     };
     const autonomyLevel = autonomyMap[autonomyRaw] ?? 'supervised';
 
@@ -506,7 +566,10 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
         const envFallback = sel.keyEnvHint ? process.env[sel.keyEnvHint] : undefined;
         if (envFallback) {
           console.log(`  Variável ${sel.keyEnvHint} detectada no ambiente.`);
-          const useEnv = (await ask(rl, 'Usar key do ambiente? (não armazenada no arquivo) [S/n]: ')).toLowerCase() || 's';
+          const useEnv =
+            (
+              await ask(rl, 'Usar key do ambiente? (não armazenada no arquivo) [S/n]: ')
+            ).toLowerCase() || 's';
           if (!['n', 'nao', 'não', 'no'].includes(useEnv)) {
             apiKey = '';
             console.log('  Key do ambiente será usada em runtime.');
@@ -545,7 +608,7 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
     }
 
     const config: Record<string, unknown> = {
-      agent:    { name: agentName, purpose: agentPurpose, language },
+      agent: { name: agentName, purpose: agentPurpose, language },
       operator: { name: operatorName, autonomyLevel },
       defaultProvider: defaultProviderSlug,
       providers: configuredProviders,
@@ -575,7 +638,6 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
     console.log('');
     console.log(line('═'));
     console.log('');
-
   } finally {
     rl.close();
   }

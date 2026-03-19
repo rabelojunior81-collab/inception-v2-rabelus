@@ -68,10 +68,14 @@ export function toOllamaMessage(msg: Message): OllamaMessage {
 
 function messageRoleToOllama(role: MessageRole): OllamaMessage['role'] {
   switch (role) {
-    case MessageRole.System: return 'system';
-    case MessageRole.User: return 'user';
-    case MessageRole.Assistant: return 'assistant';
-    case MessageRole.Tool: return 'tool';
+    case MessageRole.System:
+      return 'system';
+    case MessageRole.User:
+      return 'user';
+    case MessageRole.Assistant:
+      return 'assistant';
+    case MessageRole.Tool:
+      return 'tool';
   }
 }
 

@@ -1,7 +1,11 @@
 import { randomUUID } from 'node:crypto';
 
 import type { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
-import { MemorySearchTool, MemoryDescribeTool, MemoryExpandTool } from '@rabeluslab/inception-memory';
+import {
+  MemorySearchTool,
+  MemoryDescribeTool,
+  MemoryExpandTool,
+} from '@rabeluslab/inception-memory';
 import type {
   IProvider,
   IToolRegistry,
@@ -19,11 +23,7 @@ import type {
 
 import { ApprovalGate, type ApprovalHandler } from './approval-gate.js';
 import { ContextBuilder } from './context-builder.js';
-import {
-  inboundToMessage,
-  assistantToOutbound,
-  messageToMemoryEntry,
-} from './message-adapter.js';
+import { inboundToMessage, assistantToOutbound, messageToMemoryEntry } from './message-adapter.js';
 import type { SystemPromptContext } from './system-prompt.js';
 import { ToolExecutor } from './tool-executor.js';
 
@@ -35,12 +35,12 @@ export interface AgentLoopConfig {
   readonly toolRegistry: IToolRegistry;
   readonly approvalHandler: ApprovalHandler;
   readonly model: string;
-  readonly modelTokenBudget?: number;       // default: 128_000
-  readonly maxToolRounds?: number;          // default: 10
+  readonly modelTokenBudget?: number; // default: 128_000
+  readonly maxToolRounds?: number; // default: 10
   readonly activeMission?: Mission;
   readonly allowedCommands?: readonly string[]; // shell tool allowlist
-  readonly allowedPaths?: readonly string[];    // filesystem allowlist
-  readonly allowedUrls?: readonly string[];     // http tool allowlist
+  readonly allowedPaths?: readonly string[]; // filesystem allowlist
+  readonly allowedUrls?: readonly string[]; // http tool allowlist
 }
 
 export interface TurnResult {
@@ -69,15 +69,9 @@ export class AgentLoop {
     this.modelTokenBudget = cfg.modelTokenBudget ?? 128_000;
     this.maxToolRounds = cfg.maxToolRounds ?? 10;
 
-    this.gate = new ApprovalGate(
-      cfg.operator.autonomyLevel,
-      cfg.approvalHandler,
-    );
+    this.gate = new ApprovalGate(cfg.operator.autonomyLevel, cfg.approvalHandler);
 
-    this.contextBuilder = new ContextBuilder(
-      cfg.memory,
-      this.modelTokenBudget,
-    );
+    this.contextBuilder = new ContextBuilder(cfg.memory, this.modelTokenBudget);
 
     // Register built-in memory tools
     const retrieval = cfg.memory.getRetrieval();
@@ -122,29 +116,27 @@ export class AgentLoop {
     // IMPORTANT: use def.id (not def.name) as function.name — the LLM returns
     // tc.function.name on tool calls, and the registry is keyed by def.id.
     // def.name is human-readable ("Read File"), def.id is the stable key ("read_file").
-    const toolDefs: LLMToolDefinition[] = this.cfg.toolRegistry.list().map(
-      (def) => ({
-        type: 'function' as const,
-        function: {
-          name: def.id,
-          description: def.description,
-          parameters: {
-            type: 'object' as const,
-            properties: Object.fromEntries(
-              Object.entries(def.parameters.properties).map(([k, v]) => [
-                k,
-                {
-                  type: v.type,
-                  description: v.description,
-                  ...(v.enum !== undefined ? { enum: v.enum } : {}),
-                },
-              ]),
-            ),
-            required: [...def.parameters.required],
-          } as unknown as import('@rabeluslab/inception-types').JSONObject,
-        },
-      }),
-    );
+    const toolDefs: LLMToolDefinition[] = this.cfg.toolRegistry.list().map((def) => ({
+      type: 'function' as const,
+      function: {
+        name: def.id,
+        description: def.description,
+        parameters: {
+          type: 'object' as const,
+          properties: Object.fromEntries(
+            Object.entries(def.parameters.properties).map(([k, v]) => [
+              k,
+              {
+                type: v.type,
+                description: v.description,
+                ...(v.enum !== undefined ? { enum: v.enum } : {}),
+              },
+            ])
+          ),
+          required: [...def.parameters.required],
+        } as unknown as import('@rabeluslab/inception-types').JSONObject,
+      },
+    }));
 
     // Build system prompt context
     const systemCtx: SystemPromptContext = {
@@ -158,9 +150,7 @@ export class AgentLoop {
     const built = this.contextBuilder.build(threadId, userMessage, systemCtx);
 
     // Persist user message to memory
-    await this.cfg.memory.store(
-      messageToMemoryEntry(userMessage, threadId, missionId),
-    );
+    await this.cfg.memory.store(messageToMemoryEntry(userMessage, threadId, missionId));
 
     // Run the ReAct loop
     const conversationMessages: Message[] = [...built.messages];
@@ -184,14 +174,10 @@ export class AgentLoop {
       const assistantMsg: Message = {
         role: 'assistant' as Message['role'],
         content: response.content,
-        ...(response.toolCalls
-          ? { metadata: { toolCalls: response.toolCalls } }
-          : {}),
+        ...(response.toolCalls ? { metadata: { toolCalls: response.toolCalls } } : {}),
       };
       conversationMessages.push(assistantMsg);
-      await this.cfg.memory.store(
-        messageToMemoryEntry(assistantMsg, threadId, missionId),
-      );
+      await this.cfg.memory.store(messageToMemoryEntry(assistantMsg, threadId, missionId));
 
       // No tool calls → done
       if (
@@ -215,8 +201,8 @@ export class AgentLoop {
         workspacePath: process.cwd(),
         allowlist: {
           commands: this.cfg.allowedCommands,
-          paths:    this.cfg.allowedPaths,
-          urls:     this.cfg.allowedUrls,
+          paths: this.cfg.allowedPaths,
+          urls: this.cfg.allowedUrls,
         },
         signal: new AbortController().signal,
         logger: {
@@ -228,16 +214,13 @@ export class AgentLoop {
       };
 
       // Execute tool calls
-      const toolResults = await this.toolExecutor.executeAll(
-        response.toolCalls,
-        execCtx,
-      );
+      const toolResults = await this.toolExecutor.executeAll(response.toolCalls, execCtx);
 
       // Add tool results to conversation and persist
       for (const result of toolResults) {
         conversationMessages.push(result.resultMessage);
         await this.cfg.memory.store(
-          messageToMemoryEntry(result.resultMessage, threadId, missionId),
+          messageToMemoryEntry(result.resultMessage, threadId, missionId)
         );
       }
 
@@ -252,7 +235,7 @@ export class AgentLoop {
       finalContent || '(sem resposta)',
       inbound.channel,
       inbound.sender.id,
-      { missionId },
+      { missionId }
     );
 
     return { response: outbound, toolRounds: rounds, missionId };

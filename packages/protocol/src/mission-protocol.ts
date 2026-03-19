@@ -3,7 +3,6 @@ import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
 
-
 import type {
   IMissionProtocol,
   Mission,
@@ -11,7 +10,13 @@ import type {
   Report,
   JournalEntry,
 } from '@rabeluslab/inception-types';
-import { MissionStatus, AgentMode, TechnicalStatus, AutonomyLevel, TaskStatus } from '@rabeluslab/inception-types';
+import {
+  MissionStatus,
+  AgentMode,
+  TechnicalStatus,
+  AutonomyLevel,
+  TaskStatus,
+} from '@rabeluslab/inception-types';
 
 import { PROTOCOL_SCHEMA_SQL } from './schema.js';
 
@@ -115,7 +120,7 @@ export class MissionProtocol implements IMissionProtocol {
     this.db
       .prepare(
         `INSERT INTO missions (id, title, description, project_id, status, mode, autonomy_level, created_by, created_at, metadata)
-         VALUES (@id, @title, @description, @project_id, @status, @mode, @autonomy_level, @created_by, @created_at, @metadata)`,
+         VALUES (@id, @title, @description, @project_id, @status, @mode, @autonomy_level, @created_by, @created_at, @metadata)`
       )
       .run({
         id,
@@ -135,7 +140,7 @@ export class MissionProtocol implements IMissionProtocol {
       this.db
         .prepare(
           `INSERT INTO tasks (id, mission_id, grp, description, status, gate, dependencies, tech_status, assigned_to, notes)
-           VALUES (@id, @mission_id, @grp, @description, @status, @gate, @dependencies, @tech_status, @assigned_to, @notes)`,
+           VALUES (@id, @mission_id, @grp, @description, @status, @gate, @dependencies, @tech_status, @assigned_to, @notes)`
         )
         .run({
           id: task.id,
@@ -167,16 +172,14 @@ export class MissionProtocol implements IMissionProtocol {
       .run(MissionStatus.Completed, now, id);
 
     // Store report as a journal entry if not yet archived
-    const existing = this.db
-      .prepare('SELECT id FROM journal WHERE mission_id = ?')
-      .get(id);
+    const existing = this.db.prepare('SELECT id FROM journal WHERE mission_id = ?').get(id);
     if (!existing) {
       const mission = this.getMissionById(id);
       if (mission) {
         this.db
           .prepare(
             `INSERT INTO journal (id, mission_id, archived_at, archived_by, mission_snapshot, final_report)
-             VALUES (@id, @mission_id, @archived_at, @archived_by, @mission_snapshot, @final_report)`,
+             VALUES (@id, @mission_id, @archived_at, @archived_by, @mission_snapshot, @final_report)`
           )
           .run({
             id: generateId('jrnl'),
@@ -211,7 +214,7 @@ export class MissionProtocol implements IMissionProtocol {
     this.db
       .prepare(
         `INSERT INTO journal (id, mission_id, archived_at, archived_by, mission_snapshot)
-         VALUES (@id, @mission_id, @archived_at, @archived_by, @mission_snapshot)`,
+         VALUES (@id, @mission_id, @archived_at, @archived_by, @mission_snapshot)`
       )
       .run({
         id: journalId,
@@ -226,15 +229,17 @@ export class MissionProtocol implements IMissionProtocol {
       .run(MissionStatus.Archived, now, id);
 
     return rowToJournalEntry(
-      this.db.prepare('SELECT * FROM journal WHERE id = ?').get(journalId) as unknown as JournalRow,
+      this.db.prepare('SELECT * FROM journal WHERE id = ?').get(journalId) as unknown as JournalRow
     );
   }
 
   async getActiveMissions(): Promise<Mission[]> {
     const rows = this.db
-      .prepare(`SELECT * FROM missions WHERE status IN ('pending','running','blocked') ORDER BY created_at DESC`)
+      .prepare(
+        `SELECT * FROM missions WHERE status IN ('pending','running','blocked') ORDER BY created_at DESC`
+      )
       .all() as unknown as MissionRow[];
-    return rows.map(r => rowToMission(r, this.getTasksForMission(r.id)));
+    return rows.map((r) => rowToMission(r, this.getTasksForMission(r.id)));
   }
 
   async getJournal(): Promise<JournalEntry[]> {
@@ -286,7 +291,9 @@ function rowToJournalEntry(row: JournalRow): JournalEntry {
     archivedAt: row.archived_at,
     archivedBy: row.archived_by,
     missionSnapshot: JSON.parse(row.mission_snapshot) as Mission,
-    finalReport: row.final_report ? (JSON.parse(row.final_report) as import('@rabeluslab/inception-types').Report) : undefined,
+    finalReport: row.final_report
+      ? (JSON.parse(row.final_report) as import('@rabeluslab/inception-types').Report)
+      : undefined,
     immutable: true,
   };
 }

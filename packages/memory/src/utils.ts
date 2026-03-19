@@ -34,11 +34,7 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
 }
 
 // Format a message for summarization input
-export function formatMessageForSummary(
-  role: string,
-  content: string,
-  createdAt: string,
-): string {
+export function formatMessageForSummary(role: string, content: string, createdAt: string): string {
   const date = new Date(createdAt).toLocaleString('pt-BR', { timeZone: 'UTC' });
   return `[${date} UTC] ${role.toUpperCase()}: ${content}`;
 }

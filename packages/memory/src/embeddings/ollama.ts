@@ -14,7 +14,7 @@ export class OllamaEmbeddingProvider implements IEmbeddingProvider {
   constructor(
     host = 'http://localhost:11434',
     model = DEFAULT_MODEL,
-    dimensions = DEFAULT_DIMENSIONS,
+    dimensions = DEFAULT_DIMENSIONS
   ) {
     this.id = `ollama-${model}`;
     this.dimensions = dimensions;

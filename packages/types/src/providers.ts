@@ -13,19 +13,19 @@ export enum ProviderId {
   Anthropic = 'anthropic',
   Gemini = 'gemini',
   // Local providers
-  Ollama = 'ollama',                 // https://docs.ollama.com/integrations/openclaw
+  Ollama = 'ollama', // https://docs.ollama.com/integrations/openclaw
   // Gateways & routers
   OpenRouter = 'openrouter',
-  KiloGateway = 'kilo',             // https://kilo.ai/docs/gateway
+  KiloGateway = 'kilo', // https://kilo.ai/docs/gateway
   // Specialty / coding-focused
-  OpenCodeZen = 'opencode-zen',     // https://opencode.ai/docs/pt-br/zen/
-  KimiCoding = 'kimi',              // Moonshot AI — optimized for coding
+  OpenCodeZen = 'opencode-zen', // https://opencode.ai/docs/pt-br/zen/
+  KimiCoding = 'kimi', // Moonshot AI — optimized for coding
   // OAuth-based auth flows
-  GeminiOAuth = 'gemini-oauth',     // Antigravity-style OAuth for Gemini
-  OpenAIOAuth = 'openai-oauth',     // OpenAI with OAuth authentication
+  GeminiOAuth = 'gemini-oauth', // Antigravity-style OAuth for Gemini
+  OpenAIOAuth = 'openai-oauth', // OpenAI with OAuth authentication
   // Regional / cloud platform providers
-  ZAi = 'zai',                      // https://docs.z.ai/devpack/overview
-  Bailian = 'bailian',              // Alibaba AI Model Studio (Tongyi Qianwen)
+  ZAi = 'zai', // https://docs.z.ai/devpack/overview
+  Bailian = 'bailian', // Alibaba AI Model Studio (Tongyi Qianwen)
   // Other providers
   Groq = 'groq',
   Together = 'together',
@@ -296,7 +296,7 @@ export interface IProvider {
     readonly vision: boolean;
     readonly embeddings: boolean;
   };
-  
+
   initialize(config: ProviderConfig): Promise<void>;
   generate(request: GenerateRequest): Promise<GenerateResponse>;
   generateStream(request: GenerateRequest): AsyncIterable<GenerateChunk>;

@@ -20,7 +20,7 @@ export function guardPath(inputPath: string, context: ExecutionContext): string 
 
   if (resolved !== context.workspacePath && !resolved.startsWith(workspaceNorm)) {
     throw new Error(
-      `Path escape detected: "${inputPath}" resolves to "${resolved}" which is outside workspace "${context.workspacePath}"`,
+      `Path escape detected: "${inputPath}" resolves to "${resolved}" which is outside workspace "${context.workspacePath}"`
     );
   }
 
@@ -34,7 +34,7 @@ export function guardPath(inputPath: string, context: ExecutionContext): string 
 
     if (!allowed) {
       throw new Error(
-        `Path not in allowlist: "${resolved}" is not covered by any of [${allowedPaths.join(', ')}]`,
+        `Path not in allowlist: "${resolved}" is not covered by any of [${allowedPaths.join(', ')}]`
       );
     }
   }

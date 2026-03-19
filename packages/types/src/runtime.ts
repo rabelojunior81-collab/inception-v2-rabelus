@@ -107,18 +107,18 @@ export interface IRuntime {
   readonly state: RuntimeState;
   readonly stats: RuntimeStats;
   readonly startedAt?: ISO8601String;
-  
+
   initialize(config: RuntimeConfig): Promise<void>;
   start(): Promise<void>;
   pause(): Promise<void>;
   resume(): Promise<void>;
   stop(): Promise<void>;
   restart(): Promise<void>;
-  
+
   on<T extends RuntimeEvent>(event: T, handler: EventHandler<T>): void;
   off<T extends RuntimeEvent>(event: T, handler: EventHandler<T>): void;
   emit<T extends RuntimeEvent>(event: T, payload: RuntimeEventPayloads[T]): void;
-  
+
   getHealth(): Promise<{ healthy: boolean; checks: Record<string, boolean> }>;
 }
 

@@ -15,16 +15,16 @@ export interface StatusOptions {
 
 /** Maps env var → display name */
 const ENV_PROVIDER_LABELS: Array<[string, string]> = [
-  ['ANTHROPIC_API_KEY',   'Anthropic'],
-  ['OPENAI_API_KEY',      'OpenAI'],
-  ['GOOGLE_API_KEY',      'Gemini'],
-  ['DASHSCOPE_API_KEY',   'Bailian'],
-  ['OPENROUTER_API_KEY',  'OpenRouter'],
-  ['KILO_API_KEY',        'Kilo'],
-  ['KIMI_API_KEY',        'Kimi'],
-  ['ZAI_API_KEY',         'Z.AI'],
+  ['ANTHROPIC_API_KEY', 'Anthropic'],
+  ['OPENAI_API_KEY', 'OpenAI'],
+  ['GOOGLE_API_KEY', 'Gemini'],
+  ['DASHSCOPE_API_KEY', 'Bailian'],
+  ['OPENROUTER_API_KEY', 'OpenRouter'],
+  ['KILO_API_KEY', 'Kilo'],
+  ['KIMI_API_KEY', 'Kimi'],
+  ['ZAI_API_KEY', 'Z.AI'],
   ['OPENAI_BEARER_TOKEN', 'OpenAI OAuth'],
-  ['OLLAMA_API_KEY',      'Ollama Cloud'],
+  ['OLLAMA_API_KEY', 'Ollama Cloud'],
 ];
 
 export async function runStatus(options: StatusOptions = {}): Promise<void> {
@@ -82,9 +82,7 @@ export async function runStatus(options: StatusOptions = {}): Promise<void> {
 
   // ── Ollama health check ────────────────────────────────────────────────────
   const ollamaHost =
-    cfg?.providers['ollama']?.baseUrl ??
-    process.env['OLLAMA_BASE_URL'] ??
-    'http://localhost:11434';
+    cfg?.providers['ollama']?.baseUrl ?? process.env['OLLAMA_BASE_URL'] ?? 'http://localhost:11434';
   const ollamaLabel = ollamaHost.includes('ollama.com') ? 'Ollama Cloud' : `Ollama (${ollamaHost})`;
   process.stdout.write(`\n${ollamaLabel} ... `);
   try {
@@ -94,7 +92,7 @@ export async function runStatus(options: StatusOptions = {}): Promise<void> {
     const res = await fetch(tagsUrl, { signal: controller.signal });
     clearTimeout(timeout);
     if (res.ok) {
-      const data = await res.json() as { models?: Array<{ name: string }> };
+      const data = (await res.json()) as { models?: Array<{ name: string }> };
       const models = data.models?.map((m) => m.name).join(', ') ?? '(nenhum modelo)';
       console.log(`✅  Online — Modelos: ${models || '(nenhum)'}`);
     } else {

@@ -40,9 +40,7 @@ export interface JSONArray extends Array<JSONValue> {}
  * Result type for operations that can fail
  * Similar to Rust's Result<T, E>
  */
-export type Result<T, E = Error> = 
-  | { success: true; data: T }
-  | { success: false; error: E };
+export type Result<T, E = Error> = { success: true; data: T } | { success: false; error: E };
 
 /**
  * Nullable type shorthand

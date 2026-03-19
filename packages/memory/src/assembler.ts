@@ -22,11 +22,7 @@ export class ContextAssembler {
     this.summaries = new SummaryStore(db);
   }
 
-  assemble(
-    threadId: string,
-    tokenBudget: number,
-    freshTailCount = 32,
-  ): AssembledContext {
+  assemble(threadId: string, tokenBudget: number, freshTailCount = 32): AssembledContext {
     const allMessages = this.messages.get_by_thread(threadId, 10_000, 0);
     const allSummaries = this.summaries.get_by_thread(threadId);
 
@@ -36,7 +32,7 @@ export class ContextAssembler {
     // Fresh tail tokens (always included)
     const freshTokens = freshTail.reduce(
       (sum, m) => sum + (m.token_count || estimateTokens(m.content)),
-      0,
+      0
     );
 
     // Remaining budget for summaries
@@ -49,7 +45,7 @@ export class ContextAssembler {
 
     // Add summaries from highest depth (most condensed = most compact) to lowest
     const sortedSummaries = [...allSummaries].sort(
-      (a, b) => b.depth - a.depth || a.ordinal - b.ordinal,
+      (a, b) => b.depth - a.depth || a.ordinal - b.ordinal
     );
 
     for (const sum of sortedSummaries) {
@@ -65,12 +61,10 @@ export class ContextAssembler {
     }
 
     // Convert fresh tail messages
-    const freshMessages: Message[] = freshTail.map(m => ({
+    const freshMessages: Message[] = freshTail.map((m) => ({
       role: roleFromString(m.role),
       content: m.content,
-      metadata: m.metadata
-        ? (JSON.parse(m.metadata) as Record<string, unknown>)
-        : undefined,
+      metadata: m.metadata ? (JSON.parse(m.metadata) as Record<string, unknown>) : undefined,
     }));
 
     // Build final context: [summaries in chronological order] + [fresh tail]
@@ -79,7 +73,7 @@ export class ContextAssembler {
     // Generate system guidance when summaries are present
     let summaryGuidance: string | undefined;
     if (hasSummaries) {
-      const hasDeepSummaries = allSummaries.some(s => s.depth >= 2);
+      const hasDeepSummaries = allSummaries.some((s) => s.depth >= 2);
       summaryGuidance = hasDeepSummaries
         ? 'Sua memória de conversa foi compactada em múltiplos níveis. Use memory_search para recuperar detalhes específicos de conversas anteriores. Não presuma detalhes que não estão no contexto atual.'
         : 'Parte do histórico de conversa está em resumos acima. Use memory_search para recuperar detalhes específicos quando necessário.';

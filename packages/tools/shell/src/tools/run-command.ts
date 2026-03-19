@@ -75,7 +75,7 @@ export class RunCommandTool implements ITool {
     const command = args['command'] as string;
     const timeout = Math.min(
       (args['timeout'] as number | undefined) ?? DEFAULT_TIMEOUT_MS,
-      MAX_TIMEOUT_MS,
+      MAX_TIMEOUT_MS
     );
     const stdinData = args['stdin'] as string | undefined;
     const extraEnv = (args['env'] as Record<string, string> | undefined) ?? {};
@@ -97,9 +97,7 @@ export class RunCommandTool implements ITool {
 
     // ── Resolve cwd ───────────────────────────────────────────────────────────
     const rawCwd = args['cwd'] as string | undefined;
-    const cwd = rawCwd
-      ? path.resolve(context.workspacePath, rawCwd)
-      : context.workspacePath;
+    const cwd = rawCwd ? path.resolve(context.workspacePath, rawCwd) : context.workspacePath;
 
     // ── Spawn ─────────────────────────────────────────────────────────────────
     return new Promise<ToolExecutionResult>((resolve) => {

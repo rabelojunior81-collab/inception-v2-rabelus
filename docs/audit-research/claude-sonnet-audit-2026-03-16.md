@@ -18,22 +18,22 @@ O repositório é um **blueprint de alta qualidade** com **~8% de implementaçã
 
 **Completude geral: ~8%**
 
-| Camada | Status | Detalhes |
-|--------|--------|----------|
-| `packages/types` | ✅ 100% | 10 arquivos src, ~200 tipos/interfaces/enums |
-| `packages/core` | ❌ 0% | Diretório vazio, sem package.json |
-| `packages/config` | ❌ 0% | Diretório vazio, sem package.json |
-| `packages/providers/*` | ❌ 0% | 4 subpastas vazias, sem package.json |
-| `packages/channels/*` | ❌ 0% | 4 subpastas vazias, sem package.json |
-| `packages/memory` | ❌ 0% | Diretório vazio, sem package.json |
-| `packages/tools/*` | ❌ 0% | 5 subpastas vazias, sem package.json |
-| `packages/security` | ❌ 0% | Diretório vazio, sem package.json |
-| `packages/protocol` | ❌ 0% | Diretório vazio, sem package.json |
-| `apps/cli` | ❌ 0% | Diretório vazio, sem package.json |
-| `apps/daemon` | ❌ 0% | Diretório vazio, sem package.json |
-| Tooling/Config | ✅ 95% | package.json, turbo.json, tsconfig, ESLint, Prettier, CI |
-| Documentação | 🟡 60% | HANDOFF excelente, docs/ vazia, MISSION_BRIEFING inexistente |
-| CI/CD | ✅ 80% | GitHub Actions funcional, falta `pnpm audit` |
+| Camada                 | Status  | Detalhes                                                     |
+| ---------------------- | ------- | ------------------------------------------------------------ |
+| `packages/types`       | ✅ 100% | 10 arquivos src, ~200 tipos/interfaces/enums                 |
+| `packages/core`        | ❌ 0%   | Diretório vazio, sem package.json                            |
+| `packages/config`      | ❌ 0%   | Diretório vazio, sem package.json                            |
+| `packages/providers/*` | ❌ 0%   | 4 subpastas vazias, sem package.json                         |
+| `packages/channels/*`  | ❌ 0%   | 4 subpastas vazias, sem package.json                         |
+| `packages/memory`      | ❌ 0%   | Diretório vazio, sem package.json                            |
+| `packages/tools/*`     | ❌ 0%   | 5 subpastas vazias, sem package.json                         |
+| `packages/security`    | ❌ 0%   | Diretório vazio, sem package.json                            |
+| `packages/protocol`    | ❌ 0%   | Diretório vazio, sem package.json                            |
+| `apps/cli`             | ❌ 0%   | Diretório vazio, sem package.json                            |
+| `apps/daemon`          | ❌ 0%   | Diretório vazio, sem package.json                            |
+| Tooling/Config         | ✅ 95%  | package.json, turbo.json, tsconfig, ESLint, Prettier, CI     |
+| Documentação           | 🟡 60%  | HANDOFF excelente, docs/ vazia, MISSION_BRIEFING inexistente |
+| CI/CD                  | ✅ 80%  | GitHub Actions funcional, falta `pnpm audit`                 |
 
 ---
 
@@ -73,14 +73,15 @@ packages/types/src/
 
 `ToolResult` é declarado em **dois módulos diferentes** com **semânticas incompatíveis**:
 
-| Módulo | Contexto | Significado |
-|--------|----------|-------------|
-| `tools.ts` | Resultado de execução de uma tool pelo runtime | `{ success, data, error, metadata }` |
-| `providers.ts` | Resultado de uma tool call retornado ao LLM | `{ toolCallId, role, content, isError }` |
+| Módulo         | Contexto                                       | Significado                              |
+| -------------- | ---------------------------------------------- | ---------------------------------------- |
+| `tools.ts`     | Resultado de execução de uma tool pelo runtime | `{ success, data, error, metadata }`     |
+| `providers.ts` | Resultado de uma tool call retornado ao LLM    | `{ toolCallId, role, content, isError }` |
 
 **Impacto:** `export * from './tools.js'` e `export * from './providers.js'` em `index.ts` causam **shadowing silencioso**. O último export declarado no index vence — o que significa que `import { ToolResult } from '@inception/types'` retornará um tipo diferente do esperado dependendo da ordem em `index.ts`.
 
 **Correção:**
+
 ```typescript
 // tools.ts: renomear para
 export interface ToolExecutionResult { ... }
@@ -102,15 +103,15 @@ Com ~200 tipos, seria valioso ter testes de tipo via `expect<IsEqual<...>>()` (u
 
 ### `package.json` (raiz) — ✅ Muito Bom
 
-| Aspecto | Status | Nota |
-|---------|--------|------|
-| Node engine `>=20.0.0` | ✅ | Correto |
-| pnpm pinado `8.15.0` | ✅ | Reprodutibilidade garantida |
-| `"type": "module"` (ESM) | ✅ | Moderno e correto |
-| Scripts completos | ✅ | build, dev, lint, typecheck, test, release |
-| Husky + lint-staged | ✅ | Pre-commit automático |
-| Commitizen | ✅ | Conventional Commits |
-| Changesets | ✅ | Versionamento controlado |
+| Aspecto                  | Status | Nota                                       |
+| ------------------------ | ------ | ------------------------------------------ |
+| Node engine `>=20.0.0`   | ✅     | Correto                                    |
+| pnpm pinado `8.15.0`     | ✅     | Reprodutibilidade garantida                |
+| `"type": "module"` (ESM) | ✅     | Moderno e correto                          |
+| Scripts completos        | ✅     | build, dev, lint, typecheck, test, release |
+| Husky + lint-staged      | ✅     | Pre-commit automático                      |
+| Commitizen               | ✅     | Conventional Commits                       |
+| Changesets               | ✅     | Versionamento controlado                   |
 
 **🔴 Problema:** Script `clean` usa `rm -rf` — não funciona em Windows CMD/PowerShell nativo (apenas em Git Bash). Em CI (ubuntu-latest) funciona, mas em desenvolvimento Windows pode falhar.
 
@@ -148,6 +149,7 @@ Com ~200 tipos, seria valioso ter testes de tipo via `expect<IsEqual<...>>()` (u
 **🔴 Problema:** `"moduleResolution": "bundler"` exige que cada pacote use um bundler (esbuild, tsup) para resolução de imports. O pacote `@inception/types` usa apenas `"build": "tsc"` sem bundler — isso funciona para o próprio pacote mas pode causar erros em pacotes que importem `@inception/types` em ambiente Node.js puro.
 
 **Duas opções:**
+
 - **Opção A (recomendada):** Adotar `tsup` em cada pacote como build tool → mantém `moduleResolution: "bundler"`
 - **Opção B:** Mudar para `"moduleResolution": "node16"` → compatível com Node.js puro + tsc
 
@@ -177,30 +179,31 @@ Com ~200 tipos, seria valioso ter testes de tipo via `expect<IsEqual<...>>()` (u
 
 ## D. Auditoria de Documentação
 
-| Arquivo | Existe | Qualidade | Problemas |
-|---------|--------|-----------|-----------|
-| `README.md` | ✅ | 🟡 Médio | Descreve features "ready" que não existem — landing page > estado real |
-| `HANDOFF.md` | ✅ | ✅ Alto | Honesto, didático. Referencia MISSION_BRIEFING.md inexistente |
-| `CONTRIBUTING.md` | ✅ | ✅ Alto | Abrangente, padrões de commits, JSDoc, i18n explicado |
-| `CODE_OF_CONDUCT.md` | ✅ | ✅ | Contributor Covenant padrão |
-| `SECURITY.md` | ✅ | ✅ | Política clara |
-| `LICENSE` | ✅ | ✅ | MIT |
-| `MISSION_BRIEFING.md` | ❌ | — | **BLOQUEADOR DE ONBOARDING: citado no HANDOFF como "LEIA PRIMEIRO"** |
-| `docs/en/`, `docs/pt/`, `docs/es/`, `docs/zh/` | ✅ estrutura | ❌ vazio | 4 pastas criadas, zero conteúdo |
-| `docs/audit-research/codex-first-audit.md` | ✅ | ✅ | Excelente análise de domínio (1172 linhas, Codex 2026-03-13) |
+| Arquivo                                        | Existe       | Qualidade | Problemas                                                              |
+| ---------------------------------------------- | ------------ | --------- | ---------------------------------------------------------------------- |
+| `README.md`                                    | ✅           | 🟡 Médio  | Descreve features "ready" que não existem — landing page > estado real |
+| `HANDOFF.md`                                   | ✅           | ✅ Alto   | Honesto, didático. Referencia MISSION_BRIEFING.md inexistente          |
+| `CONTRIBUTING.md`                              | ✅           | ✅ Alto   | Abrangente, padrões de commits, JSDoc, i18n explicado                  |
+| `CODE_OF_CONDUCT.md`                           | ✅           | ✅        | Contributor Covenant padrão                                            |
+| `SECURITY.md`                                  | ✅           | ✅        | Política clara                                                         |
+| `LICENSE`                                      | ✅           | ✅        | MIT                                                                    |
+| `MISSION_BRIEFING.md`                          | ❌           | —         | **BLOQUEADOR DE ONBOARDING: citado no HANDOFF como "LEIA PRIMEIRO"**   |
+| `docs/en/`, `docs/pt/`, `docs/es/`, `docs/zh/` | ✅ estrutura | ❌ vazio  | 4 pastas criadas, zero conteúdo                                        |
+| `docs/audit-research/codex-first-audit.md`     | ✅           | ✅        | Excelente análise de domínio (1172 linhas, Codex 2026-03-13)           |
 
 ### README.md vs. Realidade
 
 O README descreve o Inception Framework como se fosse "production-ready". Exemplos de afirmações desalinhadas:
 
-| README afirma | Realidade |
-|---------------|-----------|
-| "Multi-provider support (OpenAI, Anthropic, Gemini, Ollama)" | Apenas interfaces definidas |
-| "Telegram/Discord integration" | Apenas `TelegramConfig`/`DiscordConfig` como tipos |
-| "Hybrid memory (SQLite + Gemini embeddings)" | Apenas `IMemoryBackend` como interface |
-| "Security gates & approval workflow" | Apenas `ISecurityManager` como interface |
+| README afirma                                                | Realidade                                          |
+| ------------------------------------------------------------ | -------------------------------------------------- |
+| "Multi-provider support (OpenAI, Anthropic, Gemini, Ollama)" | Apenas interfaces definidas                        |
+| "Telegram/Discord integration"                               | Apenas `TelegramConfig`/`DiscordConfig` como tipos |
+| "Hybrid memory (SQLite + Gemini embeddings)"                 | Apenas `IMemoryBackend` como interface             |
+| "Security gates & approval workflow"                         | Apenas `ISecurityManager` como interface           |
 
 **Recomendação:** Adicionar seção "Current Status" clara separando:
+
 - ✅ Implemented
 - 🏗️ Typed (contracts defined, no implementation)
 - 📋 Planned
@@ -211,22 +214,22 @@ O README descreve o Inception Framework como se fosse "production-ready". Exempl
 
 ### O que está correto
 
-| Aspecto | Status |
-|---------|--------|
-| Triggers em push/PR para `main` e `develop` | ✅ |
-| Concurrency com cancelamento de runs antigos | ✅ |
-| Cache de pnpm store | ✅ |
-| `--frozen-lockfile` | ✅ |
-| Matrix Node.js 20.x + 21.x | ✅ |
-| Jobs: lint-and-typecheck, test, build | ✅ |
+| Aspecto                                      | Status |
+| -------------------------------------------- | ------ |
+| Triggers em push/PR para `main` e `develop`  | ✅     |
+| Concurrency com cancelamento de runs antigos | ✅     |
+| Cache de pnpm store                          | ✅     |
+| `--frozen-lockfile`                          | ✅     |
+| Matrix Node.js 20.x + 21.x                   | ✅     |
+| Jobs: lint-and-typecheck, test, build        | ✅     |
 
 ### O que está faltando
 
-| Item | Impacto |
-|------|---------|
-| `pnpm audit` | Sem verificação de vulnerabilidades de dependências |
-| Matrix de OS | Apenas `ubuntu-latest` — não testa Windows/macOS |
-| Deploy pipeline | Aguardado para quando houver builds publicáveis |
+| Item            | Impacto                                             |
+| --------------- | --------------------------------------------------- |
+| `pnpm audit`    | Sem verificação de vulnerabilidades de dependências |
+| Matrix de OS    | Apenas `ubuntu-latest` — não testa Windows/macOS    |
+| Deploy pipeline | Aguardado para quando houver builds publicáveis     |
 
 ---
 
@@ -234,21 +237,21 @@ O README descreve o Inception Framework como se fosse "production-ready". Exempl
 
 ### O que o HANDOFF.md declarou como já existente (verificação)
 
-| Declaração | Status | Observação |
-|------------|--------|------------|
-| "Arquitetura completa definida (trait-driven)" | ✅ CONFIRMADO | Tipos excelentes |
-| "Tipagens TypeScript (@inception/types)" | ✅ CONFIRMADO | 100% implementado |
-| "Estrutura de monorepo configurada" | ✅ CONFIRMADO | Tooling profissional |
-| "Documentação internacionalizada" | 🟡 PARCIAL | Estrutura existe, conteúdo vazio |
+| Declaração                                     | Status        | Observação                       |
+| ---------------------------------------------- | ------------- | -------------------------------- |
+| "Arquitetura completa definida (trait-driven)" | ✅ CONFIRMADO | Tipos excelentes                 |
+| "Tipagens TypeScript (@inception/types)"       | ✅ CONFIRMADO | 100% implementado                |
+| "Estrutura de monorepo configurada"            | ✅ CONFIRMADO | Tooling profissional             |
+| "Documentação internacionalizada"              | 🟡 PARCIAL    | Estrutura existe, conteúdo vazio |
 
 ### O que o HANDOFF.md declarou como faltante (verificação)
 
-| Declaração | Status |
-|------------|--------|
+| Declaração                                       | Status                 |
+| ------------------------------------------------ | ---------------------- |
 | Código fonte dos pacotes (core, providers, etc.) | ✅ CONFIRMADO FALTANTE |
-| CLI interativo | ✅ CONFIRMADO FALTANTE |
-| Integração Telegram/Discord | ✅ CONFIRMADO FALTANTE |
-| Runtime engine | ✅ CONFIRMADO FALTANTE |
+| CLI interativo                                   | ✅ CONFIRMADO FALTANTE |
+| Integração Telegram/Discord                      | ✅ CONFIRMADO FALTANTE |
+| Runtime engine                                   | ✅ CONFIRMADO FALTANTE |
 
 ---
 
@@ -256,33 +259,33 @@ O README descreve o Inception Framework como se fosse "production-ready". Exempl
 
 ### 🔴 CRÍTICOS — Bloqueadores de desenvolvimento
 
-| # | Problema | Arquivo | Ação |
-|---|---------|---------|------|
-| 1 | `ToolResult` duplicado em `tools.ts` e `providers.ts` | `packages/types/src/tools.ts` | Renomear para `ToolExecutionResult` |
-| 2 | `moduleResolution: "bundler"` sem bundler nos pacotes | `tsconfig.json` | Definir estratégia: `tsup` ou mudar para `node16` |
-| 3 | `MISSION_BRIEFING.md` inexistente mas citado como essencial | `HANDOFF.md` | Criar o arquivo OU atualizar HANDOFF |
-| 4 | Pacotes vazios sem `package.json` | Todos os 9 pacotes + 2 apps | Inicializar com `package.json` mínimo |
+| #   | Problema                                                    | Arquivo                       | Ação                                              |
+| --- | ----------------------------------------------------------- | ----------------------------- | ------------------------------------------------- |
+| 1   | `ToolResult` duplicado em `tools.ts` e `providers.ts`       | `packages/types/src/tools.ts` | Renomear para `ToolExecutionResult`               |
+| 2   | `moduleResolution: "bundler"` sem bundler nos pacotes       | `tsconfig.json`               | Definir estratégia: `tsup` ou mudar para `node16` |
+| 3   | `MISSION_BRIEFING.md` inexistente mas citado como essencial | `HANDOFF.md`                  | Criar o arquivo OU atualizar HANDOFF              |
+| 4   | Pacotes vazios sem `package.json`                           | Todos os 9 pacotes + 2 apps   | Inicializar com `package.json` mínimo             |
 
 ### 🟡 IMPORTANTES — Afetam qualidade/manutenção
 
-| # | Problema | Arquivo | Ação |
-|---|---------|---------|------|
-| 5 | Script `clean` não-cross-platform (`rm -rf`) | `package.json` raiz | Substituir por `rimraf` |
-| 6 | Turbo schema `"pipeline"` depreciado | `turbo.json` | Preparar migração para `"tasks"` ao atualizar |
-| 7 | README.md desalinhado da realidade | `README.md` | Adicionar seção "Current Status" |
-| 8 | `pnpm audit` ausente no CI | `.github/workflows/ci.yml` | Adicionar step de audit |
-| 9 | `access: "public"` no changeset | `.changeset/config.json` | Confirmar namespace `@inception` no npm |
+| #   | Problema                                     | Arquivo                    | Ação                                          |
+| --- | -------------------------------------------- | -------------------------- | --------------------------------------------- |
+| 5   | Script `clean` não-cross-platform (`rm -rf`) | `package.json` raiz        | Substituir por `rimraf`                       |
+| 6   | Turbo schema `"pipeline"` depreciado         | `turbo.json`               | Preparar migração para `"tasks"` ao atualizar |
+| 7   | README.md desalinhado da realidade           | `README.md`                | Adicionar seção "Current Status"              |
+| 8   | `pnpm audit` ausente no CI                   | `.github/workflows/ci.yml` | Adicionar step de audit                       |
+| 9   | `access: "public"` no changeset              | `.changeset/config.json`   | Confirmar namespace `@inception` no npm       |
 
 ### 🟢 MENORES — Observações
 
-| # | Observação |
-|---|-----------|
-| 10 | `Float32Array` declarado em memory.ts como se fosse importado — é tipo nativo JS |
-| 11 | TypeScript 5.3.3 (Jan/2024) — 5.7 disponível, sem urgência de atualização |
-| 12 | Turbo 1.12.4 — versão 2.x disponível com melhorias de performance |
-| 13 | ESLint v8 — v9 com flat config é o futuro, não urgente |
-| 14 | Ausência de type-level tests para garantir contratos dos tipos |
-| 15 | Documentação multilíngue (en, pt, es, zh) criada mas vazia |
+| #   | Observação                                                                       |
+| --- | -------------------------------------------------------------------------------- |
+| 10  | `Float32Array` declarado em memory.ts como se fosse importado — é tipo nativo JS |
+| 11  | TypeScript 5.3.3 (Jan/2024) — 5.7 disponível, sem urgência de atualização        |
+| 12  | Turbo 1.12.4 — versão 2.x disponível com melhorias de performance                |
+| 13  | ESLint v8 — v9 com flat config é o futuro, não urgente                           |
+| 14  | Ausência de type-level tests para garantir contratos dos tipos                   |
+| 15  | Documentação multilíngue (en, pt, es, zh) criada mas vazia                       |
 
 ---
 
@@ -290,15 +293,15 @@ O README descreve o Inception Framework como se fosse "production-ready". Exempl
 
 A auditoria do Codex focou na **análise de domínio dos tipos** (excelente). Esta auditoria foca em **infraestrutura e tooling**:
 
-| Achado | Codex | Claude Sonnet |
-|--------|-------|---------------|
-| `ToolResult` duplicado (conflito de export) | ❌ Não mencionado | ✅ Identificado |
-| `moduleResolution: "bundler"` como risco | ❌ Não mencionado | ✅ Identificado |
-| Script `clean` não-cross-platform | ❌ Não mencionado | ✅ Identificado |
-| Turbo schema `"pipeline"` depreciado | ❌ Não mencionado | ✅ Identificado |
-| `pnpm audit` faltando no CI | ❌ Não mencionado | ✅ Identificado |
-| Pacotes sem `package.json` | ❌ Não mencionado | ✅ Identificado |
-| README vs. realidade | 🟡 Mencionado brevemente | ✅ Detalhado |
+| Achado                                      | Codex                    | Claude Sonnet   |
+| ------------------------------------------- | ------------------------ | --------------- |
+| `ToolResult` duplicado (conflito de export) | ❌ Não mencionado        | ✅ Identificado |
+| `moduleResolution: "bundler"` como risco    | ❌ Não mencionado        | ✅ Identificado |
+| Script `clean` não-cross-platform           | ❌ Não mencionado        | ✅ Identificado |
+| Turbo schema `"pipeline"` depreciado        | ❌ Não mencionado        | ✅ Identificado |
+| `pnpm audit` faltando no CI                 | ❌ Não mencionado        | ✅ Identificado |
+| Pacotes sem `package.json`                  | ❌ Não mencionado        | ✅ Identificado |
+| README vs. realidade                        | 🟡 Mencionado brevemente | ✅ Detalhado    |
 
 ---
 
@@ -350,30 +353,32 @@ Dependências: `eventemitter3` (ou Node nativo `EventEmitter`), `awilix` (opcion
 
 Todos implementam `IProvider` a partir de `@inception/types`:
 
-| Pacote | SDK | Prioridade |
-|--------|-----|-----------|
-| `providers/ollama` | `ollama` | 1ª (local, sem custo, ideal para dev) |
-| `providers/anthropic` | `@anthropic-ai/sdk` | 2ª (Claude) |
-| `providers/openai` | `openai` | 3ª |
-| `providers/gemini` | `@google/generative-ai` | 4ª (+ `IEmbeddingProvider`) |
+| Pacote                | SDK                     | Prioridade                            |
+| --------------------- | ----------------------- | ------------------------------------- |
+| `providers/ollama`    | `ollama`                | 1ª (local, sem custo, ideal para dev) |
+| `providers/anthropic` | `@anthropic-ai/sdk`     | 2ª (Claude)                           |
+| `providers/openai`    | `openai`                | 3ª                                    |
+| `providers/gemini`    | `@google/generative-ai` | 4ª (+ `IEmbeddingProvider`)           |
 
 ### Fase 3: Canais
 
-| Pacote | Lib | Prioridade |
-|--------|-----|-----------|
-| `channels/cli` | `ink` + `commander` | 1ª (interface principal do operador) |
-| `channels/telegram` | `grammy` ou `telegraf` | 2ª (mencionada no HANDOFF) |
-| `channels/discord` | `discord.js` | 3ª |
-| `channels/http` | `fastify` ou `hono` | 4ª |
+| Pacote              | Lib                    | Prioridade                           |
+| ------------------- | ---------------------- | ------------------------------------ |
+| `channels/cli`      | `ink` + `commander`    | 1ª (interface principal do operador) |
+| `channels/telegram` | `grammy` ou `telegraf` | 2ª (mencionada no HANDOFF)           |
+| `channels/discord`  | `discord.js`           | 3ª                                   |
+| `channels/http`     | `fastify` ou `hono`    | 4ª                                   |
 
 ### Fase 4: Sistemas de Suporte
 
 **`packages/memory`:**
+
 - SQLite via `better-sqlite3` + FTS5 para keyword search
 - Gemini embeddings para vector search
 - Hybrid search com pesos configuráveis
 
 **`packages/tools`** (em ordem de utilidade/segurança):
+
 1. `tools/filesystem` — read, write, list, stat
 2. `tools/shell` — exec com allowlist
 3. `tools/http` — fetch com allowlist de URLs
@@ -381,11 +386,13 @@ Todos implementam `IProvider` a partir de `@inception/types`:
 5. `tools/browser` — Playwright (complexo, baixa prioridade)
 
 **`packages/security`:**
+
 - Implementa `ISecurityManager`
 - Pairing flow completo
 - ApprovalRequest workflow
 
 **`packages/protocol`:**
+
 - `MissionProtocol` implementando `IMissionProtocol`
 - Persistência em SQLite
 - Journal imutável (`JournalEntry` com `immutable: true`)
@@ -393,6 +400,7 @@ Todos implementam `IProvider` a partir de `@inception/types`:
 ### Fase 5: Aplicações
 
 **`apps/cli`:**
+
 - `inception init` — wizard de config inicial
 - `inception start` — inicia runtime
 - `inception config` — edita config
@@ -406,21 +414,21 @@ Decisões que precisam ser tomadas antes ou durante a Fase 1:
 
 ### Q1: Estratégia de Build
 
-| Opção | Descrição | Prós | Contras |
-|-------|-----------|------|---------|
-| **A: `tsup`** | Bundler baseado em esbuild, gera CJS+ESM | Rápido, padrão moderno, mantém `moduleResolution: bundler` | Dependência extra em cada pacote |
-| **B: `tsc` + `node16`** | Build puro TypeScript, muda moduleResolution | Sem dependências extras, próximo do source | Mais lento no build, sem tree-shaking |
-| **C: `unbuild`** | UnJS/Nitro pattern | Flexível, suporte a rollup plugins | Menos popular |
+| Opção                   | Descrição                                    | Prós                                                       | Contras                               |
+| ----------------------- | -------------------------------------------- | ---------------------------------------------------------- | ------------------------------------- |
+| **A: `tsup`**           | Bundler baseado em esbuild, gera CJS+ESM     | Rápido, padrão moderno, mantém `moduleResolution: bundler` | Dependência extra em cada pacote      |
+| **B: `tsc` + `node16`** | Build puro TypeScript, muda moduleResolution | Sem dependências extras, próximo do source                 | Mais lento no build, sem tree-shaking |
+| **C: `unbuild`**        | UnJS/Nitro pattern                           | Flexível, suporte a rollup plugins                         | Menos popular                         |
 
 **Recomendação:** Opção A (`tsup`) — padrão adotado pela maioria dos monorepos TypeScript modernos.
 
 ### Q2: Dependency Injection no Core
 
-| Opção | Descrição | Prós | Contras |
-|-------|-----------|------|---------|
-| **A: Manual** | `Map<string, unknown>` com factory functions | Zero deps, simples | Menos ergonômico para projetos grandes |
-| **B: `awilix`** | DI container funcional, sem decorators | Bem testado, sem `experimentalDecorators` | Curva de aprendizado |
-| **C: `inversify`** | DI com decorators | Familiar para devs Angular/Java | Requer `experimentalDecorators`, verboso |
+| Opção              | Descrição                                    | Prós                                      | Contras                                  |
+| ------------------ | -------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| **A: Manual**      | `Map<string, unknown>` com factory functions | Zero deps, simples                        | Menos ergonômico para projetos grandes   |
+| **B: `awilix`**    | DI container funcional, sem decorators       | Bem testado, sem `experimentalDecorators` | Curva de aprendizado                     |
+| **C: `inversify`** | DI com decorators                            | Familiar para devs Angular/Java           | Requer `experimentalDecorators`, verboso |
 
 **Recomendação:** Opção A (manual) para começar — manter simples; migrar para `awilix` se crescer.
 
@@ -431,6 +439,7 @@ Decisões que precisam ser tomadas antes ou durante a Fase 1:
 ### Q4: Publicação no npm
 
 O changeset está configurado para `access: "public"`. Confirmar:
+
 - O namespace `@inception` está disponível/registrado no npm?
 - Alternativa: usar `@rabeluslab/inception-*` se `@inception` não estiver disponível.
 
@@ -470,5 +479,5 @@ Após a Pré-Fase 0, o projeto estará pronto para construir o `packages/config`
 
 ---
 
-*Auditoria realizada em 2026-03-16 por Claude Sonnet 4.6.*
-*Complementa: [codex-first-audit.md](./codex-first-audit.md) (Codex, 2026-03-13)*
+_Auditoria realizada em 2026-03-16 por Claude Sonnet 4.6._
+_Complementa: [codex-first-audit.md](./codex-first-audit.md) (Codex, 2026-03-13)_

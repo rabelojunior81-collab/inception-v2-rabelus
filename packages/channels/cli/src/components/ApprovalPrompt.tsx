@@ -28,15 +28,22 @@ export function ApprovalPrompt({ approval, onDecision }: ApprovalPromptProps): R
       paddingY={1}
       marginY={1}
     >
-      <Text bold color="yellow">⚠ Aprovação Requerida</Text>
+      <Text bold color="yellow">
+        ⚠ Aprovação Requerida
+      </Text>
       <Text> </Text>
-      <Text bold>Ferramenta: <Text color="cyan">{approval.toolName}</Text></Text>
+      <Text bold>
+        Ferramenta: <Text color="cyan">{approval.toolName}</Text>
+      </Text>
       <Text color="gray">{approval.toolDescription}</Text>
       <Text> </Text>
       <Text bold>Argumentos:</Text>
       <Text color="gray">{argsDisplay}</Text>
       <Text> </Text>
-      <Text>Expira em: <Text color="yellow">{new Date(approval.expiresAt).toLocaleTimeString('pt-BR')}</Text></Text>
+      <Text>
+        Expira em:{' '}
+        <Text color="yellow">{new Date(approval.expiresAt).toLocaleTimeString('pt-BR')}</Text>
+      </Text>
       <Text> </Text>
       <Text bold>
         <Text color="green">[Y] Aprovar</Text>

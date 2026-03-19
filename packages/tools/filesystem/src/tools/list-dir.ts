@@ -25,13 +25,13 @@ async function readDirRecursive(
   workspacePath: string,
   includeHidden: boolean,
   maxDepth: number,
-  currentDepth: number,
+  currentDepth: number
 ): Promise<DirEntry[]> {
   if (currentDepth > maxDepth) return [];
 
   let entries: Dirent<string>[];
   try {
-    entries = (await fs.readdir(dirPath, { withFileTypes: true }));
+    entries = await fs.readdir(dirPath, { withFileTypes: true });
   } catch {
     return [];
   }
@@ -72,7 +72,7 @@ async function readDirRecursive(
         workspacePath,
         includeHidden,
         maxDepth,
-        currentDepth + 1,
+        currentDepth + 1
       );
       result.push(...children);
     }
@@ -153,14 +153,17 @@ export class ListDirTool implements ITool {
         context.workspacePath,
         includeHidden,
         recursive ? maxDepth : 0,
-        0,
+        0
       );
 
       context.logger.debug('list_dir: success', { path: resolvedPath, count: entries.length });
 
       return {
         success: true,
-        data: { entries: entries as unknown as import('@rabeluslab/inception-types').JSONValue, totalCount: entries.length },
+        data: {
+          entries: entries as unknown as import('@rabeluslab/inception-types').JSONValue,
+          totalCount: entries.length,
+        },
         metadata: { executionTimeMs: Date.now() - start },
       };
     } catch (err) {

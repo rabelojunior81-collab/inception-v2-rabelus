@@ -72,22 +72,22 @@ pnpm inception config  # exibir config resolvida
 
 ### Providers suportados (configure no `inception init`)
 
-| Provider | Slug | Nota |
-|----------|------|------|
-| Kimi (Moonshot AI) | `kimi` | PAYG — api.moonshot.ai |
-| Kimi Coding Plan | `kimi-coding` | Subscription — api.kimi.com/coding |
-| Z.AI (Zhipu) | `zai` | PAYG — api.z.ai/paas |
-| Z.AI Coding Plan | `zai-coding` | Subscription — api.z.ai/coding |
-| Bailian Coding Plan | `bailian` | Hub multi-marca: Qwen+GLM+Kimi+MiniMax |
-| Bailian PAYG | `bailian-payg` | DashScope pay-per-token |
-| Anthropic Claude | `anthropic` | claude-sonnet-4-6, opus, haiku |
-| OpenAI API | `openai` | gpt-5.4 series + o-series |
-| OpenAI OAuth | `openai-oauth` | ChatGPT Plus/Pro via Bearer token |
-| Google Gemini | `gemini` | gemini-2.5-flash + gemini-3 preview |
-| Ollama Cloud | `ollama` | Pro $20/mês, Max $100/mês |
-| Ollama Local | `ollama` | Grátis, sem API key, localhost:11434 |
-| OpenRouter | `openrouter` | Gateway 300+ modelos |
-| Kilo | `kilo` | Gateway com controle de custo |
+| Provider            | Slug           | Nota                                   |
+| ------------------- | -------------- | -------------------------------------- |
+| Kimi (Moonshot AI)  | `kimi`         | PAYG — api.moonshot.ai                 |
+| Kimi Coding Plan    | `kimi-coding`  | Subscription — api.kimi.com/coding     |
+| Z.AI (Zhipu)        | `zai`          | PAYG — api.z.ai/paas                   |
+| Z.AI Coding Plan    | `zai-coding`   | Subscription — api.z.ai/coding         |
+| Bailian Coding Plan | `bailian`      | Hub multi-marca: Qwen+GLM+Kimi+MiniMax |
+| Bailian PAYG        | `bailian-payg` | DashScope pay-per-token                |
+| Anthropic Claude    | `anthropic`    | claude-sonnet-4-6, opus, haiku         |
+| OpenAI API          | `openai`       | gpt-5.4 series + o-series              |
+| OpenAI OAuth        | `openai-oauth` | ChatGPT Plus/Pro via Bearer token      |
+| Google Gemini       | `gemini`       | gemini-2.5-flash + gemini-3 preview    |
+| Ollama Cloud        | `ollama`       | Pro $20/mês, Max $100/mês              |
+| Ollama Local        | `ollama`       | Grátis, sem API key, localhost:11434   |
+| OpenRouter          | `openrouter`   | Gateway 300+ modelos                   |
+| Kilo                | `kilo`         | Gateway com controle de custo          |
 
 ---
 
@@ -142,20 +142,20 @@ Every component is swappable via configuration:
 
 ## 📦 Packages
 
-| Package | Description | Status |
-|---------|-------------|--------|
-| `@inception/types` | Core TypeScript definitions | ✅ Ready |
-| `@inception/core` | Runtime engine | ⏳ In Progress |
-| `@inception/config` | Configuration management | ⏳ In Progress |
-| `@inception/providers/openai` | OpenAI integration | ⏳ In Progress |
-| `@inception/providers/gemini` | Gemini integration | ⏳ In Progress |
-| `@inception/channels/cli` | Terminal UI | ⏳ In Progress |
-| `@inception/channels/telegram` | Telegram bot | ⏳ In Progress |
-| `@inception/channels/discord` | Discord bot | ⏳ In Progress |
-| `@inception/memory` | SQLite + vector storage | ⏳ In Progress |
-| `@inception/tools` | Tool implementations | ⏳ In Progress |
-| `@inception/security` | Auth, gates, sandbox | ⏳ In Progress |
-| `@inception/cli` | Command-line interface | ⏳ In Progress |
+| Package                        | Description                 | Status         |
+| ------------------------------ | --------------------------- | -------------- |
+| `@inception/types`             | Core TypeScript definitions | ✅ Ready       |
+| `@inception/core`              | Runtime engine              | ⏳ In Progress |
+| `@inception/config`            | Configuration management    | ⏳ In Progress |
+| `@inception/providers/openai`  | OpenAI integration          | ⏳ In Progress |
+| `@inception/providers/gemini`  | Gemini integration          | ⏳ In Progress |
+| `@inception/channels/cli`      | Terminal UI                 | ⏳ In Progress |
+| `@inception/channels/telegram` | Telegram bot                | ⏳ In Progress |
+| `@inception/channels/discord`  | Discord bot                 | ⏳ In Progress |
+| `@inception/memory`            | SQLite + vector storage     | ⏳ In Progress |
+| `@inception/tools`             | Tool implementations        | ⏳ In Progress |
+| `@inception/security`          | Auth, gates, sandbox        | ⏳ In Progress |
+| `@inception/cli`               | Command-line interface      | ⏳ In Progress |
 
 ---
 

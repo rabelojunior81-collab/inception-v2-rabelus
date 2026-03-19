@@ -22,11 +22,7 @@ export class Container {
   /**
    * Register a token with a factory function.
    */
-  register<T>(
-    token: string,
-    factory: Factory<T>,
-    lifecycle: Lifecycle = 'singleton',
-  ): this {
+  register<T>(token: string, factory: Factory<T>, lifecycle: Lifecycle = 'singleton'): this {
     this.registrations.set(token, { factory: factory as Factory<unknown>, lifecycle });
     return this;
   }

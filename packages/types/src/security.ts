@@ -114,7 +114,11 @@ export interface ApprovalRequest {
 export interface SecurityViolation {
   readonly id: string;
   readonly timestamp: string;
-  readonly type: 'gate_violation' | 'filesystem_violation' | 'network_violation' | 'command_violation';
+  readonly type:
+    | 'gate_violation'
+    | 'filesystem_violation'
+    | 'network_violation'
+    | 'command_violation';
   readonly severity: 'low' | 'medium' | 'high' | 'critical';
   readonly description: string;
   readonly context: Record<string, JSONValue>;

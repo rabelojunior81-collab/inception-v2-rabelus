@@ -28,15 +28,30 @@ export function MessageList({ messages, maxVisible = 20 }: MessageListProps): Re
 function MessageItem({ message }: { message: ChatMessage }): React.ReactElement {
   const { role, content, timestamp } = message;
 
-  const roleLabel = role === 'user' ? '▶ Você' : role === 'assistant' ? '◆ Agente' : role === 'tool' ? '⚙ Tool' : '• Sistema';
-  const roleColor = role === 'user' ? 'green' : role === 'assistant' ? 'cyan' : role === 'tool' ? 'yellow' : 'gray';
-  const time = new Date(timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const roleLabel =
+    role === 'user'
+      ? '▶ Você'
+      : role === 'assistant'
+        ? '◆ Agente'
+        : role === 'tool'
+          ? '⚙ Tool'
+          : '• Sistema';
+  const roleColor =
+    role === 'user' ? 'green' : role === 'assistant' ? 'cyan' : role === 'tool' ? 'yellow' : 'gray';
+  const time = new Date(timestamp).toLocaleTimeString('pt-BR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   return (
     <Box flexDirection="column" marginBottom={1}>
       <Box gap={1}>
-        <Text bold color={roleColor}>{roleLabel}</Text>
-        <Text color="gray" dimColor>{time}</Text>
+        <Text bold color={roleColor}>
+          {roleLabel}
+        </Text>
+        <Text color="gray" dimColor>
+          {time}
+        </Text>
       </Box>
       <Box paddingLeft={2}>
         <Text wrap="wrap">{content}</Text>

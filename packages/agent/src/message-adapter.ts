@@ -11,8 +11,8 @@ import type {
   OutboundMessage,
   Message,
   MemoryEntry,
- ChannelId } from '@rabeluslab/inception-types';
-
+  ChannelId,
+} from '@rabeluslab/inception-types';
 
 /**
  * Convert a channel InboundMessage to a provider Message for LLM context.
@@ -35,7 +35,7 @@ export function assistantToOutbound(
   text: string,
   channelId: ChannelId,
   recipientId: string,
-  options: { missionId?: string; replyTo?: string; ephemeral?: boolean } = {},
+  options: { missionId?: string; replyTo?: string; ephemeral?: boolean } = {}
 ): OutboundMessage {
   return {
     id: randomUUID() as OutboundMessage['id'],
@@ -64,20 +64,18 @@ export function assistantToOutbound(
 export function messageToMemoryEntry(
   msg: Message,
   threadId: string,
-  missionId?: string,
+  missionId?: string
 ): MemoryEntry {
   const content =
     typeof msg.content === 'string'
       ? msg.content
-      : msg.content
-          .map((p) => (p.type === 'text' ? p.text : `[${p.type}]`))
-          .join('\n');
+      : msg.content.map((p) => (p.type === 'text' ? p.text : `[${p.type}]`)).join('\n');
 
   return {
     id: randomUUID() as MemoryEntry['id'],
     threadId,
     missionId,
-    timestamp: (msg.metadata?.timestamp) ?? new Date().toISOString(),
+    timestamp: msg.metadata?.timestamp ?? new Date().toISOString(),
     type: MemoryEntryType.Conversation,
     role: msg.role,
     content,
@@ -91,7 +89,7 @@ export function toolResultToMessage(
   toolCallId: string,
   toolName: string,
   result: string,
-  _isError = false,
+  _isError = false
 ): Message {
   return {
     role: MessageRole.Tool,

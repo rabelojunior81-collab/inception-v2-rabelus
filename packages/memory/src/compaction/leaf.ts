@@ -11,7 +11,7 @@ export class LeafCompactor {
     private readonly messages: MessageStore,
     private readonly summaries: SummaryStore,
     private readonly summarizeFn: SummarizeFn,
-    private readonly config: CompactionConfig,
+    private readonly config: CompactionConfig
   ) {}
 
   // Returns number of leaf summaries created (0 if nothing to compact)
@@ -54,7 +54,7 @@ export class LeafCompactor {
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
       const formatted = chunk
-        .map(m => formatMessageForSummary(m.role, m.content, m.created_at))
+        .map((m) => formatMessageForSummary(m.role, m.content, m.created_at))
         .join('\n\n');
       const summaryContent = await this.summarizeFn(formatted, false);
       const summaryTokens = estimateTokens(summaryContent);
@@ -64,7 +64,7 @@ export class LeafCompactor {
         thread_id: threadId,
         parent_id: null,
         depth: 0,
-        covers_msg_ids: JSON.stringify(chunk.map(m => m.id)),
+        covers_msg_ids: JSON.stringify(chunk.map((m) => m.id)),
         covers_sum_ids: '[]',
         content: summaryContent,
         token_count: summaryTokens,

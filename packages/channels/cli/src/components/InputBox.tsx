@@ -7,7 +7,11 @@ interface InputBoxProps {
   disabled?: boolean;
 }
 
-export function InputBox({ onSubmit, placeholder = 'Digite uma mensagem...', disabled = false }: InputBoxProps): React.ReactElement {
+export function InputBox({
+  onSubmit,
+  placeholder = 'Digite uma mensagem...',
+  disabled = false,
+}: InputBoxProps): React.ReactElement {
   const [value, setValue] = useState('');
 
   useInput((input, key) => {
@@ -35,7 +39,13 @@ export function InputBox({ onSubmit, placeholder = 'Digite uma mensagem...', dis
   return (
     <Box borderStyle="round" borderColor={disabled ? 'gray' : 'green'} paddingX={1}>
       <Text color="green">❯ </Text>
-      <Text>{value || <Text color="gray" dimColor>{placeholder}</Text>}</Text>
+      <Text>
+        {value || (
+          <Text color="gray" dimColor>
+            {placeholder}
+          </Text>
+        )}
+      </Text>
       {!disabled && <Text color="green">▌</Text>}
     </Box>
   );

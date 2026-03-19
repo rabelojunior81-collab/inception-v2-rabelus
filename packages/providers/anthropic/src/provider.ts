@@ -142,23 +142,23 @@ function mapTools(tools: readonly LLMToolDefinition[]): AnthropicTool[] {
   }));
 }
 
-function mapToolChoice(
-  toolChoice: GenerateRequest['toolChoice'],
-): ToolChoice | undefined {
+function mapToolChoice(toolChoice: GenerateRequest['toolChoice']): ToolChoice | undefined {
   if (toolChoice === undefined) return undefined;
   if (toolChoice === 'auto') return { type: 'auto' };
   if (toolChoice === 'none') return undefined; // 'none' not in ToolChoice v0.36 — return undefined
   return { type: 'tool', name: toolChoice.name };
 }
 
-function mapFinishReason(
-  stopReason: string | null | undefined,
-): GenerateResponse['finishReason'] {
+function mapFinishReason(stopReason: string | null | undefined): GenerateResponse['finishReason'] {
   switch (stopReason) {
-    case 'end_turn': return 'stop';
-    case 'tool_use': return 'tool_calls';
-    case 'max_tokens': return 'length';
-    default: return 'stop';
+    case 'end_turn':
+      return 'stop';
+    case 'tool_use':
+      return 'tool_calls';
+    case 'max_tokens':
+      return 'length';
+    default:
+      return 'stop';
   }
 }
 
@@ -220,7 +220,7 @@ export class AnthropicProvider implements IProvider {
       throw new ProviderError(
         `Failed to initialize Anthropic client: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Anthropic,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }
@@ -229,7 +229,7 @@ export class AnthropicProvider implements IProvider {
     if (!this.client) {
       throw new ProviderError(
         'Anthropic provider is not initialized. Call initialize() first.',
-        ProviderId.Anthropic,
+        ProviderId.Anthropic
       );
     }
     return this.client;
@@ -307,7 +307,7 @@ export class AnthropicProvider implements IProvider {
       throw new ProviderError(
         `Anthropic generate failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Anthropic,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }
@@ -324,7 +324,7 @@ export class AnthropicProvider implements IProvider {
       throw new ProviderError(
         `Anthropic stream setup failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Anthropic,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
 
@@ -395,16 +395,13 @@ export class AnthropicProvider implements IProvider {
       throw new ProviderError(
         `Anthropic stream failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Anthropic,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }
 
   async embed(_request: EmbeddingRequest): Promise<EmbeddingResponse> {
-    throw new ProviderError(
-      'Anthropic does not support embeddings',
-      ProviderId.Anthropic,
-    );
+    throw new ProviderError('Anthropic does not support embeddings', ProviderId.Anthropic);
   }
 
   async healthCheck(): Promise<boolean> {

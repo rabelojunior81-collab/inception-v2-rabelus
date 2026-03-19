@@ -52,7 +52,9 @@ describe('SecurityManager.validateFilesystemAccess', () => {
   it('blocks paths in blockedPaths list', () => {
     const blockedDir = path.join(workspace, 'node_modules');
     const sm = new SecurityManager(fsPolicy({ blockedPaths: [blockedDir] }));
-    expect(sm.validateFilesystemAccess(path.join(blockedDir, 'lodash', 'index.js'), 'read')).toBe(false);
+    expect(sm.validateFilesystemAccess(path.join(blockedDir, 'lodash', 'index.js'), 'read')).toBe(
+      false
+    );
   });
 
   it('restricts to allowedPaths when configured', () => {
@@ -74,34 +76,44 @@ describe('SecurityManager.validateCommand', () => {
   });
 
   it('allows any command when allowedCommands is empty', () => {
-    const sm = new SecurityManager(makePolicy({
-      execution: { ...DEFAULT_SECURITY_POLICY.execution, allowedCommands: [], blockedCommands: [] },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        execution: {
+          ...DEFAULT_SECURITY_POLICY.execution,
+          allowedCommands: [],
+          blockedCommands: [],
+        },
+      })
+    );
     expect(sm.validateCommand('pnpm test')).toBe(true);
     expect(sm.validateCommand('node index.js')).toBe(true);
   });
 
   it('allows only listed commands when allowedCommands is configured', () => {
-    const sm = new SecurityManager(makePolicy({
-      execution: {
-        ...DEFAULT_SECURITY_POLICY.execution,
-        allowedCommands: ['node', 'pnpm', 'git'],
-        blockedCommands: [],
-      },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        execution: {
+          ...DEFAULT_SECURITY_POLICY.execution,
+          allowedCommands: ['node', 'pnpm', 'git'],
+          blockedCommands: [],
+        },
+      })
+    );
     expect(sm.validateCommand('node --version')).toBe(true);
     expect(sm.validateCommand('pnpm install')).toBe(true);
     expect(sm.validateCommand('curl http://evil.com')).toBe(false);
   });
 
   it('block list takes precedence over allow list', () => {
-    const sm = new SecurityManager(makePolicy({
-      execution: {
-        ...DEFAULT_SECURITY_POLICY.execution,
-        allowedCommands: ['rm'],
-        blockedCommands: ['rm'],
-      },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        execution: {
+          ...DEFAULT_SECURITY_POLICY.execution,
+          allowedCommands: ['rm'],
+          blockedCommands: ['rm'],
+        },
+      })
+    );
     expect(sm.validateCommand('rm file.txt')).toBe(false);
   });
 
@@ -127,52 +139,60 @@ describe('SecurityManager.validateNetworkRequest', () => {
   });
 
   it('allows valid URLs when no restrictions', () => {
-    const sm = new SecurityManager(makePolicy({
-      network: {
-        ...DEFAULT_SECURITY_POLICY.network,
-        allowedHosts: [],
-        blockedHosts: [],
-        allowedPorts: [],
-      },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        network: {
+          ...DEFAULT_SECURITY_POLICY.network,
+          allowedHosts: [],
+          blockedHosts: [],
+          allowedPorts: [],
+        },
+      })
+    );
     expect(sm.validateNetworkRequest('https://api.example.com/v1/data')).toBe(true);
   });
 
   it('blocks hosts outside allowedHosts list', () => {
-    const sm = new SecurityManager(makePolicy({
-      network: {
-        ...DEFAULT_SECURITY_POLICY.network,
-        allowedHosts: ['api.github.com', 'api.anthropic.com'],
-        blockedHosts: [],
-        allowedPorts: [],
-      },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        network: {
+          ...DEFAULT_SECURITY_POLICY.network,
+          allowedHosts: ['api.github.com', 'api.anthropic.com'],
+          blockedHosts: [],
+          allowedPorts: [],
+        },
+      })
+    );
     expect(sm.validateNetworkRequest('https://api.github.com/repos')).toBe(true);
     expect(sm.validateNetworkRequest('https://evil.com/steal')).toBe(false);
   });
 
   it('supports wildcard host patterns', () => {
-    const sm = new SecurityManager(makePolicy({
-      network: {
-        ...DEFAULT_SECURITY_POLICY.network,
-        allowedHosts: ['*.anthropic.com'],
-        blockedHosts: [],
-        allowedPorts: [],
-      },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        network: {
+          ...DEFAULT_SECURITY_POLICY.network,
+          allowedHosts: ['*.anthropic.com'],
+          blockedHosts: [],
+          allowedPorts: [],
+        },
+      })
+    );
     expect(sm.validateNetworkRequest('https://api.anthropic.com/v1')).toBe(true);
     expect(sm.validateNetworkRequest('https://other.com')).toBe(false);
   });
 
   it('blocks requests on non-allowed ports', () => {
-    const sm = new SecurityManager(makePolicy({
-      network: {
-        ...DEFAULT_SECURITY_POLICY.network,
-        allowedHosts: [],
-        blockedHosts: [],
-        allowedPorts: [443],
-      },
-    }));
+    const sm = new SecurityManager(
+      makePolicy({
+        network: {
+          ...DEFAULT_SECURITY_POLICY.network,
+          allowedHosts: [],
+          blockedHosts: [],
+          allowedPorts: [443],
+        },
+      })
+    );
     expect(sm.validateNetworkRequest('https://api.example.com/v1')).toBe(true);
     expect(sm.validateNetworkRequest('http://api.example.com/v1')).toBe(false); // port 80
   });

@@ -7,7 +7,11 @@ import {
   ReportFormat,
 } from '@rabeluslab/inception-types';
 
-import type { AgentConfigurationOutput, SecurityPolicyOutput, RuntimeConfigOutput } from './schema.js';
+import type {
+  AgentConfigurationOutput,
+  SecurityPolicyOutput,
+  RuntimeConfigOutput,
+} from './schema.js';
 
 /**
  * Default agent identity for new installations.

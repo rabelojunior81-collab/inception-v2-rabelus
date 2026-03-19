@@ -64,9 +64,7 @@ export class InceptionRuntime implements IRuntime {
       this._stats.memoryPeak = current;
     }
     return {
-      uptime: this._startedAt
-        ? Date.now() - new Date(this._startedAt).getTime()
-        : 0,
+      uptime: this._startedAt ? Date.now() - new Date(this._startedAt).getTime() : 0,
       messagesProcessed: this._stats.messagesProcessed,
       toolsExecuted: this._stats.toolsExecuted,
       missionsCompleted: this._stats.missionsCompleted,
@@ -82,10 +80,9 @@ export class InceptionRuntime implements IRuntime {
 
   async initialize(config: RuntimeConfig): Promise<void> {
     if (this._state !== State.Initializing && this._state !== State.Stopped) {
-      throw new RuntimeError(
-        `Cannot initialize: runtime is in state "${this._state}"`,
-        { state: this._state },
-      );
+      throw new RuntimeError(`Cannot initialize: runtime is in state "${this._state}"`, {
+        state: this._state,
+      });
     }
 
     if (!config.agent.id || !config.agent.name) {
@@ -99,10 +96,9 @@ export class InceptionRuntime implements IRuntime {
   async start(): Promise<void> {
     this.assertConfig();
     if (this._state !== State.Stopped) {
-      throw new RuntimeError(
-        `Cannot start: runtime is in state "${this._state}"`,
-        { state: this._state },
-      );
+      throw new RuntimeError(`Cannot start: runtime is in state "${this._state}"`, {
+        state: this._state,
+      });
     }
 
     this._state = State.Starting;
@@ -119,20 +115,18 @@ export class InceptionRuntime implements IRuntime {
 
   async pause(): Promise<void> {
     if (this._state !== State.Running) {
-      throw new RuntimeError(
-        `Cannot pause: runtime is in state "${this._state}"`,
-        { state: this._state },
-      );
+      throw new RuntimeError(`Cannot pause: runtime is in state "${this._state}"`, {
+        state: this._state,
+      });
     }
     this._state = State.Paused;
   }
 
   async resume(): Promise<void> {
     if (this._state !== State.Paused) {
-      throw new RuntimeError(
-        `Cannot resume: runtime is in state "${this._state}"`,
-        { state: this._state },
-      );
+      throw new RuntimeError(`Cannot resume: runtime is in state "${this._state}"`, {
+        state: this._state,
+      });
     }
     this._state = State.Running;
   }
@@ -149,9 +143,12 @@ export class InceptionRuntime implements IRuntime {
     this._state = State.Stopping;
     try {
       // Future: gracefully shut down channels and providers
-      await this.bus.emitAsync('shutdown' as RuntimeEvent.Shutdown, {
-        reason: 'stop() called',
-      } as RuntimeEventPayloads[RuntimeEvent.Shutdown]);
+      await this.bus.emitAsync(
+        'shutdown' as RuntimeEvent.Shutdown,
+        {
+          reason: 'stop() called',
+        } as RuntimeEventPayloads[RuntimeEvent.Shutdown]
+      );
       this.bus.removeAllListeners();
       this._state = State.Stopped;
       this._startedAt = undefined;
@@ -191,7 +188,7 @@ export class InceptionRuntime implements IRuntime {
    */
   async emitAsync<T extends RuntimeEvent>(
     event: T,
-    payload: RuntimeEventPayloads[T],
+    payload: RuntimeEventPayloads[T]
   ): Promise<void> {
     await this.bus.emitAsync(event, payload);
   }
@@ -213,9 +210,7 @@ export class InceptionRuntime implements IRuntime {
 
   private assertConfig(): void {
     if (this.config === undefined) {
-      throw new RuntimeError(
-        'Runtime has not been initialized. Call initialize(config) first.',
-      );
+      throw new RuntimeError('Runtime has not been initialized. Call initialize(config) first.');
     }
   }
 
@@ -223,9 +218,7 @@ export class InceptionRuntime implements IRuntime {
    * Increment internal stats counter.
    * Called by higher-level layers (provider loop, tool executor).
    */
-  incrementStat(
-    key: 'messagesProcessed' | 'toolsExecuted' | 'missionsCompleted' | 'errors',
-  ): void {
+  incrementStat(key: 'messagesProcessed' | 'toolsExecuted' | 'missionsCompleted' | 'errors'): void {
     this._stats[key]++;
   }
 }

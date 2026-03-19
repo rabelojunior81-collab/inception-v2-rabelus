@@ -25,10 +25,7 @@ import type {
   TokenUsage,
   LLMToolDefinition,
 } from '@rabeluslab/inception-types';
-import {
-  ProviderId,
-  MessageRole,
-} from '@rabeluslab/inception-types';
+import { ProviderId, MessageRole } from '@rabeluslab/inception-types';
 
 import { OAuthTokenStore, refreshAccessToken, type TokenData } from './oauth.js';
 
@@ -42,7 +39,7 @@ function mapMessageToGemini(message: Message): Content | null {
     const text =
       typeof content === 'string'
         ? content
-        : content.map(p => (p.type === 'text' ? p.text : '')).join('');
+        : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
     return {
       role: 'user',
       parts: [
@@ -102,7 +99,7 @@ function mapMessageToGemini(message: Message): Content | null {
 }
 
 function mapToolDefinitions(tools: readonly LLMToolDefinition[]): Tool[] {
-  const functionDeclarations: FunctionDeclaration[] = tools.map(t => ({
+  const functionDeclarations: FunctionDeclaration[] = tools.map((t) => ({
     name: t.function.name,
     description: t.function.description,
     parameters: {
@@ -135,8 +132,10 @@ function generateId(): string {
 }
 
 function isGeminiOAuthConfig(config: ProviderConfig): config is GeminiOAuthConfig {
-  return typeof (config as GeminiOAuthConfig).tokenStorePath === 'string'
-    || typeof (config as GeminiOAuthConfig).clientId === 'string';
+  return (
+    typeof (config as GeminiOAuthConfig).tokenStorePath === 'string' ||
+    typeof (config as GeminiOAuthConfig).clientId === 'string'
+  );
 }
 
 // ── GeminiOAuthProvider ───────────────────────────────────────────────────────
@@ -163,7 +162,8 @@ export class GeminiOAuthProvider implements IProvider {
         : `${process.env['HOME'] ?? process.env['USERPROFILE'] ?? '/tmp'}/.inception/gemini-oauth-tokens.json`;
 
     this.clientId = isGeminiOAuthConfig(config) && config.clientId ? config.clientId : null;
-    this.clientSecret = isGeminiOAuthConfig(config) && config.clientSecret ? config.clientSecret : null;
+    this.clientSecret =
+      isGeminiOAuthConfig(config) && config.clientSecret ? config.clientSecret : null;
     this.tokenStore = new OAuthTokenStore(storePath);
 
     const stored = await this.tokenStore.load();
@@ -172,7 +172,7 @@ export class GeminiOAuthProvider implements IProvider {
       throw new ProviderError(
         'No OAuth token found. Obtain tokens via the Inception CLI OAuth flow ' +
           '(`inception auth login --provider gemini-oauth`) before using this provider.',
-        ProviderId.GeminiOAuth,
+        ProviderId.GeminiOAuth
       );
     }
 
@@ -186,7 +186,7 @@ export class GeminiOAuthProvider implements IProvider {
           'OAuth access token is expired and cannot be refreshed automatically. ' +
             'Re-authenticate via the Inception CLI: `inception auth login --provider gemini-oauth`.',
           ProviderId.GeminiOAuth,
-          { tokenExpiredAt: new Date(stored.expires_at).toISOString() },
+          { tokenExpiredAt: new Date(stored.expires_at).toISOString() }
         );
       }
     } else {
@@ -198,7 +198,7 @@ export class GeminiOAuthProvider implements IProvider {
     if (!this.clientId || !this.clientSecret) {
       throw new ProviderError(
         'Cannot refresh OAuth token: clientId and clientSecret are required in GeminiOAuthConfig.',
-        ProviderId.GeminiOAuth,
+        ProviderId.GeminiOAuth
       );
     }
     try {
@@ -207,7 +207,7 @@ export class GeminiOAuthProvider implements IProvider {
       throw new ProviderError(
         `OAuth token refresh failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.GeminiOAuth,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
   }
@@ -216,7 +216,7 @@ export class GeminiOAuthProvider implements IProvider {
     if (!this.token) {
       throw new ProviderError(
         'GeminiOAuthProvider has not been initialized. Call initialize() first.',
-        ProviderId.GeminiOAuth,
+        ProviderId.GeminiOAuth
       );
     }
 
@@ -228,7 +228,7 @@ export class GeminiOAuthProvider implements IProvider {
       } else {
         throw new ProviderError(
           'OAuth access token is expired. Re-authenticate via the Inception CLI.',
-          ProviderId.GeminiOAuth,
+          ProviderId.GeminiOAuth
         );
       }
     }
@@ -240,13 +240,13 @@ export class GeminiOAuthProvider implements IProvider {
     const accessToken = await this.ensureValidToken();
     const genAI = new GoogleGenerativeAI(accessToken);
 
-    const systemMessage = request.messages.find(m => m.role === MessageRole.System);
+    const systemMessage = request.messages.find((m) => m.role === MessageRole.System);
     const systemInstruction =
       request.system ??
       (systemMessage
         ? typeof systemMessage.content === 'string'
           ? systemMessage.content
-          : systemMessage.content.map(p => (p.type === 'text' ? p.text : '')).join('')
+          : systemMessage.content.map((p) => (p.type === 'text' ? p.text : '')).join('')
         : undefined);
 
     const history: Content[] = [];
@@ -294,7 +294,7 @@ export class GeminiOAuthProvider implements IProvider {
       throw new ProviderError(
         `Gemini OAuth generation failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.GeminiOAuth,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
 
@@ -342,13 +342,13 @@ export class GeminiOAuthProvider implements IProvider {
     const accessToken = await this.ensureValidToken();
     const genAI = new GoogleGenerativeAI(accessToken);
 
-    const systemMessage = request.messages.find(m => m.role === MessageRole.System);
+    const systemMessage = request.messages.find((m) => m.role === MessageRole.System);
     const systemInstruction =
       request.system ??
       (systemMessage
         ? typeof systemMessage.content === 'string'
           ? systemMessage.content
-          : systemMessage.content.map(p => (p.type === 'text' ? p.text : '')).join('')
+          : systemMessage.content.map((p) => (p.type === 'text' ? p.text : '')).join('')
         : undefined);
 
     const history: Content[] = [];
@@ -395,7 +395,7 @@ export class GeminiOAuthProvider implements IProvider {
       throw new ProviderError(
         `Gemini OAuth stream failed to start: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.GeminiOAuth,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
 
@@ -458,7 +458,7 @@ export class GeminiOAuthProvider implements IProvider {
       throw new ProviderError(
         `Gemini OAuth stream error: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.GeminiOAuth,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
   }
@@ -479,19 +479,19 @@ export class GeminiOAuthProvider implements IProvider {
         totalTokens = inputs[0].split(/\s+/).length;
       } else {
         const result = await embeddingModel.batchEmbedContents({
-          requests: inputs.map(text => ({
+          requests: inputs.map((text) => ({
             content: { role: 'user', parts: [{ text }] },
             model: `models/${request.model}`,
           })),
         });
-        embeddings = result.embeddings.map(e => new Float32Array(e.values));
+        embeddings = result.embeddings.map((e) => new Float32Array(e.values));
         totalTokens = inputs.reduce((sum, t) => sum + t.split(/\s+/).length, 0);
       }
     } catch (err) {
       throw new ProviderError(
         `Gemini OAuth embed failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.GeminiOAuth,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
 

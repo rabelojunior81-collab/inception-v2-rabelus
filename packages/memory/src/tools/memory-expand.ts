@@ -61,10 +61,7 @@ export class MemoryExpandTool implements ITool {
     return typeof args === 'object' && args !== null && 'summaryId' in args;
   }
 
-  async execute(
-    args: JSONObject,
-    _ctx: ExecutionContext,
-  ): Promise<ToolExecutionResult> {
+  async execute(args: JSONObject, _ctx: ExecutionContext): Promise<ToolExecutionResult> {
     const { summaryId, maxDepth, tokenCap, includeMessages } = args as {
       summaryId: string;
       maxDepth?: number;
@@ -77,7 +74,7 @@ export class MemoryExpandTool implements ITool {
         summaryId,
         typeof maxDepth === 'number' ? maxDepth : 2,
         typeof tokenCap === 'number' ? tokenCap : 8_000,
-        typeof includeMessages === 'boolean' ? includeMessages : true,
+        typeof includeMessages === 'boolean' ? includeMessages : true
       );
 
       return {

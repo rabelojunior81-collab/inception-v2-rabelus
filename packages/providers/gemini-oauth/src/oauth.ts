@@ -86,7 +86,7 @@ interface GoogleTokenResponse {
 export async function refreshAccessToken(
   clientId: string,
   clientSecret: string,
-  refreshToken: string,
+  refreshToken: string
 ): Promise<TokenData> {
   const body = new URLSearchParams({
     client_id: clientId,

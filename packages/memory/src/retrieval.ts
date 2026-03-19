@@ -40,7 +40,7 @@ export interface ExpandResult {
 export class RetrievalEngine {
   constructor(
     private readonly db: DatabaseSync,
-    private readonly embedding?: IEmbeddingProvider,
+    private readonly embedding?: IEmbeddingProvider
   ) {}
 
   async search(
@@ -51,7 +51,7 @@ export class RetrievalEngine {
       mode?: 'keyword' | 'vector' | 'hybrid';
       vectorWeight?: number;
       keywordWeight?: number;
-    } = {},
+    } = {}
   ): Promise<SearchResult[]> {
     const {
       threadId,
@@ -78,7 +78,7 @@ export class RetrievalEngine {
         WHERE messages_fts MATCH ? ${threadFilter}
         ORDER BY score
         LIMIT ?
-      `,
+      `
         )
         .all(...params, limit * 2) as unknown as Array<MessageRow & { score: number }>;
 
@@ -106,18 +106,15 @@ export class RetrievalEngine {
 
       const rows = this.db
         .prepare(
-          `SELECT id, thread_id, role, content, created_at, token_count, embedding FROM messages ${threadFilter} LIMIT 500`,
+          `SELECT id, thread_id, role, content, created_at, token_count, embedding FROM messages ${threadFilter} LIMIT 500`
         )
         .all(...params) as unknown as Array<MessageRow>;
 
       const scored = rows
-        .filter(r => r.embedding !== null)
-        .map(r => ({
+        .filter((r) => r.embedding !== null)
+        .map((r) => ({
           row: r,
-          sim: cosineSimilarity(
-            queryVec,
-            deserializeEmbedding(r.embedding as Buffer),
-          ),
+          sim: cosineSimilarity(queryVec, deserializeEmbedding(r.embedding as Buffer)),
         }))
         .sort((a, b) => b.sim - a.sim)
         .slice(0, limit);
@@ -142,15 +139,13 @@ export class RetrievalEngine {
       }
     }
 
-    return [...results.values()]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
+    return [...results.values()].sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
   describe(summaryId: string): DescribeResult | undefined {
-    const row = this.db
-      .prepare('SELECT * FROM summaries WHERE id = ?')
-      .get(summaryId) as SummaryRow | undefined;
+    const row = this.db.prepare('SELECT * FROM summaries WHERE id = ?').get(summaryId) as
+      | SummaryRow
+      | undefined;
     if (!row) return undefined;
 
     return {
@@ -172,11 +167,11 @@ export class RetrievalEngine {
     tokenCap = 8_000,
     includeMessages = true,
     _currentDepth = 0,
-    _usedTokens = { value: 0 },
+    _usedTokens = { value: 0 }
   ): ExpandResult {
-    const row = this.db
-      .prepare('SELECT * FROM summaries WHERE id = ?')
-      .get(summaryId) as SummaryRow | undefined;
+    const row = this.db.prepare('SELECT * FROM summaries WHERE id = ?').get(summaryId) as
+      | SummaryRow
+      | undefined;
     if (!row) {
       return {
         summaryId,
@@ -197,14 +192,7 @@ export class RetrievalEngine {
       for (const childId of childIds) {
         if (_usedTokens.value >= tokenCap) break;
         children.push(
-          this.expand(
-            childId,
-            maxDepth,
-            tokenCap,
-            includeMessages,
-            _currentDepth + 1,
-            _usedTokens,
-          ),
+          this.expand(childId, maxDepth, tokenCap, includeMessages, _currentDepth + 1, _usedTokens)
         );
       }
     }
@@ -215,9 +203,7 @@ export class RetrievalEngine {
       for (const msgId of msgIds) {
         if (_usedTokens.value >= tokenCap) break;
         const msg = this.db
-          .prepare(
-            'SELECT id, role, content, created_at FROM messages WHERE id = ?',
-          )
+          .prepare('SELECT id, role, content, created_at FROM messages WHERE id = ?')
           .get(msgId) as
           | { id: string; role: string; content: string; created_at: string }
           | undefined;

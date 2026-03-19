@@ -39,7 +39,7 @@ function extractText(content: string | ContentPart[]): string {
 }
 
 function buildUserContent(
-  content: string | ContentPart[],
+  content: string | ContentPart[]
 ): string | OpenAI.ChatCompletionContentPart[] {
   if (typeof content === 'string') return content;
   return content.map((p) => {
@@ -59,7 +59,7 @@ function buildUserContent(
 
 function toOpenAIMessages(
   messages: readonly Message[],
-  system?: string,
+  system?: string
 ): OpenAI.ChatCompletionMessageParam[] {
   const result: OpenAI.ChatCompletionMessageParam[] = [];
   if (system) result.push({ role: 'system', content: system });
@@ -98,15 +98,18 @@ function toOpenAIMessages(
 
 // ── Finish reason mapping ────────────────────────────────────────────────────
 
-function mapFinishReason(
-  reason: string | null | undefined,
-): GenerateResponse['finishReason'] {
+function mapFinishReason(reason: string | null | undefined): GenerateResponse['finishReason'] {
   switch (reason) {
-    case 'stop':           return 'stop';
-    case 'length':         return 'length';
-    case 'tool_calls':     return 'tool_calls';
-    case 'content_filter': return 'content_filter';
-    default:               return 'stop';
+    case 'stop':
+      return 'stop';
+    case 'length':
+      return 'length';
+    case 'tool_calls':
+      return 'tool_calls';
+    case 'content_filter':
+      return 'content_filter';
+    default:
+      return 'stop';
   }
 }
 
@@ -177,11 +180,9 @@ export class OpenCodeZenProvider implements IProvider {
 
       const choice = response.choices[0];
       if (!choice) {
-        throw new ProviderError(
-          'OpenCode Zen returned no choices',
-          ProviderId.OpenCodeZen,
-          { model: request.model },
-        );
+        throw new ProviderError('OpenCode Zen returned no choices', ProviderId.OpenCodeZen, {
+          model: request.model,
+        });
       }
 
       const toolCalls: ToolCall[] | undefined = choice.message.tool_calls?.map((tc) => ({
@@ -211,7 +212,7 @@ export class OpenCodeZenProvider implements IProvider {
       throw new ProviderError(
         `OpenCode Zen generate failed: ${String(err)}`,
         ProviderId.OpenCodeZen,
-        { model: request.model },
+        { model: request.model }
       );
     }
   }
@@ -271,9 +272,7 @@ export class OpenCodeZenProvider implements IProvider {
           model: chunk.model,
           delta: delta?.content ?? '',
           toolCalls,
-          finishReason: choice?.finish_reason
-            ? mapFinishReason(choice.finish_reason)
-            : undefined,
+          finishReason: choice?.finish_reason ? mapFinishReason(choice.finish_reason) : undefined,
           usage,
         };
       }
@@ -281,7 +280,7 @@ export class OpenCodeZenProvider implements IProvider {
       throw new ProviderError(
         `OpenCode Zen stream failed: ${String(err)}`,
         ProviderId.OpenCodeZen,
-        { model: request.model },
+        { model: request.model }
       );
     }
   }
@@ -289,10 +288,7 @@ export class OpenCodeZenProvider implements IProvider {
   // ── Embeddings ──────────────────────────────────────────────────────────────
 
   async embed(_request: EmbeddingRequest): Promise<EmbeddingResponse> {
-    throw new ProviderError(
-      'OpenCode Zen does not support embeddings',
-      ProviderId.OpenCodeZen,
-    );
+    throw new ProviderError('OpenCode Zen does not support embeddings', ProviderId.OpenCodeZen);
   }
 
   // ── Health ──────────────────────────────────────────────────────────────────
@@ -313,7 +309,7 @@ export class OpenCodeZenProvider implements IProvider {
     if (!this.client) {
       throw new ProviderError(
         'OpenCodeZenProvider not initialized. Call initialize(config) first.',
-        ProviderId.OpenCodeZen,
+        ProviderId.OpenCodeZen
       );
     }
     return this.client;

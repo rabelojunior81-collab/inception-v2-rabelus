@@ -223,12 +223,12 @@ export interface IChannel {
   readonly id: ChannelId;
   readonly direction: MessageDirection;
   readonly state: ChannelState;
-  
+
   initialize(config: ChannelConfig): Promise<void>;
   start(): Promise<void>;
   stop(): Promise<void>;
   restart(): Promise<void>;
-  
+
   send(message: OutboundMessage): Promise<void>;
   onMessage(handler: (message: InboundMessage) => Promise<void>): void;
   onError(handler: (error: Error) => void): void;

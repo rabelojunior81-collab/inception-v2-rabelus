@@ -71,9 +71,7 @@ export class ChannelManager {
       try {
         await channel.start();
       } catch (err) {
-        errors.push(
-          new ChannelError(`Failed to start channel "${id}": ${String(err)}`, id),
-        );
+        errors.push(new ChannelError(`Failed to start channel "${id}": ${String(err)}`, id));
       }
     }
     if (errors.length > 0) {

@@ -2,7 +2,6 @@
 // OpenAI Provider Implementation
 // ============================================================================
 
-
 import { ProviderError } from '@rabeluslab/inception-core';
 import type {
   IProvider,
@@ -39,9 +38,7 @@ function mapContentPart(part: ContentPart): OpenAI.Chat.ChatCompletionContentPar
   if (part.type === 'image') {
     const { source } = part;
     const url =
-      source.type === 'url'
-        ? source.data
-        : `data:${source.mediaType};base64,${source.data}`;
+      source.type === 'url' ? source.data : `data:${source.mediaType};base64,${source.data}`;
     return { type: 'image_url', image_url: { url } };
   }
   // file parts — represent as text
@@ -53,7 +50,10 @@ function mapMessageToOpenAI(message: Message): ChatCompletionMessageParam {
 
   switch (role) {
     case MessageRole.System: {
-      const text = typeof content === 'string' ? content : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
+      const text =
+        typeof content === 'string'
+          ? content
+          : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
       return { role: 'system', content: text };
     }
 
@@ -97,12 +97,18 @@ function mapMessageToOpenAI(message: Message): ChatCompletionMessageParam {
 
     case MessageRole.Tool: {
       const toolCallId = metadata?.toolCallId ?? '';
-      const text = typeof content === 'string' ? content : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
+      const text =
+        typeof content === 'string'
+          ? content
+          : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
       return { role: 'tool', tool_call_id: toolCallId, content: text };
     }
 
     default: {
-      const text = typeof content === 'string' ? content : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
+      const text =
+        typeof content === 'string'
+          ? content
+          : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
       return { role: 'user', content: text };
     }
   }
@@ -120,7 +126,7 @@ function mapTools(tools: readonly LLMToolDefinition[]): ChatCompletionTool[] {
 }
 
 function mapToolChoice(
-  toolChoice: GenerateRequest['toolChoice'],
+  toolChoice: GenerateRequest['toolChoice']
 ): ChatCompletionToolChoiceOption | undefined {
   if (toolChoice === undefined) return undefined;
   if (toolChoice === 'auto') return 'auto';
@@ -129,7 +135,7 @@ function mapToolChoice(
 }
 
 function mapToolCalls(
-  raw: OpenAI.Chat.ChatCompletionMessage['tool_calls'],
+  raw: OpenAI.Chat.ChatCompletionMessage['tool_calls']
 ): ToolCall[] | undefined {
   if (!raw || raw.length === 0) return undefined;
   return raw.map((tc) => ({
@@ -139,7 +145,9 @@ function mapToolCalls(
   }));
 }
 
-function mapUsage(raw: OpenAI.Completions.CompletionUsage | null | undefined): TokenUsage | undefined {
+function mapUsage(
+  raw: OpenAI.Completions.CompletionUsage | null | undefined
+): TokenUsage | undefined {
   if (!raw) return undefined;
   return {
     promptTokens: raw.prompt_tokens,
@@ -148,15 +156,18 @@ function mapUsage(raw: OpenAI.Completions.CompletionUsage | null | undefined): T
   };
 }
 
-function mapFinishReason(
-  reason: string | null | undefined,
-): GenerateResponse['finishReason'] {
+function mapFinishReason(reason: string | null | undefined): GenerateResponse['finishReason'] {
   switch (reason) {
-    case 'stop': return 'stop';
-    case 'length': return 'length';
-    case 'tool_calls': return 'tool_calls';
-    case 'content_filter': return 'content_filter';
-    default: return 'stop';
+    case 'stop':
+      return 'stop';
+    case 'length':
+      return 'length';
+    case 'tool_calls':
+      return 'tool_calls';
+    case 'content_filter':
+      return 'content_filter';
+    default:
+      return 'stop';
   }
 }
 
@@ -191,7 +202,7 @@ export class OpenAIProvider implements IProvider {
       throw new ProviderError(
         `Failed to initialize OpenAI client: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.OpenAI,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }
@@ -200,7 +211,7 @@ export class OpenAIProvider implements IProvider {
     if (!this.client) {
       throw new ProviderError(
         'OpenAI provider is not initialized. Call initialize() first.',
-        ProviderId.OpenAI,
+        ProviderId.OpenAI
       );
     }
     return this.client;
@@ -226,8 +237,12 @@ export class OpenAIProvider implements IProvider {
         ...(request.temperature !== undefined ? { temperature: request.temperature } : {}),
         ...(request.maxTokens !== undefined ? { max_tokens: request.maxTokens } : {}),
         ...(request.topP !== undefined ? { top_p: request.topP } : {}),
-        ...(request.frequencyPenalty !== undefined ? { frequency_penalty: request.frequencyPenalty } : {}),
-        ...(request.presencePenalty !== undefined ? { presence_penalty: request.presencePenalty } : {}),
+        ...(request.frequencyPenalty !== undefined
+          ? { frequency_penalty: request.frequencyPenalty }
+          : {}),
+        ...(request.presencePenalty !== undefined
+          ? { presence_penalty: request.presencePenalty }
+          : {}),
         ...(request.stopSequences && request.stopSequences.length > 0
           ? { stop: request.stopSequences as string[] }
           : {}),
@@ -252,7 +267,7 @@ export class OpenAIProvider implements IProvider {
       throw new ProviderError(
         `OpenAI generate failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.OpenAI,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }
@@ -276,8 +291,12 @@ export class OpenAIProvider implements IProvider {
         ...(request.temperature !== undefined ? { temperature: request.temperature } : {}),
         ...(request.maxTokens !== undefined ? { max_tokens: request.maxTokens } : {}),
         ...(request.topP !== undefined ? { top_p: request.topP } : {}),
-        ...(request.frequencyPenalty !== undefined ? { frequency_penalty: request.frequencyPenalty } : {}),
-        ...(request.presencePenalty !== undefined ? { presence_penalty: request.presencePenalty } : {}),
+        ...(request.frequencyPenalty !== undefined
+          ? { frequency_penalty: request.frequencyPenalty }
+          : {}),
+        ...(request.presencePenalty !== undefined
+          ? { presence_penalty: request.presencePenalty }
+          : {}),
         ...(request.stopSequences && request.stopSequences.length > 0
           ? { stop: request.stopSequences as string[] }
           : {}),
@@ -287,7 +306,7 @@ export class OpenAIProvider implements IProvider {
       throw new ProviderError(
         `OpenAI stream setup failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.OpenAI,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
 
@@ -313,9 +332,7 @@ export class OpenAIProvider implements IProvider {
           model: chunk.model,
           delta: delta.content ?? '',
           toolCalls: toolCalls && toolCalls.length > 0 ? toolCalls : undefined,
-          finishReason: choice.finish_reason
-            ? mapFinishReason(choice.finish_reason)
-            : undefined,
+          finishReason: choice.finish_reason ? mapFinishReason(choice.finish_reason) : undefined,
           usage: mapUsage(chunk.usage),
         };
       }
@@ -323,7 +340,7 @@ export class OpenAIProvider implements IProvider {
       throw new ProviderError(
         `OpenAI stream failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.OpenAI,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }
@@ -337,9 +354,7 @@ export class OpenAIProvider implements IProvider {
         input: request.input as string | string[],
       });
 
-      const embeddings = response.data.map(
-        (item) => new Float32Array(item.embedding),
-      );
+      const embeddings = response.data.map((item) => new Float32Array(item.embedding));
 
       return {
         model: response.model,
@@ -354,7 +369,7 @@ export class OpenAIProvider implements IProvider {
       throw new ProviderError(
         `OpenAI embed failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.OpenAI,
-        { cause: String(err) },
+        { cause: String(err) }
       );
     }
   }

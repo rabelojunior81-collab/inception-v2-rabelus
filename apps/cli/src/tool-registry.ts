@@ -2,7 +2,13 @@
 // Tool Registry Builder — assembles all tools with security validation
 // ============================================================================
 
-import { ReadFileTool, WriteFileTool, ListDirTool, FileExistsTool, StatFileTool } from '@rabeluslab/inception-tool-filesystem';
+import {
+  ReadFileTool,
+  WriteFileTool,
+  ListDirTool,
+  FileExistsTool,
+  StatFileTool,
+} from '@rabeluslab/inception-tool-filesystem';
 import { HttpGetTool, HttpPostTool } from '@rabeluslab/inception-tool-http';
 import { RunCommandTool } from '@rabeluslab/inception-tool-shell';
 import type { IToolRegistry } from '@rabeluslab/inception-types';
@@ -29,7 +35,9 @@ export class ToolRegistry implements IToolRegistry {
     return Array.from(this.tools.values()).map((t) => t.definition);
   }
 
-  listByGate(gate: import('@rabeluslab/inception-types').GateType): readonly import('@rabeluslab/inception-types').ToolDefinition[] {
+  listByGate(
+    gate: import('@rabeluslab/inception-types').GateType
+  ): readonly import('@rabeluslab/inception-types').ToolDefinition[] {
     return this.list().filter((d) => d.gate === gate);
   }
 }

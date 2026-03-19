@@ -44,10 +44,14 @@ export async function runConfig(options: ConfigOptions = {}): Promise<void> {
   console.log(`  Relatório:  ${cfg.agent.operator.reportFrequency}`);
 
   console.log('\n🔒 Segurança:');
-  console.log(`  Autenticação: ${cfg.security.authentication.requirePairing ? 'Pairing obrigatório' : 'Aberta'}`);
+  console.log(
+    `  Autenticação: ${cfg.security.authentication.requirePairing ? 'Pairing obrigatório' : 'Aberta'}`
+  );
   console.log(`  Sandbox:      ${cfg.security.execution.sandbox}`);
   console.log(`  Workspacepath:${cfg.security.filesystem.workspacePath}`);
-  console.log(`  Max. arquivo: ${(cfg.security.filesystem.maxFileSize / 1024 / 1024).toFixed(1)} MiB`);
+  console.log(
+    `  Max. arquivo: ${(cfg.security.filesystem.maxFileSize / 1024 / 1024).toFixed(1)} MiB`
+  );
 
   console.log('\n📊 Limites:');
   console.log(`  Req/min:  ${cfg.security.rateLimit.requestsPerMinute}`);

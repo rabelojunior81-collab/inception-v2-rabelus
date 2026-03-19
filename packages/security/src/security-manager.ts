@@ -21,7 +21,7 @@ export class SecurityManager implements ISecurityManager {
 
   constructor(
     private readonly policy: SecurityPolicy,
-    approvalHandler?: ApprovalHandler,
+    approvalHandler?: ApprovalHandler
   ) {
     this.approvalHandler = approvalHandler;
   }
@@ -107,7 +107,9 @@ export class SecurityManager implements ISecurityManager {
       hostname = parsed.hostname.toLowerCase();
       const rawPort = parsed.port
         ? parseInt(parsed.port, 10)
-        : parsed.protocol === 'https:' ? 443 : 80;
+        : parsed.protocol === 'https:'
+          ? 443
+          : 80;
       port = rawPort;
     } catch {
       return false;

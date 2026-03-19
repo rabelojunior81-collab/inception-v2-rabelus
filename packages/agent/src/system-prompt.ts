@@ -5,7 +5,7 @@ export interface SystemPromptContext {
   readonly identity: AgentIdentity;
   readonly operator: OperatorConfig;
   readonly activeMission?: Mission;
-  readonly summaryGuidance?: string;   // from ContextAssembler when history is compacted
+  readonly summaryGuidance?: string; // from ContextAssembler when history is compacted
   readonly currentDate: string;
 }
 
@@ -28,7 +28,7 @@ export function buildSystemPrompt(ctx: SystemPromptContext): string {
       [...identity.values]
         .sort((a, b) => a.priority - b.priority)
         .map((v) => `- ${v.value}${v.description ? `: ${v.description}` : ''}`)
-        .join('\n'),
+        .join('\n')
     );
   }
 
@@ -57,7 +57,7 @@ export function buildSystemPrompt(ctx: SystemPromptContext): string {
     sections.push(`Modo: ${modeDescription(activeMission.mode)}`);
 
     const pendingTasks = activeMission.tasks.filter(
-      (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress,
+      (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress
     );
     if (pendingTasks.length > 0) {
       sections.push('\n**Tarefas pendentes:**');
@@ -79,10 +79,15 @@ export function buildSystemPrompt(ctx: SystemPromptContext): string {
 
 function modeDescription(mode: AgentMode): string {
   switch (mode) {
-    case AgentMode.Auditor: return 'A — Auditor (planejamento, sem execução)';
-    case AgentMode.Executor: return 'B — Executor (implementação)';
-    case AgentMode.Archivist: return 'C — Arquivista (preservação)';
-    case AgentMode.Verifier: return 'D — Verificador (somente leitura, SAGRADO)';
-    default: return mode satisfies never;
+    case AgentMode.Auditor:
+      return 'A — Auditor (planejamento, sem execução)';
+    case AgentMode.Executor:
+      return 'B — Executor (implementação)';
+    case AgentMode.Archivist:
+      return 'C — Arquivista (preservação)';
+    case AgentMode.Verifier:
+      return 'D — Verificador (somente leitura, SAGRADO)';
+    default:
+      return mode satisfies never;
   }
 }

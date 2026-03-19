@@ -15,7 +15,7 @@ export function isUrlAllowed(url: string, allowlist: readonly string[] | undefin
   if (!allowlist || allowlist.length === 0) return false; // deny by default
   try {
     const parsed = new URL(url);
-    return allowlist.some(pattern => {
+    return allowlist.some((pattern) => {
       // Support exact host match or wildcard prefix *.example.com
       if (pattern.startsWith('*.')) {
         const domain = pattern.slice(2);

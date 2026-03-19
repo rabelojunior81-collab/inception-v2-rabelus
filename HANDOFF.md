@@ -3,7 +3,7 @@
 > **Documento de Transferência de Conhecimento**  
 > **Data:** 2026-03-12  
 > **Versão:** 1.0.0  
-> **Autor:** Rabelus Lab  
+> **Autor:** Rabelus Lab
 
 ---
 
@@ -12,12 +12,14 @@
 Este é um **novo repositório** que contém a evolução do `inception-tui` para um **runtime completo de agentes autônomos** ao estilo ZeroClaw/OpenClaw.
 
 **O que já existe:**
+
 - ✅ Arquitetura completa definida (trait-driven)
 - ✅ Tipagens TypeScript (@inception/types)
 - ✅ Estrutura de monorepo configurada
 - ✅ Documentação internacionalizada
 
 **O que falta implementar:**
+
 - ⏳ Código fonte dos pacotes (core, providers, channels, etc.)
 - ⏳ CLI interativo (Opencode-inspired)
 - ⏳ Integração Telegram/Discord
@@ -34,6 +36,7 @@ Antes de começar, verifique se você tem:
 #### 1. Node.js (Versão 20 ou superior)
 
 **Windows:**
+
 ```powershell
 # Baixe em: https://nodejs.org/en/download/
 # Escolha a versão LTS (20.x.x)
@@ -45,6 +48,7 @@ node --version
 ```
 
 **Mac/Linux:**
+
 ```bash
 # Usando navegador (recomendado para iniciantes):
 # 1. Acesse: https://nodejs.org/en/download/
@@ -63,6 +67,7 @@ node --version
 #### 2. pnpm (Gerenciador de pacotes)
 
 **Windows/Mac/Linux (todos os sistemas):**
+
 ```bash
 # Execute este comando no terminal:
 npm install -g pnpm
@@ -75,6 +80,7 @@ pnpm --version
 #### 3. Git (Controle de versão)
 
 **Windows:**
+
 ```powershell
 # Baixe em: https://git-scm.com/download/win
 # Instale com opções padrão
@@ -85,6 +91,7 @@ git --version
 ```
 
 **Mac:**
+
 ```bash
 # Git geralmente já vem instalado no Mac
 # Verifique:
@@ -95,6 +102,7 @@ xcode-select --install
 ```
 
 **Linux:**
+
 ```bash
 sudo apt update
 sudo apt install git
@@ -145,6 +153,7 @@ pnpm install
 ```
 
 **Se der erro:**
+
 - Verifique se está na pasta correta (`pwd` no Mac/Linux, `cd` no Windows)
 - Verifique se o pnpm está instalado (`pnpm --version`)
 
@@ -159,7 +168,7 @@ pnpm typecheck
 # Deve mostrar algo como:
 # > @inception/root@2.0.0 typecheck /caminho/inception
 # > tsc --noEmit
-# 
+#
 # (sem erros = sucesso!)
 ```
 
@@ -240,9 +249,7 @@ inception/                      ← Shopping center (monorepo)
 
 1. **@inception/types** - Todas as interfaces TypeScript
    - Como usar: `import type { IProvider, IChannel } from '@inception/types'`
-   
 2. **Configuração do monorepo** - Turborepo + pnpm configurados
-   
 3. **Documentação** - CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md
 
 ### O que você precisa implementar (⏳)
@@ -280,12 +287,14 @@ pnpm clean            # Limpa builds e node_modules
 ### "pnpm não é reconhecido como comando"
 
 **Windows:**
+
 ```powershell
 # Feche e REABRA o terminal (Prompt de Comando ou PowerShell)
 # O PATH só atualiza em novas janelas
 ```
 
 **Mac/Linux:**
+
 ```bash
 # Adicione ao PATH manualmente:
 export PATH="$HOME/.local/share/pnpm:$PATH"
@@ -349,6 +358,7 @@ Leia estes arquivos na ordem:
 ### Fase 1: Fundação (FAÇA PRIMEIRO)
 
 #### 1.1 Config Package
+
 ```
 packages/config/
 ├── src/
@@ -363,6 +373,7 @@ packages/config/
 **Tarefa:** Criar validação de configuração usando Zod
 
 #### 1.2 Core Package
+
 ```
 packages/core/
 ├── src/
@@ -378,25 +389,31 @@ packages/core/
 ### Fase 2: Provedores
 
 #### 2.1 OpenAI Provider
+
 Implementar `IProvider` para OpenAI
 
 #### 2.2 Gemini Embeddings
+
 Implementar `IEmbeddingProvider` usando API Gemini
 
 ### Fase 3: Canais
 
 #### 3.1 CLI Channel (Ink-based)
+
 Interface terminal rica
 
 #### 3.2 Telegram Channel
+
 Bot do Telegram
 
 ### Fase 4: Memória
 
 #### 4.1 SQLite Backend
+
 Implementar `IMemoryBackend` com SQLite
 
 #### 4.2 Gemini Integration
+
 Integrar embeddings da Gemini
 
 ### Fase 5: CLI App
@@ -434,20 +451,26 @@ apps/cli/
 ## 💡 Dicas para Novos Desenvolvedores
 
 ### 1. Comece pelo types
+
 Veja como as interfaces estão definidas em `packages/types/src/`. Isso mostra o "contrato" que todas as implementações devem seguir.
 
 ### 2. Use o Zod Playground
+
 Teste seus schemas de validação em: https://zod-playground.vercel.app/
 
 ### 3. Teste pequenas partes
+
 Não tente implementar tudo de uma vez. Faça um pacote, teste, depois vá para o próximo.
 
 ### 4. Siga os exemplos
+
 Veja como outros projetos open source estruturam monorepos:
+
 - https://github.com/vercel/turborepo (exemplos)
 - https://github.com/calcom/cal.com
 
 ### 5. Pergunte!
+
 Se travar em algo por mais de 30 minutos, pergunte. Não fique preso.
 
 ---
@@ -483,11 +506,11 @@ Se absolutamente travar:
 ## 📝 Notas do Desenvolvedor Anterior
 
 > Este projeto é ambicioso mas totalmente factível. A arquitetura está bem definida, os tipos TypeScript são rigorosos, e a estrutura do monorepo é profissional.
-> 
+>
 > O maior desafio será o runtime engine (packages/core) - é o coração de tudo. Depois disso, os provedores e canais são mais mecânicos.
-> 
+>
 > Não tenha medo de Typescript strict - ele vai te salvar de muitos bugs.
-> 
+>
 > Boa sorte! 🚀
 
 ---

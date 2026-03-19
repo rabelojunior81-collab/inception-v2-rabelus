@@ -1,7 +1,12 @@
 import type { Result } from '@rabeluslab/inception-types';
 import { cosmiconfig } from 'cosmiconfig';
 
-import { DEFAULT_AGENT_IDENTITY, DEFAULT_OPERATOR, DEFAULT_SECURITY, DEFAULT_RUNTIME } from './defaults.js';
+import {
+  DEFAULT_AGENT_IDENTITY,
+  DEFAULT_OPERATOR,
+  DEFAULT_SECURITY,
+  DEFAULT_RUNTIME,
+} from './defaults.js';
 import {
   InceptionConfigFileSchema,
   AgentConfigurationSchema,
@@ -47,12 +52,10 @@ const explorer = cosmiconfig('inception', {
  * Returns a Result — no exceptions thrown.
  */
 export async function loadConfigFile(
-  searchFrom?: string,
+  searchFrom?: string
 ): Promise<Result<{ raw: InceptionConfigFile; filePath: string | undefined }>> {
   try {
-    const result = await (searchFrom
-      ? explorer.search(searchFrom)
-      : explorer.search());
+    const result = await (searchFrom ? explorer.search(searchFrom) : explorer.search());
 
     if (result === null) {
       return {
@@ -65,9 +68,7 @@ export async function loadConfigFile(
     if (!parsed.success) {
       return {
         success: false,
-        error: new Error(
-          `Invalid config file at ${result.filepath}: ${parsed.error.message}`,
-        ),
+        error: new Error(`Invalid config file at ${result.filepath}: ${parsed.error.message}`),
       };
     }
 
@@ -88,7 +89,7 @@ export async function loadConfigFile(
  */
 export function resolveConfig(
   raw: InceptionConfigFile,
-  filePath: string | undefined,
+  filePath: string | undefined
 ): Result<ResolvedConfig> {
   const now = new Date().toISOString();
 
@@ -160,9 +161,7 @@ export function resolveConfig(
     },
     providers: raw.providers ?? {},
     channels: raw.channels ?? {},
-    logging: raw.logging
-      ? { ...DEFAULT_RUNTIME.logging, ...raw.logging }
-      : DEFAULT_RUNTIME.logging,
+    logging: raw.logging ? { ...DEFAULT_RUNTIME.logging, ...raw.logging } : DEFAULT_RUNTIME.logging,
   };
 
   const runtimeParsed = RuntimeConfigSchema.safeParse(runtimeInput);

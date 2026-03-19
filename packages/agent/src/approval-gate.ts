@@ -26,7 +26,7 @@ export class ApprovalGate {
 
   constructor(
     private readonly autonomyLevel: AutonomyLevel,
-    private readonly approvalHandler: ApprovalHandler,
+    private readonly approvalHandler: ApprovalHandler
   ) {}
 
   /**
@@ -36,7 +36,7 @@ export class ApprovalGate {
   async checkAndWait(
     toolDef: ToolDefinition,
     args: JSONObject,
-    context: { missionId: string; threadId: string },
+    context: { missionId: string; threadId: string }
   ): Promise<boolean> {
     // Only gate in Supervised mode with dangerous tools
     if (this.autonomyLevel !== AutonomyLevel.Supervised) return true;
@@ -57,15 +57,20 @@ export class ApprovalGate {
 
     // Create a promise that resolves when the operator responds
     const approved = await new Promise<boolean>((resolve) => {
-      const timer = setTimeout(() => {
-        this.pending.delete(id);
-        resolve(false); // timeout = reject
-      }, 5 * 60 * 1000);
+      const timer = setTimeout(
+        () => {
+          this.pending.delete(id);
+          resolve(false); // timeout = reject
+        },
+        5 * 60 * 1000
+      );
 
       this.pending.set(id, { resolve, timer });
 
       // Notify the approval handler (non-blocking — it will call resolveApproval later)
-      this.approvalHandler(request).then(resolve).catch(() => resolve(false));
+      this.approvalHandler(request)
+        .then(resolve)
+        .catch(() => resolve(false));
     });
 
     this.pending.delete(id);

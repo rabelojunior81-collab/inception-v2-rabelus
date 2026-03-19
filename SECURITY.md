@@ -43,6 +43,7 @@ We aim to respond within 48 hours and will keep you updated on our progress.
    - Set appropriate autonomy levels
 
 3. **Environment Variables**:
+
    ```bash
    # Never commit these
    INCEPTION_API_KEY=sk-...
@@ -105,8 +106,8 @@ We follow responsible disclosure:
 
 We thank the following security researchers:
 
-*To be populated as reports are received*
+_To be populated as reports are received_
 
 ---
 
-*Last updated: 2026-03-12*
+_Last updated: 2026-03-12_

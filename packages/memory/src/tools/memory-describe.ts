@@ -46,10 +46,7 @@ export class MemoryDescribeTool implements ITool {
     return typeof args === 'object' && args !== null && 'summaryId' in args;
   }
 
-  async execute(
-    args: JSONObject,
-    _ctx: ExecutionContext,
-  ): Promise<ToolExecutionResult> {
+  async execute(args: JSONObject, _ctx: ExecutionContext): Promise<ToolExecutionResult> {
     const { summaryId } = args as { summaryId: string };
 
     try {

@@ -119,9 +119,7 @@ export const FilesystemPolicySchema = z.object({
     .int()
     .positive()
     .default(10 * 1024 * 1024), // 10 MB
-  blockedExtensions: z
-    .array(z.string())
-    .default(['.exe', '.bat', '.sh', '.ps1', '.cmd']),
+  blockedExtensions: z.array(z.string()).default(['.exe', '.bat', '.sh', '.ps1', '.cmd']),
 });
 
 export const ExecutionPolicySchema = z.object({
@@ -130,26 +128,74 @@ export const ExecutionPolicySchema = z.object({
     // Version control
     'git',
     // Node.js ecosystem
-    'node', 'npm', 'npx', 'pnpm', 'yarn', 'bun', 'bunx',
+    'node',
+    'npm',
+    'npx',
+    'pnpm',
+    'yarn',
+    'bun',
+    'bunx',
     // Python
-    'python', 'python3', 'pip', 'pip3', 'uv',
+    'python',
+    'python3',
+    'pip',
+    'pip3',
+    'uv',
     // Build / task runners
-    'make', 'cmake', 'turbo', 'nx',
+    'make',
+    'cmake',
+    'turbo',
+    'nx',
     // Info & navigation
-    'ls', 'dir', 'pwd', 'cat', 'head', 'tail', 'grep', 'find',
-    'echo', 'printf', 'wc', 'sort', 'uniq', 'diff',
+    'ls',
+    'dir',
+    'pwd',
+    'cat',
+    'head',
+    'tail',
+    'grep',
+    'find',
+    'echo',
+    'printf',
+    'wc',
+    'sort',
+    'uniq',
+    'diff',
     // File ops (non-destructive by default)
-    'cp', 'mv', 'mkdir', 'touch',
+    'cp',
+    'mv',
+    'mkdir',
+    'touch',
     // Archive
-    'zip', 'unzip', 'tar', 'gzip', 'gunzip',
+    'zip',
+    'unzip',
+    'tar',
+    'gzip',
+    'gunzip',
     // Network (read-only)
-    'curl', 'wget', 'ping', 'nslookup', 'dig',
+    'curl',
+    'wget',
+    'ping',
+    'nslookup',
+    'dig',
     // Env / process
-    'env', 'printenv', 'which', 'type', 'whoami', 'hostname',
+    'env',
+    'printenv',
+    'which',
+    'type',
+    'whoami',
+    'hostname',
     // Text processing
-    'sed', 'awk', 'jq', 'yq', 'xargs',
+    'sed',
+    'awk',
+    'jq',
+    'yq',
+    'xargs',
     // Misc dev tools
-    'gh', 'docker', 'docker-compose', 'kubectl',
+    'gh',
+    'docker',
+    'docker-compose',
+    'kubectl',
   ]),
   blockedCommands: z
     .array(z.string())
@@ -192,9 +238,7 @@ export const SecurityPolicySchema = z.object({
 export const LoggingConfigSchema = z.object({
   level: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   format: z.enum(['json', 'pretty']).default('pretty'),
-  destinations: z
-    .array(z.enum(['console', 'file', 'syslog']))
-    .default(['console']),
+  destinations: z.array(z.enum(['console', 'file', 'syslog'])).default(['console']),
 });
 
 export const RuntimeConfigSchema = z.object({

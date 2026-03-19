@@ -96,7 +96,10 @@ export class WriteFileTool implements ITool {
       const buffer = Buffer.from(content, encoding);
       await fs.writeFile(resolvedPath, buffer, { signal: context.signal });
 
-      context.logger.debug('write_file: success', { path: resolvedPath, sizeBytes: buffer.byteLength });
+      context.logger.debug('write_file: success', {
+        path: resolvedPath,
+        sizeBytes: buffer.byteLength,
+      });
 
       return {
         success: true,

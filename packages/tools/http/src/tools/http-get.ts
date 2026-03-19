@@ -82,7 +82,8 @@ export class HttpGetTool implements ITool {
     const url = args['url'] as string;
     const userHeaders = (args['headers'] as Record<string, string> | undefined) ?? {};
     const timeout = (args['timeout'] as number | undefined) ?? DEFAULT_TIMEOUT_MS;
-    const maxResponseBytes = (args['maxResponseBytes'] as number | undefined) ?? DEFAULT_MAX_RESPONSE_BYTES;
+    const maxResponseBytes =
+      (args['maxResponseBytes'] as number | undefined) ?? DEFAULT_MAX_RESPONSE_BYTES;
 
     // ── Allowlist check ────────────────────────────────────────────────────────
     if (!isUrlAllowed(url, context.allowlist.urls)) {
@@ -106,7 +107,9 @@ export class HttpGetTool implements ITool {
 
       const contentType = response.headers.get('content-type') ?? '';
       const responseHeaders: Record<string, string> = {};
-      response.headers.forEach((value, key) => { responseHeaders[key] = value; });
+      response.headers.forEach((value, key) => {
+        responseHeaders[key] = value;
+      });
 
       // Read body with size cap
       const buffer = await response.arrayBuffer();
@@ -123,7 +126,11 @@ export class HttpGetTool implements ITool {
       // Attempt JSON parse
       let body: unknown = bodyText;
       if (contentType.includes('application/json') && !truncated) {
-        try { body = JSON.parse(bodyText); } catch { /* leave as string */ }
+        try {
+          body = JSON.parse(bodyText);
+        } catch {
+          /* leave as string */
+        }
       }
 
       context.logger.debug('http_get: success', { url, status: response.status });

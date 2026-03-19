@@ -13,19 +13,41 @@ import { loadConfig } from '@rabeluslab/inception-config';
 import { ChannelManager, InceptionRuntime } from '@rabeluslab/inception-core';
 import { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
 import { SecurityManager } from '@rabeluslab/inception-security';
-import { ReadFileTool, WriteFileTool, ListDirTool, FileExistsTool, StatFileTool } from '@rabeluslab/inception-tool-filesystem';
+import {
+  ReadFileTool,
+  WriteFileTool,
+  ListDirTool,
+  FileExistsTool,
+  StatFileTool,
+} from '@rabeluslab/inception-tool-filesystem';
 import { HttpGetTool, HttpPostTool } from '@rabeluslab/inception-tool-http';
 import { RunCommandTool } from '@rabeluslab/inception-tool-shell';
-import type { RuntimeConfig, IToolRegistry, ITool, ToolDefinition, GateType } from '@rabeluslab/inception-types';
+import type {
+  RuntimeConfig,
+  IToolRegistry,
+  ITool,
+  ToolDefinition,
+  GateType,
+} from '@rabeluslab/inception-types';
 import { AutonomyLevel } from '@rabeluslab/inception-types';
 
 class ToolRegistry implements IToolRegistry {
   private readonly tools = new Map<string, ITool>();
-  register(tool: ITool): void { this.tools.set(tool.definition.id, tool); }
-  unregister(id: string): void { this.tools.delete(id); }
-  get(id: string): ITool | undefined { return this.tools.get(id); }
-  list(): readonly ToolDefinition[] { return Array.from(this.tools.values()).map(t => t.definition); }
-  listByGate(gate: GateType): readonly ToolDefinition[] { return this.list().filter(d => d.gate === gate); }
+  register(tool: ITool): void {
+    this.tools.set(tool.definition.id, tool);
+  }
+  unregister(id: string): void {
+    this.tools.delete(id);
+  }
+  get(id: string): ITool | undefined {
+    return this.tools.get(id);
+  }
+  list(): readonly ToolDefinition[] {
+    return Array.from(this.tools.values()).map((t) => t.definition);
+  }
+  listByGate(gate: GateType): readonly ToolDefinition[] {
+    return this.list().filter((d) => d.gate === gate);
+  }
 }
 
 // ── Env / defaults ────────────────────────────────────────────────────────────
@@ -116,9 +138,7 @@ async function main(): Promise<void> {
     enabled: true,
     port: PORT,
     host: HOST,
-    auth: HTTP_SECRET
-      ? { type: 'bearer', secret: HTTP_SECRET }
-      : { type: 'none' },
+    auth: HTTP_SECRET ? { type: 'bearer', secret: HTTP_SECRET } : { type: 'none' },
   });
 
   // ── Channel manager ──────────────────────────────────────────────────────────
@@ -153,7 +173,9 @@ async function main(): Promise<void> {
       const result = await agentLoop.turn(inbound);
       await channelManager.send(result.response);
     } catch (err) {
-      process.stderr.write(`[daemon] Turn error: ${err instanceof Error ? err.message : String(err)}\n`);
+      process.stderr.write(
+        `[daemon] Turn error: ${err instanceof Error ? err.message : String(err)}\n`
+      );
     }
   });
 
@@ -186,10 +208,12 @@ async function main(): Promise<void> {
   process.on('SIGTERM', () => void shutdown());
 
   // Keep alive
-  await new Promise<void>(() => { /* intentionally unresolved */ });
+  await new Promise<void>(() => {
+    /* intentionally unresolved */
+  });
 }
 
-main().catch(err => {
+main().catch((err) => {
   process.stderr.write(`[daemon] Fatal: ${err instanceof Error ? err.message : String(err)}\n`);
   process.exit(1);
 });

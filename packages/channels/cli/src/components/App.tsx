@@ -8,7 +8,6 @@ import { InputBox } from './InputBox.js';
 import { MessageList } from './MessageList.js';
 import { StatusBar } from './StatusBar.js';
 
-
 interface AppProps {
   state: CliAppState;
   onUserInput: (text: string) => void;
@@ -38,15 +37,14 @@ export function App({ state, onUserInput, onApprovalDecision }: AppProps): React
       />
       <MessageList messages={state.messages} />
       {state.pendingApproval ? (
-        <ApprovalPrompt
-          approval={state.pendingApproval}
-          onDecision={onApprovalDecision}
-        />
+        <ApprovalPrompt approval={state.pendingApproval} onDecision={onApprovalDecision} />
       ) : (
         <InputBox
           onSubmit={handleInput}
           disabled={state.isProcessing}
-          placeholder={state.isProcessing ? 'Processando...' : 'Digite uma mensagem... (/stop para sair)'}
+          placeholder={
+            state.isProcessing ? 'Processando...' : 'Digite uma mensagem... (/stop para sair)'
+          }
         />
       )}
     </Box>

@@ -13,9 +13,7 @@ import {
   MemoryEntryType,
 } from '@rabeluslab/inception-types';
 import type { InboundMessage, Message } from '@rabeluslab/inception-types';
-import {
-  AutonomyLevel,
-} from '@rabeluslab/inception-types';
+import { AutonomyLevel } from '@rabeluslab/inception-types';
 
 const inbound: InboundMessage = {
   id: 'msg-in-1' as InboundMessage['id'],
@@ -105,7 +103,10 @@ describe('messageToMemoryEntry', () => {
       role: MessageRole.User,
       content: [
         { type: 'text', text: 'Hello' },
-        { type: 'image', source: { type: 'url', data: 'http://x.com/img.png', mediaType: 'image/png' } },
+        {
+          type: 'image',
+          source: { type: 'url', data: 'http://x.com/img.png', mediaType: 'image/png' },
+        },
       ],
     };
     const entry = messageToMemoryEntry(msg, 'thread-1');

@@ -45,22 +45,22 @@ export interface ProviderSelection {
  */
 const DEFAULT_MODELS: Record<string, string> = {
   // Frontier cloud
-  anthropic:         'claude-sonnet-4-6',
-  openai:            'gpt-5.4',           // GPT-5.4 flagship (Mar 2026)
-  gemini:            'gemini-2.5-flash',  // stable; gemini-3 is preview
-  'openai-oauth':    'gpt-5.4',
+  anthropic: 'claude-sonnet-4-6',
+  openai: 'gpt-5.4', // GPT-5.4 flagship (Mar 2026)
+  gemini: 'gemini-2.5-flash', // stable; gemini-3 is preview
+  'openai-oauth': 'gpt-5.4',
   // Regional providers (standard PAYG)
-  kimi:              'kimi-k2.5',         // Moonshot AI
-  'kimi-coding':     'kimi-for-coding',   // Kimi Coding Plan endpoint
-  zai:               'glm-4.7',           // Z.AI PAYG
-  'zai-coding':      'GLM-4.7',          // Z.AI Coding Plan endpoint
-  bailian:           'qwen3.5-plus',      // Bailian Coding Plan (sk-sp-xxx)
-  'bailian-payg':    'qwen3.5-plus',      // Bailian PAYG (sk-xxx)
+  kimi: 'kimi-k2.5', // Moonshot AI
+  'kimi-coding': 'kimi-for-coding', // Kimi Coding Plan endpoint
+  zai: 'glm-4.7', // Z.AI PAYG
+  'zai-coding': 'GLM-4.7', // Z.AI Coding Plan endpoint
+  bailian: 'qwen3.5-plus', // Bailian Coding Plan (sk-sp-xxx)
+  'bailian-payg': 'qwen3.5-plus', // Bailian PAYG (sk-xxx)
   // Gateways
-  openrouter:        'openai/gpt-4o',
-  kilo:              'gpt-4o',
+  openrouter: 'openai/gpt-4o',
+  kilo: 'gpt-4o',
   // Ollama
-  ollama:            'qwen2.5',
+  ollama: 'qwen2.5',
 };
 
 /**
@@ -74,29 +74,29 @@ const DEFAULT_MODELS: Record<string, string> = {
  * PAYG users should set baseUrl explicitly in .inception.json providers.bailian.baseUrl
  */
 const DEFAULT_BASE_URLS: Record<string, string> = {
-  kimi:            'https://api.moonshot.ai/v1',
-  'kimi-coding':   'https://api.kimi.com/coding/v1',
-  zai:             'https://api.z.ai/api/paas/v4',
-  'zai-coding':    'https://api.z.ai/api/coding/paas/v4',
-  bailian:         'https://coding-intl.dashscope.aliyuncs.com/v1',  // Coding Plan
-  'bailian-payg':  'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',  // PAYG
+  kimi: 'https://api.moonshot.ai/v1',
+  'kimi-coding': 'https://api.kimi.com/coding/v1',
+  zai: 'https://api.z.ai/api/paas/v4',
+  'zai-coding': 'https://api.z.ai/api/coding/paas/v4',
+  bailian: 'https://coding-intl.dashscope.aliyuncs.com/v1', // Coding Plan
+  'bailian-payg': 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1', // PAYG
 };
 
 /** Environment variable names per provider slug. */
 const ENV_KEYS: Record<string, string> = {
-  anthropic:       'ANTHROPIC_API_KEY',
-  openai:          'OPENAI_API_KEY',
-  gemini:          'GOOGLE_API_KEY',
-  bailian:         'DASHSCOPE_API_KEY',    // Coding Plan (sk-sp-xxx)
-  'bailian-payg':  'DASHSCOPE_API_KEY',    // PAYG (sk-xxx)
-  openrouter:      'OPENROUTER_API_KEY',
-  kilo:            'KILO_API_KEY',
-  kimi:            'KIMI_API_KEY',
-  'kimi-coding':   'KIMI_API_KEY',
-  zai:             'ZAI_API_KEY',
-  'zai-coding':    'ZAI_API_KEY',
-  'openai-oauth':  'OPENAI_BEARER_TOKEN',
-  ollama:          'OLLAMA_API_KEY',       // for Ollama Cloud
+  anthropic: 'ANTHROPIC_API_KEY',
+  openai: 'OPENAI_API_KEY',
+  gemini: 'GOOGLE_API_KEY',
+  bailian: 'DASHSCOPE_API_KEY', // Coding Plan (sk-sp-xxx)
+  'bailian-payg': 'DASHSCOPE_API_KEY', // PAYG (sk-xxx)
+  openrouter: 'OPENROUTER_API_KEY',
+  kilo: 'KILO_API_KEY',
+  kimi: 'KIMI_API_KEY',
+  'kimi-coding': 'KIMI_API_KEY',
+  zai: 'ZAI_API_KEY',
+  'zai-coding': 'ZAI_API_KEY',
+  'openai-oauth': 'OPENAI_BEARER_TOKEN',
+  ollama: 'OLLAMA_API_KEY', // for Ollama Cloud
 };
 
 function getApiKey(slug: string, config?: ResolvedConfig): string {
@@ -122,10 +122,7 @@ function getBaseUrl(slug: string, config?: ResolvedConfig): string | undefined {
  * Detects which provider slug to use given CLI flags and config file.
  * Falls back to env var detection, then Ollama.
  */
-function detectSlug(
-  overrideProvider?: string,
-  config?: ResolvedConfig,
-): string {
+function detectSlug(overrideProvider?: string, config?: ResolvedConfig): string {
   // 1. Explicit CLI override
   if (overrideProvider) return overrideProvider.toLowerCase();
 
@@ -158,7 +155,7 @@ function detectSlug(
 export async function createProvider(
   config?: ResolvedConfig,
   overrideProvider?: string,
-  overrideModel?: string,
+  overrideModel?: string
 ): Promise<ProviderSelection> {
   const slug = detectSlug(overrideProvider, config);
   const model = getModel(slug, overrideModel, config);
@@ -229,9 +226,7 @@ export async function createProvider(
       // with Bearer token auth. Docs: https://docs.ollama.com/cloud
       provider = new OllamaProvider();
       const ollamaHost =
-        config?.providers['ollama']?.baseUrl ??
-        process.env['OLLAMA_BASE_URL'] ??
-        undefined; // OllamaProvider picks local vs cloud based on apiKey
+        config?.providers['ollama']?.baseUrl ?? process.env['OLLAMA_BASE_URL'] ?? undefined; // OllamaProvider picks local vs cloud based on apiKey
       await provider.initialize({
         ...(apiKey ? { apiKey } : {}),
         ...(ollamaHost ? { host: ollamaHost } : {}),

@@ -3,8 +3,4 @@
 // ============================================================================
 
 export { OllamaProvider } from './provider.js';
-export type {
-  OllamaMessage,
-  OllamaToolCall,
-  OllamaTool,
-} from './types.js';
+export type { OllamaMessage, OllamaToolCall, OllamaTool } from './types.js';

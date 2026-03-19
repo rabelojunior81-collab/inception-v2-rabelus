@@ -48,17 +48,17 @@ export enum AgentMode {
    * Auditor mode: Planning only, no execution
    */
   Auditor = 'A',
-  
+
   /**
    * Executor mode: Implementation
    */
   Executor = 'B',
-  
+
   /**
    * Archivist mode: Preservation, moving to journal
    */
   Archivist = 'C',
-  
+
   /**
    * Verifier mode: Read-only observation
    * This mode is SACRED - never modifies anything

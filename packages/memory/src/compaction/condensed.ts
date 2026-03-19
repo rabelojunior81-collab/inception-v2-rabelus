@@ -10,7 +10,7 @@ export class CondensedCompactor {
     _db: DatabaseSync,
     private readonly summaries: SummaryStore,
     private readonly summarizeFn: SummarizeFn,
-    private readonly config: CompactionConfig,
+    private readonly config: CompactionConfig
   ) {}
 
   // Compact all eligible depths. Returns total summaries created.
@@ -28,7 +28,7 @@ export class CondensedCompactor {
       const groups = chunkArray(existing, this.config.condensedMinFanout);
 
       // Only process groups that are full (don't compact partial groups at the tail)
-      const fullGroups = groups.filter(g => g.length >= this.config.condensedMinFanout);
+      const fullGroups = groups.filter((g) => g.length >= this.config.condensedMinFanout);
       if (fullGroups.length === 0) break;
 
       const nextOrdinal = this.summaries.max_ordinal(threadId) + 1;
@@ -36,7 +36,7 @@ export class CondensedCompactor {
       for (let i = 0; i < fullGroups.length; i++) {
         const group = fullGroups[i];
         const formatted = group
-          .map(s => {
+          .map((s) => {
             const period =
               s.period_start && s.period_end
                 ? `[${s.period_start} - ${s.period_end}]`
@@ -53,7 +53,7 @@ export class CondensedCompactor {
           parent_id: null,
           depth: depth + 1,
           covers_msg_ids: '[]',
-          covers_sum_ids: JSON.stringify(group.map(s => s.id)),
+          covers_sum_ids: JSON.stringify(group.map((s) => s.id)),
           content: condensedContent,
           token_count: estimateTokens(condensedContent),
           period_start: group[0].period_start,

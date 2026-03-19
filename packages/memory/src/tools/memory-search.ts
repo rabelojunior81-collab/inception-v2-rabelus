@@ -62,10 +62,7 @@ export class MemorySearchTool implements ITool {
     return typeof args === 'object' && args !== null && 'query' in args;
   }
 
-  async execute(
-    args: JSONObject,
-    _ctx: ExecutionContext,
-  ): Promise<ToolExecutionResult> {
+  async execute(args: JSONObject, _ctx: ExecutionContext): Promise<ToolExecutionResult> {
     const { query, threadId, limit, mode } = args as {
       query: string;
       threadId?: string;
@@ -83,7 +80,7 @@ export class MemorySearchTool implements ITool {
       return {
         success: true,
         data: {
-          results: results.map(r => ({
+          results: results.map((r) => ({
             id: r.id,
             type: r.type,
             role: r.role,

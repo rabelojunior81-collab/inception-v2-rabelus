@@ -26,10 +26,7 @@ import type {
   TokenUsage,
   LLMToolDefinition,
 } from '@rabeluslab/inception-types';
-import {
-  ProviderId,
-  MessageRole,
-} from '@rabeluslab/inception-types';
+import { ProviderId, MessageRole } from '@rabeluslab/inception-types';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -40,7 +37,10 @@ function mapMessageToGemini(message: Message): Content | null {
   if (role === MessageRole.Tool) {
     const toolCallId = metadata?.toolCallId ?? 'unknown';
     // Find a name from content (just the text content) or use toolCallId
-    const text = typeof content === 'string' ? content : content.map(p => (p.type === 'text' ? p.text : '')).join('');
+    const text =
+      typeof content === 'string'
+        ? content
+        : content.map((p) => (p.type === 'text' ? p.text : '')).join('');
     return {
       role: 'user',
       parts: [
@@ -115,7 +115,7 @@ function mapMessageToGemini(message: Message): Content | null {
 }
 
 function mapToolDefinitions(tools: readonly LLMToolDefinition[]): Tool[] {
-  const functionDeclarations: FunctionDeclaration[] = tools.map(t => ({
+  const functionDeclarations: FunctionDeclaration[] = tools.map((t) => ({
     name: t.function.name,
     description: t.function.description,
     parameters: {
@@ -127,9 +127,7 @@ function mapToolDefinitions(tools: readonly LLMToolDefinition[]): Tool[] {
   return [{ functionDeclarations }];
 }
 
-function mapFinishReason(
-  reason: string | undefined,
-): GenerateResponse['finishReason'] {
+function mapFinishReason(reason: string | undefined): GenerateResponse['finishReason'] {
   switch (reason) {
     case 'STOP':
       return 'stop';
@@ -168,7 +166,7 @@ export class GeminiProvider implements IProvider {
     if (!apiKey) {
       throw new ProviderError(
         'Gemini provider requires an API key. Set apiKey in the provider config.',
-        ProviderId.Gemini,
+        ProviderId.Gemini
       );
     }
     this.genAI = new GoogleGenerativeAI(apiKey);
@@ -178,7 +176,7 @@ export class GeminiProvider implements IProvider {
     if (!this.genAI) {
       throw new ProviderError(
         'GeminiProvider has not been initialized. Call initialize() first.',
-        ProviderId.Gemini,
+        ProviderId.Gemini
       );
     }
     return this.genAI;
@@ -187,12 +185,14 @@ export class GeminiProvider implements IProvider {
   async generate(request: GenerateRequest): Promise<GenerateResponse> {
     const genAI = this.requireGenAI();
 
-    const systemMessage = request.messages.find(m => m.role === MessageRole.System);
-    const systemInstruction = request.system ?? (
-      systemMessage
-        ? (typeof systemMessage.content === 'string' ? systemMessage.content : systemMessage.content.map(p => p.type === 'text' ? p.text : '').join(''))
-        : undefined
-    );
+    const systemMessage = request.messages.find((m) => m.role === MessageRole.System);
+    const systemInstruction =
+      request.system ??
+      (systemMessage
+        ? typeof systemMessage.content === 'string'
+          ? systemMessage.content
+          : systemMessage.content.map((p) => (p.type === 'text' ? p.text : '')).join('')
+        : undefined);
 
     const history: Content[] = [];
     for (const msg of request.messages) {
@@ -242,7 +242,7 @@ export class GeminiProvider implements IProvider {
       throw new ProviderError(
         `Gemini generation failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Gemini,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
 
@@ -266,9 +266,7 @@ export class GeminiProvider implements IProvider {
       }
     }
 
-    const finishReason = mapFinishReason(
-      candidates[0]?.finishReason as string | undefined,
-    );
+    const finishReason = mapFinishReason(candidates[0]?.finishReason as string | undefined);
 
     const usageMeta = response.usageMetadata;
     const usage: TokenUsage | undefined = usageMeta
@@ -292,12 +290,14 @@ export class GeminiProvider implements IProvider {
   async *generateStream(request: GenerateRequest): AsyncIterable<GenerateChunk> {
     const genAI = this.requireGenAI();
 
-    const systemMessage = request.messages.find(m => m.role === MessageRole.System);
-    const systemInstruction = request.system ?? (
-      systemMessage
-        ? (typeof systemMessage.content === 'string' ? systemMessage.content : systemMessage.content.map(p => p.type === 'text' ? p.text : '').join(''))
-        : undefined
-    );
+    const systemMessage = request.messages.find((m) => m.role === MessageRole.System);
+    const systemInstruction =
+      request.system ??
+      (systemMessage
+        ? typeof systemMessage.content === 'string'
+          ? systemMessage.content
+          : systemMessage.content.map((p) => (p.type === 'text' ? p.text : '')).join('')
+        : undefined);
 
     const history: Content[] = [];
     for (const msg of request.messages) {
@@ -343,7 +343,7 @@ export class GeminiProvider implements IProvider {
       throw new ProviderError(
         `Gemini stream failed to start: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Gemini,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
 
@@ -407,7 +407,7 @@ export class GeminiProvider implements IProvider {
       throw new ProviderError(
         `Gemini stream error: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Gemini,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
   }
@@ -428,19 +428,19 @@ export class GeminiProvider implements IProvider {
         totalTokens = result.embedding.values.length > 0 ? inputs[0].split(/\s+/).length : 0;
       } else {
         const result = await embeddingModel.batchEmbedContents({
-          requests: inputs.map(text => ({
+          requests: inputs.map((text) => ({
             content: { role: 'user', parts: [{ text }] },
             model: `models/${request.model}`,
           })),
         });
-        embeddings = result.embeddings.map(e => new Float32Array(e.values));
+        embeddings = result.embeddings.map((e) => new Float32Array(e.values));
         totalTokens = inputs.reduce((sum, t) => sum + t.split(/\s+/).length, 0);
       }
     } catch (err) {
       throw new ProviderError(
         `Gemini embed failed: ${err instanceof Error ? err.message : String(err)}`,
         ProviderId.Gemini,
-        { originalError: String(err) },
+        { originalError: String(err) }
       );
     }
 

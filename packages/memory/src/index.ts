@@ -26,8 +26,4 @@ export type { SummarizeFn, CompactionConfig } from './compaction/index.js';
 export { DEFAULT_COMPACTION_CONFIG } from './compaction/index.js';
 
 // Memory tools (ITool implementations for agent use)
-export {
-  MemorySearchTool,
-  MemoryDescribeTool,
-  MemoryExpandTool,
-} from './tools/index.js';
+export { MemorySearchTool, MemoryDescribeTool, MemoryExpandTool } from './tools/index.js';

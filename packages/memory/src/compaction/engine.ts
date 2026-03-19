@@ -14,11 +14,7 @@ export class CompactionEngine {
   private readonly messages: MessageStore;
   private readonly summaries: SummaryStore;
 
-  constructor(
-    db: DatabaseSync,
-    summarizeFn: SummarizeFn,
-    config: Partial<CompactionConfig> = {},
-  ) {
+  constructor(db: DatabaseSync, summarizeFn: SummarizeFn, config: Partial<CompactionConfig> = {}) {
     this.cfg = { ...DEFAULT_COMPACTION_CONFIG, ...config };
     this.messages = new MessageStore(db);
     this.summaries = new SummaryStore(db);
@@ -27,14 +23,9 @@ export class CompactionEngine {
       this.messages,
       this.summaries,
       summarizeFn,
-      this.cfg,
+      this.cfg
     );
-    this.condensedCompactor = new CondensedCompactor(
-      db,
-      this.summaries,
-      summarizeFn,
-      this.cfg,
-    );
+    this.condensedCompactor = new CondensedCompactor(db, this.summaries, summarizeFn, this.cfg);
   }
 
   // Check if thread needs compaction based on current token usage
@@ -46,7 +37,7 @@ export class CompactionEngine {
   // Run compaction until under budget or max rounds reached
   async compactUntilUnder(
     threadId: string,
-    modelTokenBudget: number,
+    modelTokenBudget: number
   ): Promise<{ leafCreated: number; condensedCreated: number; rounds: number }> {
     let leafCreated = 0;
     let condensedCreated = 0;
@@ -74,4 +65,3 @@ export class CompactionEngine {
     await this.condensedCompactor.compact(threadId);
   }
 }
-

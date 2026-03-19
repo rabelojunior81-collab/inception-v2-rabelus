@@ -66,7 +66,7 @@ export class HttpChannel implements IChannel {
     }
     this.sseClients = [];
     await new Promise<void>((resolve, reject) => {
-      this.server.close(err => (err ? reject(err) : resolve()));
+      this.server.close((err) => (err ? reject(err) : resolve()));
     });
     this.setState(ChannelState.Disconnected);
   }
@@ -156,7 +156,7 @@ export class HttpChannel implements IChannel {
     this.sseClients.push(client);
 
     res.on('close', () => {
-      this.sseClients = this.sseClients.filter(c => c.id !== client.id);
+      this.sseClients = this.sseClients.filter((c) => c.id !== client.id);
     });
   }
 
@@ -194,7 +194,7 @@ export class HttpChannel implements IChannel {
         res.end(JSON.stringify({ id: msg.id, status: 'accepted' }));
 
         if (this.messageHandler) {
-          this.messageHandler(msg).catch(err => this.errorHandler?.(err as Error));
+          this.messageHandler(msg).catch((err) => this.errorHandler?.(err as Error));
         }
       } catch (err) {
         res.writeHead(400, { 'Content-Type': 'application/json' });

@@ -93,7 +93,8 @@ export class HttpPostTool implements ITool {
     const userHeaders = (args['headers'] as Record<string, string> | undefined) ?? {};
     const contentType = (args['contentType'] as string | undefined) ?? 'application/json';
     const timeout = (args['timeout'] as number | undefined) ?? DEFAULT_TIMEOUT_MS;
-    const maxResponseBytes = (args['maxResponseBytes'] as number | undefined) ?? DEFAULT_MAX_RESPONSE_BYTES;
+    const maxResponseBytes =
+      (args['maxResponseBytes'] as number | undefined) ?? DEFAULT_MAX_RESPONSE_BYTES;
 
     if (!isUrlAllowed(url, context.allowlist.urls)) {
       return {
@@ -127,7 +128,9 @@ export class HttpPostTool implements ITool {
 
       const responseContentType = response.headers.get('content-type') ?? '';
       const responseHeaders: Record<string, string> = {};
-      response.headers.forEach((value, key) => { responseHeaders[key] = value; });
+      response.headers.forEach((value, key) => {
+        responseHeaders[key] = value;
+      });
 
       const buffer = await response.arrayBuffer();
       let truncated = false;
@@ -142,7 +145,11 @@ export class HttpPostTool implements ITool {
 
       let responseBody: unknown = bodyText;
       if (responseContentType.includes('application/json') && !truncated) {
-        try { responseBody = JSON.parse(bodyText); } catch { /* leave as string */ }
+        try {
+          responseBody = JSON.parse(bodyText);
+        } catch {
+          /* leave as string */
+        }
       }
 
       context.logger.debug('http_post: success', { url, status: response.status });

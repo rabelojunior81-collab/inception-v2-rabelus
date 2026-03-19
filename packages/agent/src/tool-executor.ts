@@ -19,7 +19,7 @@ export interface ToolExecutionSummary {
 export class ToolExecutor {
   constructor(
     private readonly registry: IToolRegistry,
-    private readonly gate: ApprovalGate,
+    private readonly gate: ApprovalGate
   ) {}
 
   /**
@@ -28,7 +28,7 @@ export class ToolExecutor {
    */
   async executeAll(
     toolCalls: readonly ToolCall[],
-    executionCtx: ExecutionContext,
+    executionCtx: ExecutionContext
   ): Promise<ToolExecutionSummary[]> {
     const results: ToolExecutionSummary[] = [];
 
@@ -40,10 +40,7 @@ export class ToolExecutor {
     return results;
   }
 
-  private async executeSingle(
-    tc: ToolCall,
-    ctx: ExecutionContext,
-  ): Promise<ToolExecutionSummary> {
+  private async executeSingle(tc: ToolCall, ctx: ExecutionContext): Promise<ToolExecutionSummary> {
     const tool = this.registry.get(tc.function.name);
 
     if (!tool) {
@@ -51,7 +48,7 @@ export class ToolExecutor {
         tc.id,
         tc.function.name,
         `Tool "${tc.function.name}" not found in registry.`,
-        true,
+        true
       );
       return {
         toolCallId: tc.id,
@@ -70,7 +67,7 @@ export class ToolExecutor {
         tc.id,
         tc.function.name,
         `Invalid JSON arguments: ${tc.function.arguments}`,
-        true,
+        true
       );
       return {
         toolCallId: tc.id,
@@ -82,12 +79,7 @@ export class ToolExecutor {
 
     // Validate
     if (!tool.validate(args)) {
-      const msg = toolResultToMessage(
-        tc.id,
-        tc.function.name,
-        'Argument validation failed.',
-        true,
-      );
+      const msg = toolResultToMessage(tc.id, tc.function.name, 'Argument validation failed.', true);
       return {
         toolCallId: tc.id,
         toolName: tc.function.name,
@@ -107,7 +99,7 @@ export class ToolExecutor {
         tc.id,
         tc.function.name,
         `Operador rejeitou a execução de "${tool.definition.name}". Ação cancelada.`,
-        true,
+        true
       );
       return {
         toolCallId: tc.id,
@@ -124,12 +116,7 @@ export class ToolExecutor {
         ? JSON.stringify(result.data ?? { success: true })
         : `Error [${result.error?.code}]: ${result.error?.message}`;
 
-      const msg = toolResultToMessage(
-        tc.id,
-        tc.function.name,
-        resultText,
-        !result.success,
-      );
+      const msg = toolResultToMessage(tc.id, tc.function.name, resultText, !result.success);
       return {
         toolCallId: tc.id,
         toolName: tc.function.name,
@@ -141,7 +128,7 @@ export class ToolExecutor {
         tc.id,
         tc.function.name,
         `Execution error: ${String(err)}`,
-        true,
+        true
       );
       return {
         toolCallId: tc.id,

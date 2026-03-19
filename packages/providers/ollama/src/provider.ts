@@ -24,12 +24,7 @@ import type {
 import { ProviderId } from '@rabeluslab/inception-types';
 import { Ollama } from 'ollama';
 
-import {
-  toOllamaMessage,
-  toOllamaTool,
-  fromOllamaToolCall,
-  type OllamaToolCall,
-} from './types.js';
+import { toOllamaMessage, toOllamaTool, fromOllamaToolCall, type OllamaToolCall } from './types.js';
 
 const DEFAULT_LOCAL_HOST = 'http://localhost:11434';
 const OLLAMA_CLOUD_HOST = 'https://ollama.com';
@@ -69,7 +64,10 @@ export class OllamaProvider implements IProvider {
     // Ollama Cloud: when an apiKey is provided, route to ollama.com with Bearer auth.
     // Docs: https://docs.ollama.com/cloud
     const isCloud = !!ollamaConfig.apiKey;
-    const host = ollamaConfig.host ?? ollamaConfig.baseUrl ?? (isCloud ? OLLAMA_CLOUD_HOST : DEFAULT_LOCAL_HOST);
+    const host =
+      ollamaConfig.host ??
+      ollamaConfig.baseUrl ??
+      (isCloud ? OLLAMA_CLOUD_HOST : DEFAULT_LOCAL_HOST);
     const headers: Record<string, string> = isCloud
       ? { Authorization: `Bearer ${ollamaConfig.apiKey}` }
       : {};
@@ -112,11 +110,9 @@ export class OllamaProvider implements IProvider {
         finishReason: toolCalls && toolCalls.length > 0 ? 'tool_calls' : 'stop',
       };
     } catch (err) {
-      throw new ProviderError(
-        `Ollama generate failed: ${String(err)}`,
-        ProviderId.Ollama,
-        { model: request.model },
-      );
+      throw new ProviderError(`Ollama generate failed: ${String(err)}`, ProviderId.Ollama, {
+        model: request.model,
+      });
     }
   }
 
@@ -143,9 +139,7 @@ export class OllamaProvider implements IProvider {
       for await (const chunk of stream) {
         const msg = chunk.message;
         const toolCalls: ToolCall[] | undefined = msg.tool_calls
-          ? msg.tool_calls.map((tc: OllamaToolCall, i: number) =>
-              fromOllamaToolCall(tc, index + i),
-            )
+          ? msg.tool_calls.map((tc: OllamaToolCall, i: number) => fromOllamaToolCall(tc, index + i))
           : undefined;
 
         if (toolCalls) index += toolCalls.length;
@@ -164,11 +158,9 @@ export class OllamaProvider implements IProvider {
         };
       }
     } catch (err) {
-      throw new ProviderError(
-        `Ollama stream failed: ${String(err)}`,
-        ProviderId.Ollama,
-        { model: request.model },
-      );
+      throw new ProviderError(`Ollama stream failed: ${String(err)}`, ProviderId.Ollama, {
+        model: request.model,
+      });
     }
   }
 
@@ -185,9 +177,7 @@ export class OllamaProvider implements IProvider {
           : [request.input as string],
       });
 
-      const embeddings = response.embeddings.map(
-        (vec: number[]) => new Float32Array(vec),
-      );
+      const embeddings = response.embeddings.map((vec: number[]) => new Float32Array(vec));
 
       const promptTokens = response.prompt_eval_count ?? 0;
 
@@ -201,11 +191,9 @@ export class OllamaProvider implements IProvider {
         },
       };
     } catch (err) {
-      throw new ProviderError(
-        `Ollama embed failed: ${String(err)}`,
-        ProviderId.Ollama,
-        { model: request.model },
-      );
+      throw new ProviderError(`Ollama embed failed: ${String(err)}`, ProviderId.Ollama, {
+        model: request.model,
+      });
     }
   }
 
@@ -233,7 +221,7 @@ export class OllamaProvider implements IProvider {
       throw new ProviderError(
         `Model "${model}" not available locally and pullStrategy is "never"`,
         ProviderId.Ollama,
-        { model },
+        { model }
       );
     }
 
@@ -246,7 +234,7 @@ export class OllamaProvider implements IProvider {
       throw new ProviderError(
         `Failed to pull model "${model}": ${String(err)}`,
         ProviderId.Ollama,
-        { model },
+        { model }
       );
     }
   }
@@ -260,10 +248,7 @@ export class OllamaProvider implements IProvider {
       const { models } = await client.list();
       return models.map((m) => m.name);
     } catch (err) {
-      throw new ProviderError(
-        `Failed to list models: ${String(err)}`,
-        ProviderId.Ollama,
-      );
+      throw new ProviderError(`Failed to list models: ${String(err)}`, ProviderId.Ollama);
     }
   }
 
@@ -273,14 +258,14 @@ export class OllamaProvider implements IProvider {
     if (!this.client) {
       throw new ProviderError(
         'OllamaProvider not initialized. Call initialize(config) first.',
-        ProviderId.Ollama,
+        ProviderId.Ollama
       );
     }
     return this.client;
   }
 
   private buildOptions(
-    req: GenerateRequest,
+    req: GenerateRequest
   ): Record<string, number | string | boolean | undefined> {
     return {
       temperature: req.temperature,
@@ -294,7 +279,7 @@ export class OllamaProvider implements IProvider {
 
   private extractUsage(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    response: any,
+    response: any
   ): TokenUsage | undefined {
     const prompt = response['prompt_eval_count'];
     const completion = response['eval_count'];
