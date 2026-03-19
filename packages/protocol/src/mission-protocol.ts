@@ -8,7 +8,6 @@ import type {
   IMissionProtocol,
   Mission,
   Task,
-  TaskStatus,
   Report,
   JournalEntry,
 } from '@rabeluslab/inception-types';
