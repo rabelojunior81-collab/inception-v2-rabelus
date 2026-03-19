@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
+
 import type {
   ExecutionContext,
   ITool,
@@ -8,6 +9,7 @@ import type {
   ToolExecutionResult,
 } from '@rabeluslab/inception-types';
 import { GateType } from '@rabeluslab/inception-types';
+
 import { isCommandAllowed } from '../allowlist.js';
 
 const DEFAULT_TIMEOUT_MS = 30_000;

@@ -12,6 +12,7 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from '@google/generative-ai';
+import { ProviderError } from '@rabeluslab/inception-core';
 import type {
   IProvider,
   ProviderConfig,
@@ -29,7 +30,6 @@ import {
   ProviderId,
   MessageRole,
 } from '@rabeluslab/inception-types';
-import { ProviderError } from '@rabeluslab/inception-core';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -423,9 +423,9 @@ export class GeminiProvider implements IProvider {
 
     try {
       if (inputs.length === 1) {
-        const result = await embeddingModel.embedContent(inputs[0]!);
+        const result = await embeddingModel.embedContent(inputs[0]);
         embeddings = [new Float32Array(result.embedding.values)];
-        totalTokens = result.embedding.values.length > 0 ? inputs[0]!.split(/\s+/).length : 0;
+        totalTokens = result.embedding.values.length > 0 ? inputs[0].split(/\s+/).length : 0;
       } else {
         const result = await embeddingModel.batchEmbedContents({
           requests: inputs.map(text => ({

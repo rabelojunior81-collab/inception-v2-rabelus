@@ -12,7 +12,6 @@ import type {
   ToolChoice,
   ImageBlockParam,
 } from '@anthropic-ai/sdk/resources/messages/messages.js';
-
 import { ProviderError } from '@rabeluslab/inception-core';
 import type {
   IProvider,

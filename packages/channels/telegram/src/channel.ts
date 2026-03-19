@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { Bot, Context, webhookCallback } from 'grammy';
+
+import { ChannelError } from '@rabeluslab/inception-core';
 import type {
   IChannel,
   InboundMessage,
@@ -14,9 +15,10 @@ import {
   ContentType,
   AutonomyLevel,
 } from '@rabeluslab/inception-types';
-import { ChannelError } from '@rabeluslab/inception-core';
-import { formatForTelegram } from './formatter.js';
+import { Bot, Context, webhookCallback } from 'grammy';
+
 import { parseApprovalCallback, buildApprovalKeyboard, formatApprovalMessage } from './approval.js';
+import { formatForTelegram } from './formatter.js';
 
 type ApprovalResolverFn = (approvalId: string, approved: boolean) => void;
 
@@ -28,8 +30,8 @@ export class TelegramChannel implements IChannel {
   private bot: Bot | undefined;
   private config: TelegramConfig | undefined;
   private inboundHandler: ((msg: InboundMessage) => Promise<void>) | undefined;
-  private errorHandlers: ((err: Error) => void)[] = [];
-  private stateHandlers: ((state: ChannelState) => void)[] = [];
+  private readonly errorHandlers: ((err: Error) => void)[] = [];
+  private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private approvalResolver: ApprovalResolverFn | undefined;
 
   get state(): ChannelState { return this._state; }
@@ -171,7 +173,7 @@ export class TelegramChannel implements IChannel {
         direction: MessageDirection.Inbound,
         sender: {
           id: String(from.id),
-          name: [from.first_name, from.last_name].filter(Boolean).join(' ') || from.username || String(from.id),
+          name: [from.first_name, from.last_name].filter(Boolean).join(' ') || from.username ?? String(from.id),
           role: 'operator',
         },
         content: {

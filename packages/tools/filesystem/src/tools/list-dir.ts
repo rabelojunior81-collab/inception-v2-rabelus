@@ -1,6 +1,7 @@
-import fs from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
+import fs from 'node:fs/promises';
 import path from 'node:path';
+
 import type {
   ExecutionContext,
   ITool,
@@ -9,6 +10,7 @@ import type {
   ToolExecutionResult,
 } from '@rabeluslab/inception-types';
 import { GateType } from '@rabeluslab/inception-types';
+
 import { guardPath } from '../path-guard.js';
 
 interface DirEntry {
@@ -29,7 +31,7 @@ async function readDirRecursive(
 
   let entries: Dirent<string>[];
   try {
-    entries = (await fs.readdir(dirPath, { withFileTypes: true })) as Dirent<string>[];
+    entries = (await fs.readdir(dirPath, { withFileTypes: true }));
   } catch {
     return [];
   }

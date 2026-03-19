@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+
 import type {
   ExecutionContext,
   ITool,
@@ -8,6 +9,7 @@ import type {
   ToolExecutionResult,
 } from '@rabeluslab/inception-types';
 import { GateType } from '@rabeluslab/inception-types';
+
 import { guardPath } from '../path-guard.js';
 
 export class WriteFileTool implements ITool {

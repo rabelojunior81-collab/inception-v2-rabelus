@@ -1,8 +1,10 @@
 import type { DatabaseSync } from 'node:sqlite';
-import { MessageStore, SummaryStore } from './db/queries.js';
-import { estimateTokens } from './utils.js';
+
 import type { Message } from '@rabeluslab/inception-types';
 import { MessageRole } from '@rabeluslab/inception-types';
+
+import { MessageStore, SummaryStore } from './db/queries.js';
+import { estimateTokens } from './utils.js';
 
 export interface AssembledContext {
   messages: Message[];

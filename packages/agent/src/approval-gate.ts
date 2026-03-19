@@ -1,6 +1,7 @@
+import { randomUUID } from 'node:crypto';
+
 import type { ToolDefinition, JSONObject } from '@rabeluslab/inception-types';
 import { AutonomyLevel } from '@rabeluslab/inception-types';
-import { randomUUID } from 'node:crypto';
 
 export type ApprovalHandler = (request: PendingApproval) => Promise<boolean>;
 

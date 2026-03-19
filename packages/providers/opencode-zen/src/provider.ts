@@ -8,7 +8,7 @@
 //
 // ============================================================================
 
-import OpenAI from 'openai';
+import { ProviderError } from '@rabeluslab/inception-core';
 import type {
   IProvider,
   BaseProviderConfig,
@@ -24,7 +24,7 @@ import type {
   TokenUsage,
 } from '@rabeluslab/inception-types';
 import { ProviderId, MessageRole } from '@rabeluslab/inception-types';
-import { ProviderError } from '@rabeluslab/inception-core';
+import OpenAI from 'openai';
 
 const DEFAULT_BASE_URL = 'https://api.opencode.ai/v1';
 

@@ -2,12 +2,12 @@
 // Runtime Engine Types
 // ============================================================================
 
-import type { UUID, ISO8601String, JSONValue } from './common.js';
 import type { InboundMessage, OutboundMessage } from './channels.js';
+import type { UUID, ISO8601String, JSONValue } from './common.js';
 import type { MemoryEntry } from './memory.js';
+import type { Mission } from './protocol.js';
 import type { ToolCall } from './providers.js';
 import type { ToolExecutionResult } from './tools.js';
-import type { Mission } from './protocol.js';
 
 /**
  * Runtime events

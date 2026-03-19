@@ -2,10 +2,10 @@
 // Tool Registry Builder — assembles all tools with security validation
 // ============================================================================
 
-import type { IToolRegistry } from '@rabeluslab/inception-types';
 import { ReadFileTool, WriteFileTool, ListDirTool, FileExistsTool, StatFileTool } from '@rabeluslab/inception-tool-filesystem';
-import { RunCommandTool } from '@rabeluslab/inception-tool-shell';
 import { HttpGetTool, HttpPostTool } from '@rabeluslab/inception-tool-http';
+import { RunCommandTool } from '@rabeluslab/inception-tool-shell';
+import type { IToolRegistry } from '@rabeluslab/inception-types';
 
 /**
  * Simple in-memory IToolRegistry implementation.

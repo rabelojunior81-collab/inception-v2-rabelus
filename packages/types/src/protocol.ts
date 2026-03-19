@@ -2,9 +2,9 @@
 // Inception Methodology Protocol Types (IMP, IEP, ISP)
 // ============================================================================
 
+import type { AutonomyLevel } from './agent.js';
 import type { UUID, ISO8601String } from './common.js';
 import type { GateType } from './tools.js';
-import type { AutonomyLevel } from './agent.js';
 
 /**
  * Mission status (from IMP)

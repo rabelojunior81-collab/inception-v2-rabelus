@@ -75,7 +75,15 @@
       "Bash(node --experimental-sqlite \"e:/tessy-argenta-fenix/inception-v2/apps/cli/dist/index.js\" init --force)",
       "Bash(node --experimental-sqlite \"e:/tessy-argenta-fenix/inception-v2/apps/cli/dist/index.js\" status)",
       "Bash(grep -rn \"PendingApprovalDisplay\\\\|ApprovalHandler\" e:/tessy-argenta-fenix/inception-v2/ --include=*.ts)",
-      "Bash(grep -rn ApprovalHandler e:/tessy-argenta-fenix/inception-v2/packages/agent/src/ --include=*.ts)"
+      "Bash(grep -rn ApprovalHandler e:/tessy-argenta-fenix/inception-v2/packages/agent/src/ --include=*.ts)",
+      "Bash(gh run:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(sort -t' ' -k3)",
+      "Bash(uniq -f2)",
+      "Bash(grep -v \"^$\")",
+      "Bash(grep -E \"^\\\\S.*\\\\.ts$\")",
+      "Bash(grep -v \"^--$\")",
+      "Bash(npx eslint:*)"
     ]
   }
 }

@@ -1,7 +1,8 @@
-import { DatabaseSync, type DatabaseSyncInstance } from './sqlite-native.js';
 import { existsSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
+
 import { SCHEMA_SQL } from './schema.js';
+import { DatabaseSync, type DatabaseSyncInstance } from './sqlite-native.js';
 
 let _db: DatabaseSyncInstance | undefined;
 let _dbPath: string | undefined;

@@ -3,9 +3,10 @@
 // ============================================================================
 
 import { Command } from 'commander';
-import { runStart } from './commands/start.js';
-import { runInit } from './commands/init.js';
+
 import { runConfig } from './commands/config.js';
+import { runInit } from './commands/init.js';
+import { runStart } from './commands/start.js';
 import { runStatus } from './commands/status.js';
 
 const program = new Command();

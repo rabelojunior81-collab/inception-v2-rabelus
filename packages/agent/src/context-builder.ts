@@ -1,5 +1,6 @@
-import type { Message } from '@rabeluslab/inception-types';
 import type { SQLiteMemoryBackend, AssembledContext } from '@rabeluslab/inception-memory';
+import type { Message } from '@rabeluslab/inception-types';
+
 import { buildSystemPrompt, type SystemPromptContext } from './system-prompt.js';
 
 export interface BuiltContext {

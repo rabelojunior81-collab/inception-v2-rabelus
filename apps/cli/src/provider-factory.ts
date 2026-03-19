@@ -12,18 +12,18 @@
 //   2. Environment variable (fallback)
 // ============================================================================
 
-import type { IProvider } from '@rabeluslab/inception-types';
-import { OllamaProvider } from '@rabeluslab/inception-provider-ollama';
-import { OpenAIProvider } from '@rabeluslab/inception-provider-openai';
+import type { ResolvedConfig } from '@rabeluslab/inception-config';
 import { AnthropicProvider } from '@rabeluslab/inception-provider-anthropic';
-import { GeminiProvider } from '@rabeluslab/inception-provider-gemini';
 import { BailianProvider } from '@rabeluslab/inception-provider-bailian';
-import { OpenRouterProvider } from '@rabeluslab/inception-provider-openrouter';
+import { GeminiProvider } from '@rabeluslab/inception-provider-gemini';
 import { KiloProvider } from '@rabeluslab/inception-provider-kilo';
 import { KimiProvider } from '@rabeluslab/inception-provider-kimi';
-import { ZAiProvider as ZAIProvider } from '@rabeluslab/inception-provider-zai';
+import { OllamaProvider } from '@rabeluslab/inception-provider-ollama';
+import { OpenAIProvider } from '@rabeluslab/inception-provider-openai';
 import { OpenAIOAuthProvider } from '@rabeluslab/inception-provider-openai-oauth';
-import type { ResolvedConfig } from '@rabeluslab/inception-config';
+import { OpenRouterProvider } from '@rabeluslab/inception-provider-openrouter';
+import { ZAiProvider as ZAIProvider } from '@rabeluslab/inception-provider-zai';
+import type { IProvider } from '@rabeluslab/inception-types';
 
 export interface ProviderSelection {
   provider: IProvider;

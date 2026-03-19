@@ -10,6 +10,7 @@ import {
   type FunctionDeclaration,
   type Tool,
 } from '@google/generative-ai';
+import { ProviderError } from '@rabeluslab/inception-core';
 import type {
   IProvider,
   ProviderConfig,
@@ -28,7 +29,7 @@ import {
   ProviderId,
   MessageRole,
 } from '@rabeluslab/inception-types';
-import { ProviderError } from '@rabeluslab/inception-core';
+
 import { OAuthTokenStore, refreshAccessToken, type TokenData } from './oauth.js';
 
 // ── helpers (shared with gemini provider) ────────────────────────────────────
@@ -219,7 +220,7 @@ export class GeminiOAuthProvider implements IProvider {
       );
     }
 
-    if (this.tokenStore && this.tokenStore.isExpired(this.token)) {
+    if (this.tokenStore?.isExpired(this.token)) {
       if (this.token.refresh_token && this.clientId && this.clientSecret) {
         const refreshed = await this.performRefresh(this.token.refresh_token);
         await this.tokenStore.save(refreshed);
@@ -473,9 +474,9 @@ export class GeminiOAuthProvider implements IProvider {
 
     try {
       if (inputs.length === 1) {
-        const result = await embeddingModel.embedContent(inputs[0]!);
+        const result = await embeddingModel.embedContent(inputs[0]);
         embeddings = [new Float32Array(result.embedding.values)];
-        totalTokens = inputs[0]!.split(/\s+/).length;
+        totalTokens = inputs[0].split(/\s+/).length;
       } else {
         const result = await embeddingModel.batchEmbedContents({
           requests: inputs.map(text => ({

@@ -4,19 +4,20 @@
 // Exposes an HTTP channel; no interactive CLI.
 // ============================================================================
 
-import { join } from 'node:path';
 import { homedir } from 'node:os';
+import { join } from 'node:path';
+
 import { AgentLoop } from '@rabeluslab/inception-agent';
-import { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
-import { SecurityManager } from '@rabeluslab/inception-security';
-import { ChannelManager, InceptionRuntime } from '@rabeluslab/inception-core';
 import { HttpChannel } from '@rabeluslab/inception-channel-http';
 import { loadConfig } from '@rabeluslab/inception-config';
+import { ChannelManager, InceptionRuntime } from '@rabeluslab/inception-core';
+import { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
+import { SecurityManager } from '@rabeluslab/inception-security';
+import { ReadFileTool, WriteFileTool, ListDirTool, FileExistsTool, StatFileTool } from '@rabeluslab/inception-tool-filesystem';
+import { HttpGetTool, HttpPostTool } from '@rabeluslab/inception-tool-http';
+import { RunCommandTool } from '@rabeluslab/inception-tool-shell';
 import type { RuntimeConfig, IToolRegistry, ITool, ToolDefinition, GateType } from '@rabeluslab/inception-types';
 import { AutonomyLevel } from '@rabeluslab/inception-types';
-import { ReadFileTool, WriteFileTool, ListDirTool, FileExistsTool, StatFileTool } from '@rabeluslab/inception-tool-filesystem';
-import { RunCommandTool } from '@rabeluslab/inception-tool-shell';
-import { HttpGetTool, HttpPostTool } from '@rabeluslab/inception-tool-http';
 
 class ToolRegistry implements IToolRegistry {
   private readonly tools = new Map<string, ITool>();

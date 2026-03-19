@@ -1,7 +1,9 @@
 import type { DatabaseSync } from 'node:sqlite';
+
 import { SummaryStore } from '../db/queries.js';
-import type { CompactionConfig, SummarizeFn } from './types.js';
 import { estimateTokens, generateId } from '../utils.js';
+
+import type { CompactionConfig, SummarizeFn } from './types.js';
 
 export class CondensedCompactor {
   constructor(
@@ -17,6 +19,7 @@ export class CondensedCompactor {
     let depth = 0;
 
     // Walk up the DAG: find the shallowest depth with enough summaries to condense
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const count = this.summaries.count_at_depth(threadId, depth);
       if (count < this.config.condensedMinFanout) break;

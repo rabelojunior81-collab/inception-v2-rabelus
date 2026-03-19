@@ -1,7 +1,9 @@
 import type { DatabaseSync } from 'node:sqlite';
+
 import { MessageStore, SummaryStore } from '../db/queries.js';
-import type { CompactionConfig, SummarizeFn } from './types.js';
 import { estimateTokens, generateId, formatMessageForSummary } from '../utils.js';
+
+import type { CompactionConfig, SummarizeFn } from './types.js';
 
 export class LeafCompactor {
   constructor(

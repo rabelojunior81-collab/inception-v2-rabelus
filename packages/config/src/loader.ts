@@ -1,5 +1,7 @@
-import { cosmiconfig } from 'cosmiconfig';
 import type { Result } from '@rabeluslab/inception-types';
+import { cosmiconfig } from 'cosmiconfig';
+
+import { DEFAULT_AGENT_IDENTITY, DEFAULT_OPERATOR, DEFAULT_SECURITY, DEFAULT_RUNTIME } from './defaults.js';
 import {
   InceptionConfigFileSchema,
   AgentConfigurationSchema,
@@ -12,7 +14,6 @@ import {
   type RuntimeConfigOutput,
   type ProviderConfig,
 } from './schema.js';
-import { DEFAULT_AGENT_IDENTITY, DEFAULT_OPERATOR, DEFAULT_SECURITY, DEFAULT_RUNTIME } from './defaults.js';
 
 /**
  * Resolved configuration after loading and merging.

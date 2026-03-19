@@ -2,13 +2,6 @@
 // Z.ai Provider Implementation — OpenAI-compatible
 // ============================================================================
 
-import OpenAI from 'openai';
-import type {
-  ChatCompletionMessageParam,
-  ChatCompletionTool,
-  ChatCompletionToolChoiceOption,
-  ChatCompletionChunk,
-} from 'openai/resources/chat/completions.js';
 
 import { ProviderError } from '@rabeluslab/inception-core';
 import type {
@@ -27,6 +20,13 @@ import type {
   ContentPart,
 } from '@rabeluslab/inception-types';
 import { ProviderId, MessageRole } from '@rabeluslab/inception-types';
+import OpenAI from 'openai';
+import type {
+  ChatCompletionMessageParam,
+  ChatCompletionTool,
+  ChatCompletionToolChoiceOption,
+  ChatCompletionChunk,
+} from 'openai/resources/chat/completions.js';
 
 // ============================================================================
 // Message mapping helpers

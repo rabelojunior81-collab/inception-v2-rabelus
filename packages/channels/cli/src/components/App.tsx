@@ -1,10 +1,13 @@
-import React from 'react';
 import { Box, useApp } from 'ink';
-import { StatusBar } from './StatusBar.js';
-import { MessageList } from './MessageList.js';
-import { InputBox } from './InputBox.js';
-import { ApprovalPrompt } from './ApprovalPrompt.js';
+import React from 'react';
+
 import type { CliAppState } from '../types.js';
+
+import { ApprovalPrompt } from './ApprovalPrompt.js';
+import { InputBox } from './InputBox.js';
+import { MessageList } from './MessageList.js';
+import { StatusBar } from './StatusBar.js';
+
 
 interface AppProps {
   state: CliAppState;

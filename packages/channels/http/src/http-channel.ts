@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+
 import type {
   IChannel,
   ChannelConfig,
@@ -34,7 +35,7 @@ export class HttpChannel implements IChannel {
 
   private _state: ChannelState = ChannelState.Initializing;
   private config!: HTTPConfig;
-  private server = createServer((req, res) => this.handleRequest(req, res));
+  private readonly server = createServer((req, res) => this.handleRequest(req, res));
   private sseClients: SseClient[] = [];
 
   private messageHandler?: MessageHandler;

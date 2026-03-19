@@ -6,6 +6,7 @@ import type {
   JSONObject,
 } from '@rabeluslab/inception-types';
 import { GateType } from '@rabeluslab/inception-types';
+
 import type { RetrievalEngine } from '../retrieval.js';
 
 export class MemoryExpandTool implements ITool {

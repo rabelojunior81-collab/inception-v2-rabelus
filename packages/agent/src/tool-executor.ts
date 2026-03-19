@@ -5,6 +5,7 @@ import type {
   JSONObject,
   Message,
 } from '@rabeluslab/inception-types';
+
 import type { ApprovalGate } from './approval-gate.js';
 import { toolResultToMessage } from './message-adapter.js';
 

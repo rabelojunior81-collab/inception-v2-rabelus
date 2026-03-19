@@ -9,8 +9,9 @@ import type {
   ISO8601String,
 } from '@rabeluslab/inception-types';
 import { RuntimeState as State } from '@rabeluslab/inception-types';
-import { TypedEventBus } from './events.js';
+
 import { RuntimeError, ConfigError } from './errors.js';
+import { TypedEventBus } from './events.js';
 
 /**
  * InceptionRuntime — the heart of the Inception Framework.
@@ -30,7 +31,7 @@ export class InceptionRuntime implements IRuntime {
   private _startedAt: ISO8601String | undefined;
   private readonly bus = new TypedEventBus();
 
-  private _stats: {
+  private readonly _stats: {
     messagesProcessed: number;
     toolsExecuted: number;
     missionsCompleted: number;

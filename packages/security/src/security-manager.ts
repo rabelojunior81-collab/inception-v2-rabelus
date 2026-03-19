@@ -3,11 +3,13 @@
 // ============================================================================
 
 import path from 'node:path';
+
 import type {
   ApprovalRequest,
   ISecurityManager,
   SecurityPolicy,
 } from '@rabeluslab/inception-types';
+
 import { PairingStore } from './pairing-store.js';
 import { generatePairingCode, generateBearerToken } from './token.js';
 

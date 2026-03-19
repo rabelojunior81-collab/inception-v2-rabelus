@@ -1,7 +1,9 @@
 import type { DatabaseSync } from 'node:sqlite';
+
 import { MessageStore, SummaryStore } from '../db/queries.js';
-import { LeafCompactor } from './leaf.js';
+
 import { CondensedCompactor } from './condensed.js';
+import { LeafCompactor } from './leaf.js';
 import type { CompactionConfig, SummarizeFn } from './types.js';
 import { DEFAULT_COMPACTION_CONFIG } from './types.js';
 

@@ -1,7 +1,9 @@
 import type { DatabaseSync } from 'node:sqlite';
-import { cosineSimilarity, deserializeEmbedding, estimateTokens } from './utils.js';
-import type { SummaryRow, MessageRow } from './db/types.js';
+
 import type { IEmbeddingProvider } from '@rabeluslab/inception-types';
+
+import type { SummaryRow, MessageRow } from './db/types.js';
+import { cosineSimilarity, deserializeEmbedding, estimateTokens } from './utils.js';
 
 export interface SearchResult {
   id: string;

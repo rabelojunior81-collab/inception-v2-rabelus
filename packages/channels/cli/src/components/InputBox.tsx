@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
+import React, { useState } from 'react';
 
 interface InputBoxProps {
   onSubmit: (text: string) => void;

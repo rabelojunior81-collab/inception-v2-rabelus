@@ -1,5 +1,5 @@
 import type { AgentIdentity, OperatorConfig, Mission } from '@rabeluslab/inception-types';
-import { AgentMode } from '@rabeluslab/inception-types';
+import { AgentMode, TaskStatus } from '@rabeluslab/inception-types';
 
 export interface SystemPromptContext {
   readonly identity: AgentIdentity;
@@ -57,7 +57,7 @@ export function buildSystemPrompt(ctx: SystemPromptContext): string {
     sections.push(`Modo: ${modeDescription(activeMission.mode)}`);
 
     const pendingTasks = activeMission.tasks.filter(
-      (t) => t.status === 'pending' || t.status === 'in_progress',
+      (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress,
     );
     if (pendingTasks.length > 0) {
       sections.push('\n**Tarefas pendentes:**');

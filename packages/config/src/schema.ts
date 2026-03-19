@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import {
   AgentNature,
   AgentTone,
@@ -7,6 +6,7 @@ import {
   ReportFrequency,
   ReportFormat,
 } from '@rabeluslab/inception-types';
+import { z } from 'zod';
 
 // ============================================================================
 // Primitives

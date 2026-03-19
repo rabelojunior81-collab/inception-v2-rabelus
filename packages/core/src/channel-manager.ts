@@ -9,6 +9,7 @@ import type {
   ChannelState,
 } from '@rabeluslab/inception-types';
 import { ChannelId } from '@rabeluslab/inception-types';
+
 import { ChannelError } from './errors.js';
 
 type InboundHandler = (message: InboundMessage) => Promise<void>;
@@ -47,7 +48,7 @@ export class ChannelManager {
       channel.onError((err) => this.errorHandler?.(err, channel.id));
     }
 
-    if (options.operatorChannel || !this.operatorChannelId) {
+    if (options.operatorChannel === true || this.operatorChannelId == null) {
       this.operatorChannelId = channel.id;
     }
 
@@ -133,7 +134,7 @@ export class ChannelManager {
    * Get the primary operator channel (used for approval flows, alerts).
    */
   getOperatorChannel(): IChannel {
-    if (!this.operatorChannelId) {
+    if (this.operatorChannelId == null) {
       throw new ChannelError('No operator channel registered', 'none' as ChannelId);
     }
     return this.assertChannel(this.operatorChannelId);

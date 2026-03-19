@@ -2,15 +2,17 @@
 // inception start — launches the full runtime with the CLI channel
 // ============================================================================
 
-import { join } from 'node:path';
 import { homedir } from 'node:os';
+import { join } from 'node:path';
+
 import { AgentLoop } from '@rabeluslab/inception-agent';
-import { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
-import { CliChannel } from '@rabeluslab/inception-channel-cli';
-import { SecurityManager } from '@rabeluslab/inception-security';
-import { ChannelManager, InceptionRuntime } from '@rabeluslab/inception-core';
-import { loadConfig } from '@rabeluslab/inception-config';
 import type { PendingApproval } from '@rabeluslab/inception-agent';
+import { CliChannel } from '@rabeluslab/inception-channel-cli';
+import { loadConfig } from '@rabeluslab/inception-config';
+import { ChannelManager, InceptionRuntime } from '@rabeluslab/inception-core';
+import { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
+import { SecurityManager } from '@rabeluslab/inception-security';
+
 import { createProvider } from '../provider-factory.js';
 import { buildToolRegistry } from '../tool-registry.js';
 

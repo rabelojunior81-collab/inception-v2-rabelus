@@ -2,8 +2,8 @@
 // Channel (Communication) Types
 // ============================================================================
 
-import type { UUID, ISO8601String, JSONValue } from './common.js';
 import type { AutonomyLevel } from './agent.js';
+import type { UUID, ISO8601String, JSONValue } from './common.js';
 
 /**
  * Supported communication channels

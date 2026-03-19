@@ -1,4 +1,7 @@
 import { randomUUID } from 'node:crypto';
+
+import type { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
+import { MemorySearchTool, MemoryDescribeTool, MemoryExpandTool } from '@rabeluslab/inception-memory';
 import type {
   IProvider,
   IToolRegistry,
@@ -13,17 +16,16 @@ import type {
   ExecutionContext,
   ChannelId,
 } from '@rabeluslab/inception-types';
-import type { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
-import { MemorySearchTool, MemoryDescribeTool, MemoryExpandTool } from '@rabeluslab/inception-memory';
-import { ContextBuilder } from './context-builder.js';
-import { ToolExecutor } from './tool-executor.js';
+
 import { ApprovalGate, type ApprovalHandler } from './approval-gate.js';
+import { ContextBuilder } from './context-builder.js';
 import {
   inboundToMessage,
   assistantToOutbound,
   messageToMemoryEntry,
 } from './message-adapter.js';
 import type { SystemPromptContext } from './system-prompt.js';
+import { ToolExecutor } from './tool-executor.js';
 
 export interface AgentLoopConfig {
   readonly identity: AgentIdentity;

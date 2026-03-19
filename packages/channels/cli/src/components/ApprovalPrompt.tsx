@@ -1,5 +1,6 @@
-import React from 'react';
 import { Box, Text, useInput } from 'ink';
+import React from 'react';
+
 import type { PendingApprovalDisplay } from '../types.js';
 
 interface ApprovalPromptProps {

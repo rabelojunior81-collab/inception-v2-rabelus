@@ -8,7 +8,7 @@
 //
 // ============================================================================
 
-import { Ollama } from 'ollama';
+import { ProviderError } from '@rabeluslab/inception-core';
 import type {
   IProvider,
   OllamaConfig,
@@ -22,7 +22,8 @@ import type {
   TokenUsage,
 } from '@rabeluslab/inception-types';
 import { ProviderId } from '@rabeluslab/inception-types';
-import { ProviderError } from '@rabeluslab/inception-core';
+import { Ollama } from 'ollama';
+
 import {
   toOllamaMessage,
   toOllamaTool,

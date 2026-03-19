@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+
 import type {
   ExecutionContext,
   ITool,
@@ -7,6 +8,7 @@ import type {
   ToolExecutionResult,
 } from '@rabeluslab/inception-types';
 import { GateType } from '@rabeluslab/inception-types';
+
 import { guardPath } from '../path-guard.js';
 
 const DEFAULT_MAX_BYTES = 1_048_576; // 1 MiB

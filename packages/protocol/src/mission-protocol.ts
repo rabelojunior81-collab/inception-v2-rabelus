@@ -1,8 +1,9 @@
-import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
 import { existsSync, mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
-import { PROTOCOL_SCHEMA_SQL } from './schema.js';
+import { dirname, join } from 'node:path';
+import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
+
+
 import type {
   IMissionProtocol,
   Mission,
@@ -11,7 +12,9 @@ import type {
   Report,
   JournalEntry,
 } from '@rabeluslab/inception-types';
-import { MissionStatus, AgentMode, TechnicalStatus, AutonomyLevel } from '@rabeluslab/inception-types';
+import { MissionStatus, AgentMode, TechnicalStatus, AutonomyLevel, TaskStatus } from '@rabeluslab/inception-types';
+
+import { PROTOCOL_SCHEMA_SQL } from './schema.js';
 
 function generateId(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
@@ -246,10 +249,10 @@ export class MissionProtocol implements IMissionProtocol {
     const now = new Date().toISOString();
     const updates: Record<string, SQLInputValue> = { status, id: taskId, mission_id: missionId };
     let sql = 'UPDATE tasks SET status = @status';
-    if (status === 'in_progress') {
+    if (status === TaskStatus.InProgress) {
       sql += ', started_at = @started_at';
       updates['started_at'] = now;
-    } else if (status === 'completed' || status === 'skipped') {
+    } else if (status === TaskStatus.Completed || status === TaskStatus.Skipped) {
       sql += ', completed_at = @completed_at';
       updates['completed_at'] = now;
     }

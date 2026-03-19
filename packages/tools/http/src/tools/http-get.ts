@@ -6,6 +6,7 @@ import type {
   ToolExecutionResult,
 } from '@rabeluslab/inception-types';
 import { GateType } from '@rabeluslab/inception-types';
+
 import { isUrlAllowed, sanitizeHeaders } from '../url-guard.js';
 
 const DEFAULT_TIMEOUT_MS = 15_000;

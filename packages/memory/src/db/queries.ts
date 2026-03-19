@@ -1,4 +1,5 @@
 import type { DatabaseSync, StatementSync } from 'node:sqlite';
+
 import type { MessageRow, SummaryRow, SessionRow } from './types.js';
 
 export class MessageStore {

@@ -1,5 +1,5 @@
-import { Ollama } from 'ollama';
 import type { IEmbeddingProvider } from '@rabeluslab/inception-types';
+import { Ollama } from 'ollama';
 
 const DEFAULT_MODEL = 'embeddinggemma';
 const DEFAULT_DIMENSIONS = 768;
@@ -8,8 +8,8 @@ export class OllamaEmbeddingProvider implements IEmbeddingProvider {
   readonly id: string;
   readonly dimensions: number;
 
-  private client: Ollama;
-  private model: string;
+  private readonly client: Ollama;
+  private readonly model: string;
 
   constructor(
     host = 'http://localhost:11434',

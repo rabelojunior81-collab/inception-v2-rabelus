@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 /**
  * Vite plugin that externalizes `node:sqlite`, which is an experimental Node.js

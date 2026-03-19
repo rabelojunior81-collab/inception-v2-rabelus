@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { render } from 'ink';
-import React from 'react';
+
 import type {
   IChannel,
   InboundMessage,
@@ -14,9 +13,12 @@ import {
   ContentType,
   AutonomyLevel,
 } from '@rabeluslab/inception-types';
+import { render } from 'ink';
+import React from 'react';
+
 import { App } from './components/App.js';
-import type { CliAppState, PendingApprovalDisplay } from './types.js';
 import type { ChatMessage } from './components/MessageList.js';
+import type { CliAppState, PendingApprovalDisplay } from './types.js';
 
 export class CliChannel implements IChannel {
   readonly id = ChannelId.CLI;
@@ -24,8 +26,8 @@ export class CliChannel implements IChannel {
 
   private _state: ChannelState = ChannelState.Initializing;
   private inboundHandler: ((msg: InboundMessage) => Promise<void>) | undefined;
-  private errorHandlers: ((err: Error) => void)[] = [];
-  private stateHandlers: ((state: ChannelState) => void)[] = [];
+  private readonly errorHandlers: ((err: Error) => void)[] = [];
+  private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private inkInstance: ReturnType<typeof render> | undefined;
 
   // Mutable UI state — updated via setState()
@@ -53,23 +55,21 @@ export class CliChannel implements IChannel {
     this._setState(ChannelState.Ready);
 
     // Build a stateful wrapper component that exposes the setState function
-    const self = this;
-
-    function StatefulApp(): React.ReactElement {
-      const [state, setState] = React.useState<CliAppState>(self.uiState);
+    const StatefulApp = (): React.ReactElement => {
+      const [state, setState] = React.useState<CliAppState>(this.uiState);
       // Expose setState to the channel for external updates
-      self.setUiState = (updater) => setState(updater);
+      this.setUiState = (updater) => setState(updater);
 
       return React.createElement(App, {
         state,
         onUserInput: (text: string) => {
-          self._handleUserInput(text);
+          this._handleUserInput(text);
         },
         onApprovalDecision: (approvalId: string, approved: boolean) => {
-          self._handleApprovalDecision(approvalId, approved);
+          this._handleApprovalDecision(approvalId, approved);
         },
       });
-    }
+    };
 
     this.inkInstance = render(React.createElement(StatefulApp));
   }
@@ -155,7 +155,7 @@ export class CliChannel implements IChannel {
     }));
 
     const inbound: InboundMessage = {
-      id: userMsg.id as InboundMessage['id'],
+      id: userMsg.id,
       timestamp: userMsg.timestamp,
       channel: ChannelId.CLI,
       direction: MessageDirection.Inbound,

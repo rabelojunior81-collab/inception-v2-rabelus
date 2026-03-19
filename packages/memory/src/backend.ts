@@ -1,10 +1,7 @@
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
-import { openDatabase, closeDatabase } from './db/connection.js';
-import { MessageStore, SessionStore } from './db/queries.js';
-import { ContextAssembler } from './assembler.js';
-import { RetrievalEngine } from './retrieval.js';
-import { CompactionEngine } from './compaction/engine.js';
-import { generateId, estimateTokens, serializeEmbedding } from './utils.js';
+
 import type {
   IMemoryBackend,
   MemoryEntry,
@@ -15,9 +12,14 @@ import type {
   IEmbeddingProvider,
 } from '@rabeluslab/inception-types';
 import { MemoryEntryType } from '@rabeluslab/inception-types';
+
+import { ContextAssembler } from './assembler.js';
+import { CompactionEngine } from './compaction/engine.js';
 import type { SummarizeFn } from './compaction/types.js';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { openDatabase, closeDatabase } from './db/connection.js';
+import { MessageStore, SessionStore } from './db/queries.js';
+import { RetrievalEngine } from './retrieval.js';
+import { generateId, estimateTokens, serializeEmbedding } from './utils.js';
 
 export class SQLiteMemoryBackend implements IMemoryBackend {
   readonly id = 'sqlite';
@@ -31,7 +33,7 @@ export class SQLiteMemoryBackend implements IMemoryBackend {
   private config!: MemoryConfig;
   private embeddingProvider: IEmbeddingProvider | undefined;
   private summarizeFn: SummarizeFn | undefined;
-  private currentSessionId: string = generateId('sess');
+  private readonly currentSessionId: string = generateId('sess');
 
   async initialize(config: MemoryConfig): Promise<void> {
     this.config = config;

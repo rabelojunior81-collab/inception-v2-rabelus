@@ -1,17 +1,18 @@
 import { randomUUID } from 'node:crypto';
-import type {
-  InboundMessage,
-  OutboundMessage,
-  Message,
-  MemoryEntry,
-} from '@rabeluslab/inception-types';
+
 import {
   MessageRole,
   MessageDirection,
   ContentType,
   MemoryEntryType,
 } from '@rabeluslab/inception-types';
-import type { ChannelId } from '@rabeluslab/inception-types';
+import type {
+  InboundMessage,
+  OutboundMessage,
+  Message,
+  MemoryEntry,
+ ChannelId } from '@rabeluslab/inception-types';
+
 
 /**
  * Convert a channel InboundMessage to a provider Message for LLM context.
@@ -76,7 +77,7 @@ export function messageToMemoryEntry(
     id: randomUUID() as MemoryEntry['id'],
     threadId,
     missionId,
-    timestamp: (msg.metadata?.timestamp as string | undefined) ?? new Date().toISOString(),
+    timestamp: (msg.metadata?.timestamp) ?? new Date().toISOString(),
     type: MemoryEntryType.Conversation,
     role: msg.role,
     content,

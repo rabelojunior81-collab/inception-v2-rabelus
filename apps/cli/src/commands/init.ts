@@ -2,9 +2,9 @@
 // inception init — interactive setup wizard to create .inception.json
 // ============================================================================
 
-import { createInterface } from 'node:readline/promises';
 import { writeFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
+import { createInterface } from 'node:readline/promises';
 
 export interface InitOptions {
   force?: boolean;
@@ -485,7 +485,7 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
       printProviderMenu();
       const providerRaw = (await ask(rl, 'Provider [1 = Kimi PAYG]: ')) || '1';
       const providerIdx = parseInt(providerRaw, 10) - 1;
-      const sel = PROVIDERS[providerIdx] ?? PROVIDERS[0]!;
+      const sel = PROVIDERS[providerIdx] ?? PROVIDERS[0];
       const providerSlug = sel.slug === 'ollama-local' ? 'ollama' : sel.slug;
       console.log(`\n  Selecionado: ${sel.label}`);
 

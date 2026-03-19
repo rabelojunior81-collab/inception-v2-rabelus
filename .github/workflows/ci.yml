@@ -25,11 +25,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Build must run before lint so workspace packages are resolved
+      - name: Build
+        run: pnpm build
 
       - name: Lint
         run: pnpm lint
@@ -44,7 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20, 21]
+        # node:sqlite (built-in) requires Node.js 22+
+        node-version: [22]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -83,7 +88,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
