@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
+import type { SQLInputValue } from 'node:sqlite';
 
 import type {
   IMissionProtocol,
@@ -19,6 +19,7 @@ import {
 } from '@rabeluslab/inception-types';
 
 import { PROTOCOL_SCHEMA_SQL } from './schema.js';
+import { DatabaseSync, type DatabaseSyncInstance } from './sqlite-native.js';
 
 function generateId(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
@@ -100,7 +101,7 @@ function rowToMission(row: MissionRow, tasks: Task[]): Mission {
 }
 
 export class MissionProtocol implements IMissionProtocol {
-  private readonly db: DatabaseSync;
+  private readonly db: DatabaseSyncInstance;
 
   constructor(dbPath?: string) {
     const resolvedPath = dbPath ?? join(homedir(), '.inception', 'protocol.db');
