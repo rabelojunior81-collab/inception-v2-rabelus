@@ -89,6 +89,9 @@ importers:
       '@rabeluslab/inception-memory':
         specifier: workspace:*
         version: link:../../packages/memory
+      '@rabeluslab/inception-protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
       '@rabeluslab/inception-provider-anthropic':
         specifier: workspace:*
         version: link:../../packages/providers/anthropic

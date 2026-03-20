@@ -5,13 +5,17 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-import { AgentLoop } from '@rabeluslab/inception-agent';
-import type { PendingApproval } from '@rabeluslab/inception-agent';
+import {
+  AgentLoop,
+  handleSlashCommand,
+} from '@rabeluslab/inception-agent';
+import type { PendingApproval, SlashCommandContext } from '@rabeluslab/inception-agent';
 import { CliChannel } from '@rabeluslab/inception-channel-cli';
-import { loadConfig } from '@rabeluslab/inception-config';
+import { loadConfig, refreshModelsInBackground } from '@rabeluslab/inception-config';
 import { ChannelManager, InceptionRuntime } from '@rabeluslab/inception-core';
 import { SQLiteMemoryBackend } from '@rabeluslab/inception-memory';
 import { SecurityManager } from '@rabeluslab/inception-security';
+import type { Mission } from '@rabeluslab/inception-types';
 
 import { createProvider } from '../provider-factory.js';
 import { buildToolRegistry } from '../tool-registry.js';
@@ -22,6 +26,7 @@ export interface StartOptions {
   model?: string;
   memory?: string;
   debug?: boolean;
+  activeMission?: Mission;
 }
 
 export async function runStart(options: StartOptions): Promise<void> {
@@ -80,6 +85,8 @@ export async function runStart(options: StartOptions): Promise<void> {
   channelManager.register(cliChannel, { operatorChannel: true });
 
   // ── Create approval handler ────────────────────────────────────────────────
+  const pendingResolvers = new Map<string, (approved: boolean) => void>();
+
   const approvalHandler = async (request: PendingApproval): Promise<boolean> => {
     return new Promise<boolean>((resolve) => {
       cliChannel.showApprovalPrompt({
@@ -89,12 +96,9 @@ export async function runStart(options: StartOptions): Promise<void> {
         args: request.args,
         expiresAt: request.expiresAt,
       });
-
       pendingResolvers.set(request.id, resolve);
     });
   };
-
-  const pendingResolvers = new Map<string, (approved: boolean) => void>();
 
   // ── Create agent loop ──────────────────────────────────────────────────────
   const agentLoop = new AgentLoop({
@@ -106,9 +110,39 @@ export async function runStart(options: StartOptions): Promise<void> {
     approvalHandler,
     model,
     maxToolRounds: 10,
+    activeMission: options.activeMission,
     allowedCommands: cfg.security.execution.allowedCommands,
     allowedPaths: cfg.security.filesystem.allowedPaths,
   });
+
+  // ── Wire slash commands ────────────────────────────────────────────────────
+  // Shared mutable ref to active mission (can change via /mission create)
+  let currentMission: Mission | undefined = options.activeMission;
+
+  const slashCtx = (): SlashCommandContext => ({
+    activeMission: currentMission,
+    onMissionUpdate: (updated: Mission) => {
+      currentMission = updated;
+      cliChannel.setActiveMission(updated.title);
+    },
+    agentName: cfg.agent.identity.name,
+    provider: provider.id,
+    model,
+  });
+
+  cliChannel.setSlashHandler((cmd: string) => {
+    const result = handleSlashCommand(cmd, slashCtx());
+    // Handle /pause — trigger graceful shutdown after response
+    if (cmd.trim() === '/pause') {
+      setTimeout(() => void shutdown(), 500);
+    }
+    return result;
+  });
+
+  // ── Show active mission in status bar ─────────────────────────────────────
+  if (currentMission) {
+    cliChannel.setActiveMission(currentMission.title);
+  }
 
   // ── Wire inbound messages ──────────────────────────────────────────────────
   channelManager.onMessage(async (inbound) => {
@@ -137,6 +171,15 @@ export async function runStart(options: StartOptions): Promise<void> {
   cliChannel.setRuntimeState('Pronto');
   await channelManager.startAll();
 
+  // ── Refresh de modelos em background (fire and forget) ────────────────────
+  refreshModelsInBackground(
+    Object.entries(cfg.providers).map(([slug, provCfg]) => ({
+      slug,
+      apiKey: provCfg.apiKey,
+      baseUrl: provCfg.baseUrl,
+    }))
+  );
+
   if (options.debug) {
     console.error(`[inception] Provider: ${provider.id} / Model: ${model}`);
     console.error(`[inception] Memory DB: ${dbPath}`);
@@ -146,12 +189,12 @@ export async function runStart(options: StartOptions): Promise<void> {
         .map((t) => t.id)
         .join(', ')}`
     );
+    if (currentMission) {
+      console.error(`[inception] Active Mission: ${currentMission.title} (${currentMission.id})`);
+    }
   }
 
   // ── Handle approval decisions from the UI ─────────────────────────────────
-  // CliChannel calls _handleApprovalDecision which only clears the UI.
-  // We need to also resolve the pending promise.
-  // Override the channel's approval handler by monkey-patching the private method:
   const originalHandleDecision = (
     cliChannel as unknown as { _handleApprovalDecision: (id: string, approved: boolean) => void }
   )._handleApprovalDecision.bind(cliChannel);
@@ -159,7 +202,6 @@ export async function runStart(options: StartOptions): Promise<void> {
     cliChannel as unknown as { _handleApprovalDecision: (id: string, approved: boolean) => void }
   )._handleApprovalDecision = (approvalId: string, approved: boolean): void => {
     originalHandleDecision(approvalId, approved);
-    // Resolve the pending AgentLoop approval promise
     const resolver = pendingResolvers.get(approvalId);
     if (resolver) {
       pendingResolvers.delete(approvalId);

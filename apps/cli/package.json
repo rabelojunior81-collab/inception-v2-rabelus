@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@rabeluslab/inception-agent": "workspace:*",
+    "@rabeluslab/inception-protocol": "workspace:*",
     "@rabeluslab/inception-channel-cli": "workspace:*",
     "@rabeluslab/inception-config": "workspace:*",
     "@rabeluslab/inception-core": "workspace:*",

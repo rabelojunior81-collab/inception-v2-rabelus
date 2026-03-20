@@ -18,7 +18,7 @@ import React from 'react';
 
 import { App } from './components/App.js';
 import type { ChatMessage } from './components/MessageList.js';
-import type { CliAppState, PendingApprovalDisplay } from './types.js';
+import type { CliAppState, PendingApprovalDisplay, SlashCommandResult } from './types.js';
 
 export class CliChannel implements IChannel {
   readonly id = ChannelId.CLI;
@@ -29,6 +29,7 @@ export class CliChannel implements IChannel {
   private readonly errorHandlers: ((err: Error) => void)[] = [];
   private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private inkInstance: ReturnType<typeof render> | undefined;
+  private slashHandler: ((cmd: string) => SlashCommandResult) | undefined;
 
   // Mutable UI state — updated via setState()
   private uiState: CliAppState = {
@@ -69,6 +70,9 @@ export class CliChannel implements IChannel {
         },
         onApprovalDecision: (approvalId: string, approved: boolean) => {
           this._handleApprovalDecision(approvalId, approved);
+        },
+        onSlashCommand: (text: string) => {
+          this._handleSlashCommand(text);
         },
       });
     };
@@ -138,6 +142,15 @@ export class CliChannel implements IChannel {
     this._updateState((prev) => ({ ...prev, activeMission: mission }));
   }
 
+  /**
+   * Registra um handler externo para slash commands.
+   * Quando o usuário digita um comando (exceto /stop e /exit),
+   * o handler é invocado e o output é exibido como mensagem do sistema.
+   */
+  setSlashHandler(handler: (cmd: string) => SlashCommandResult): void {
+    this.slashHandler = handler;
+  }
+
   // ── Private ──────────────────────────────────────────────────────────────
 
   private _handleUserInput(text: string): void {
@@ -176,6 +189,29 @@ export class CliChannel implements IChannel {
       this.errorHandlers.forEach((h) => h(err instanceof Error ? err : new Error(String(err))));
       this._updateState((prev) => ({ ...prev, isProcessing: false }));
     });
+  }
+
+  private _handleSlashCommand(text: string): void {
+    let output: string;
+
+    if (this.slashHandler) {
+      const result = this.slashHandler(text);
+      output = result.output;
+    } else {
+      output = `Slash commands não configurados. Use /stop ou /exit para sair.`;
+    }
+
+    const sysMsg: ChatMessage = {
+      id: randomUUID(),
+      role: 'system',
+      content: output,
+      timestamp: new Date().toISOString(),
+    };
+
+    this._updateState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, sysMsg],
+    }));
   }
 
   private _handleApprovalDecision(_approvalId: string, _approved: boolean): void {

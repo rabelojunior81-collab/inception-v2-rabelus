@@ -12,15 +12,25 @@ interface AppProps {
   state: CliAppState;
   onUserInput: (text: string) => void;
   onApprovalDecision: (approvalId: string, approved: boolean) => void;
+  onSlashCommand?: (text: string) => void; // handler opcional para slash commands
 }
 
-export function App({ state, onUserInput, onApprovalDecision }: AppProps): React.ReactElement {
+export function App({
+  state,
+  onUserInput,
+  onApprovalDecision,
+  onSlashCommand,
+}: AppProps): React.ReactElement {
   const { exit } = useApp();
 
-  // Handle /stop and /exit commands
+  // Handle /stop e /exit primeiro; demais slash commands vão para onSlashCommand
   const handleInput = (text: string): void => {
     if (text === '/stop' || text === '/exit') {
       exit();
+      return;
+    }
+    if (text.startsWith('/') && onSlashCommand) {
+      onSlashCommand(text);
       return;
     }
     onUserInput(text);
