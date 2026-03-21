@@ -30,6 +30,7 @@ export class CliChannel implements IChannel {
   private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private inkInstance: ReturnType<typeof render> | undefined;
   private slashHandler: ((cmd: string) => SlashCommandResult) | undefined;
+  private wizardInputHandler: ((text: string) => void | Promise<void>) | undefined;
 
   // Mutable UI state — updated via setState()
   private uiState: CliAppState = {
@@ -142,6 +143,27 @@ export class CliChannel implements IChannel {
     this._updateState((prev) => ({ ...prev, activeMission: mission }));
   }
 
+  /** Push a system message directly into the chat (used by inline wizard) */
+  pushSystemMessage(text: string): void {
+    const sysMsg: ChatMessage = {
+      id: randomUUID(),
+      role: 'system',
+      content: text,
+      timestamp: new Date().toISOString(),
+    };
+    this._updateState((prev) => ({ ...prev, messages: [...prev.messages, sysMsg] }));
+  }
+
+  /** When set, user input is routed to this handler instead of the AI */
+  setWizardInputHandler(handler: (text: string) => void | Promise<void>): void {
+    this.wizardInputHandler = handler;
+  }
+
+  /** Clear wizard mode — input returns to AI */
+  clearWizardInputHandler(): void {
+    this.wizardInputHandler = undefined;
+  }
+
   /**
    * Registra um handler externo para slash commands.
    * Quando o usuário digita um comando (exceto /stop e /exit),
@@ -154,6 +176,26 @@ export class CliChannel implements IChannel {
   // ── Private ──────────────────────────────────────────────────────────────
 
   private _handleUserInput(text: string): void {
+    // Wizard mode: route input to wizard handler, not AI
+    if (this.wizardInputHandler) {
+      const userMsg: ChatMessage = {
+        id: randomUUID(),
+        role: 'user',
+        content: text,
+        timestamp: new Date().toISOString(),
+      };
+      this._updateState((prev) => ({ ...prev, messages: [...prev.messages, userMsg] }));
+      const maybePromise = this.wizardInputHandler(text);
+      if (maybePromise instanceof Promise) {
+        maybePromise.catch((err: unknown) => {
+          this.errorHandlers.forEach((h) =>
+            h(err instanceof Error ? err : new Error(String(err)))
+          );
+        });
+      }
+      return;
+    }
+
     if (!this.inboundHandler) return;
 
     const userMsg: ChatMessage = {
