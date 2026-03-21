@@ -141,7 +141,7 @@ export async function runStart(options: StartOptions): Promise<void> {
   // Runs entirely inside the existing chat UI — no readline, no Ink pause.
   function startInlineWizard(): void {
     const steps = getWizardSteps();
-    const partial: Partial<MissionWizardInput> = {};
+    let partial: Partial<MissionWizardInput> = {};
     let stepIndex = 0;
 
     function formatQuestion(step: WizardStep, idx: number, total: number): string {
@@ -165,11 +165,18 @@ export async function runStart(options: StartOptions): Promise<void> {
       return lines.join('\n');
     }
 
+    function restart(): void {
+      partial = {};
+      stepIndex = 0;
+      const first = steps[0];
+      if (first) cliChannel.pushSystemMessage(formatQuestion(first, 0, steps.length));
+    }
+
     function applyAnswer(step: WizardStep, raw: string): void {
       if (step.inputType === 'text') {
         switch (step.id) {
-          case 'name': partial.name = raw; break;
-          case 'description': partial.description = raw; break;
+          case 'name': partial.name = raw.trim(); break;
+          case 'description': partial.description = raw.trim(); break;
         }
       } else if (step.inputType === 'select') {
         const idx = parseInt(raw, 10) - 1;
@@ -180,7 +187,7 @@ export async function runStart(options: StartOptions): Promise<void> {
           case 'autonomyLevel': partial.autonomyLevel = val as MissionWizardInput['autonomyLevel']; break;
         }
       } else if (step.inputType === 'multiselect') {
-        const parts = raw ? raw.split(/[\s,]+/).filter(Boolean) : [];
+        const parts = raw ? raw.split(/[\s,+]+/).filter(Boolean) : [];
         const selected = parts
           .map((p) => {
             const i = parseInt(p, 10) - 1;
@@ -203,9 +210,19 @@ export async function runStart(options: StartOptions): Promise<void> {
     // Show first question
     const firstStep = steps[0];
     if (!firstStep) return;
+    cliChannel.pushSystemMessage(
+      '══ WIZARD DE MISSÃO ══\nResponda as perguntas abaixo. Para cancelar, digite /stop.\n'
+    );
     cliChannel.pushSystemMessage(formatQuestion(firstStep, 0, steps.length));
 
     cliChannel.setWizardInputHandler(async (answer: string) => {
+      // Allow cancellation mid-wizard
+      if (answer.trim() === '/stop' || answer.trim() === '/exit') {
+        cliChannel.clearWizardInputHandler();
+        cliChannel.pushSystemMessage('Criação de missão cancelada.');
+        return;
+      }
+
       const step = steps[stepIndex];
       if (!step) return;
       applyAnswer(step, answer);
@@ -219,9 +236,7 @@ export async function runStart(options: StartOptions): Promise<void> {
         return;
       }
 
-      // All steps done
-      cliChannel.clearWizardInputHandler();
-
+      // All steps done — validate
       const input: MissionWizardInput = {
         name: partial.name ?? '',
         type: partial.type ?? 'development',
@@ -236,11 +251,16 @@ export async function runStart(options: StartOptions): Promise<void> {
 
       const validation = validateMissionInput(input);
       if (!validation.valid) {
+        // Stay in wizard mode and restart from step 1
         cliChannel.pushSystemMessage(
-          `Erros de validação:\n${validation.errors.map((e) => `  • ${e}`).join('\n')}\n\nUse /mission create para tentar novamente.`
+          `Atenção — campos inválidos:\n${validation.errors.map((e) => `  • ${e}`).join('\n')}\n\nReiniciando o wizard...`
         );
+        restart();
         return;
       }
+
+      // Validation passed — create mission
+      cliChannel.clearWizardInputHandler();
 
       try {
         const dbPath = join(homedir(), '.inception', 'missions.db');
