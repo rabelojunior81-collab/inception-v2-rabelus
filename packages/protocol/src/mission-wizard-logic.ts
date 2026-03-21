@@ -58,21 +58,21 @@ export interface MissionWizardInput {
 // ----------------------------------------------------------------------------
 
 export const MISSION_TYPE_LABELS: Record<MissionType, string> = {
-  development: 'Development',
-  research: 'Research',
-  analysis: 'Analysis',
-  automation: 'Automation',
-  refactor: 'Refactor',
-  investigation: 'Investigation',
+  development: 'Desenvolvimento',
+  research: 'Pesquisa',
+  analysis: 'Análise',
+  automation: 'Automação',
+  refactor: 'Refatoração',
+  investigation: 'Investigação',
 };
 
 export const MISSION_TYPE_DESCRIPTIONS: Record<MissionType, string> = {
-  development: 'Build or extend a software feature, module, or system',
-  research: 'Investigate a topic and produce findings or a report',
-  analysis: 'Examine existing code, data, or systems to identify patterns or issues',
-  automation: 'Create scripts or pipelines that automate repetitive processes',
-  refactor: 'Improve code quality, structure, or performance without changing behavior',
-  investigation: 'Debug or diagnose a problem, tracing root cause and proposing fixes',
+  development: 'Construir ou estender uma feature, módulo ou sistema de software',
+  research: 'Investigar um tema e produzir descobertas ou um relatório',
+  analysis: 'Examinar código, dados ou sistemas existentes para identificar padrões ou problemas',
+  automation: 'Criar scripts ou pipelines que automatizam processos repetitivos',
+  refactor: 'Melhorar qualidade, estrutura ou performance do código sem alterar o comportamento',
+  investigation: 'Depurar ou diagnosticar um problema, rastreando a causa raiz e propondo correções',
 };
 
 export const TECH_STACK_LABELS: Record<TechStack, string> = {
@@ -82,39 +82,39 @@ export const TECH_STACK_LABELS: Record<TechStack, string> = {
   docker: 'Docker / Kubernetes',
   browser: 'Browser / Frontend',
   api: 'REST / GraphQL API',
-  sql: 'SQL Database',
-  nosql: 'NoSQL Database',
+  sql: 'Banco de Dados SQL',
+  nosql: 'Banco de Dados NoSQL',
 };
 
 export const METHODOLOGY_LABELS: Record<Methodology, string> = {
-  exploratory: 'Exploratory',
-  tdd: 'TDD (Test-Driven Development)',
-  'research-first': 'Research-First',
+  exploratory: 'Exploratório',
+  tdd: 'TDD (Desenvolvimento Orientado a Testes)',
+  'research-first': 'Pesquisa Primeiro',
   sprint: 'Sprint',
-  autonomous: 'Autonomous',
+  autonomous: 'Autônomo',
 };
 
 export const METHODOLOGY_DESCRIPTIONS: Record<Methodology, string> = {
-  exploratory: 'Discover the problem space before committing to a solution',
-  tdd: 'Write tests before implementation; red-green-refactor cycle',
-  'research-first': 'Gather information and produce a design doc before writing code',
-  sprint: 'Time-boxed execution with a defined backlog',
-  autonomous: 'Agent acts independently with minimal checkpoints',
+  exploratory: 'Descobrir o espaço do problema antes de comprometer-se com uma solução',
+  tdd: 'Escrever testes antes da implementação; ciclo vermelho-verde-refatorar',
+  'research-first': 'Reunir informações e produzir um documento de design antes de escrever código',
+  sprint: 'Execução com tempo definido e backlog estabelecido',
+  autonomous: 'O agente age de forma independente com pontos de verificação mínimos',
 };
 
 export const AUTONOMY_LEVEL_LABELS: Record<WizardAutonomyLevel, string> = {
-  readonly: 'Read-only (observe only)',
-  supervised: 'Supervised (request approval for risky actions)',
-  full: 'Full autonomy (act independently)',
+  readonly: 'Somente leitura (apenas observar)',
+  supervised: 'Supervisionado (solicita aprovação para ações de risco)',
+  full: 'Autonomia total (age de forma independente)',
 };
 
 export const SKILL_LABELS: Record<Skill, string> = {
   'web-scraping': 'Web Scraping',
-  'code-generation': 'Code Generation',
-  'data-analysis': 'Data Analysis',
-  'api-integration': 'API Integration',
+  'code-generation': 'Geração de Código',
+  'data-analysis': 'Análise de Dados',
+  'api-integration': 'Integração de API',
   deploy: 'Deploy / DevOps',
-  documentation: 'Documentation',
+  documentation: 'Documentação',
 };
 
 // ----------------------------------------------------------------------------
@@ -154,17 +154,17 @@ export function getWizardSteps(): WizardStep[] {
     {
       id: 'name',
       order: 1,
-      title: 'Mission Name',
-      prompt: 'What is the name of this mission?',
+      title: 'Nome da Missão',
+      prompt: 'Qual é o nome desta missão?',
       inputType: 'text',
       required: true,
-      hint: 'Use a short, descriptive name (e.g. "Implement auth module")',
+      hint: 'Use um nome curto e descritivo (ex: "Implementar módulo de autenticação")',
     },
     {
       id: 'type',
       order: 2,
-      title: 'Mission Type',
-      prompt: 'What type of mission is this?',
+      title: 'Tipo de Missão',
+      prompt: 'Qual é o tipo desta missão?',
       inputType: 'select',
       required: true,
       options: (Object.keys(MISSION_TYPE_LABELS) as MissionType[]).map((k) => ({
@@ -176,17 +176,17 @@ export function getWizardSteps(): WizardStep[] {
     {
       id: 'description',
       order: 3,
-      title: 'Description',
-      prompt: 'Describe the goal and scope of this mission:',
+      title: 'Descrição',
+      prompt: 'Descreva o objetivo e escopo desta missão:',
       inputType: 'text',
       required: true,
-      hint: 'What should be done and why? Be as specific as possible.',
+      hint: 'O que deve ser feito e por quê? Seja o mais específico possível.',
     },
     {
       id: 'techStack',
       order: 4,
-      title: 'Tech Stack',
-      prompt: 'Which technologies are involved? (select all that apply)',
+      title: 'Stack de Tecnologias',
+      prompt: 'Quais tecnologias estão envolvidas? (selecione todas que se aplicam)',
       inputType: 'multiselect',
       required: false,
       options: (Object.keys(TECH_STACK_LABELS) as TechStack[]).map((k) => ({
@@ -197,8 +197,8 @@ export function getWizardSteps(): WizardStep[] {
     {
       id: 'methodology',
       order: 5,
-      title: 'Methodology',
-      prompt: 'Which methodology should guide execution?',
+      title: 'Metodologia',
+      prompt: 'Qual metodologia deve guiar a execução?',
       inputType: 'select',
       required: true,
       options: (Object.keys(METHODOLOGY_LABELS) as Methodology[]).map((k) => ({
@@ -210,8 +210,8 @@ export function getWizardSteps(): WizardStep[] {
     {
       id: 'autonomyLevel',
       order: 6,
-      title: 'Autonomy Level',
-      prompt: 'How much autonomy should the agent have?',
+      title: 'Nível de Autonomia',
+      prompt: 'Quanta autonomia o agente deve ter?',
       inputType: 'select',
       required: true,
       options: (Object.keys(AUTONOMY_LEVEL_LABELS) as WizardAutonomyLevel[]).map((k) => ({
@@ -222,8 +222,8 @@ export function getWizardSteps(): WizardStep[] {
     {
       id: 'skills',
       order: 7,
-      title: 'Required Skills',
-      prompt: 'Which agent skills will be needed? (select all that apply)',
+      title: 'Skills Necessárias',
+      prompt: 'Quais skills do agente serão necessárias? (selecione todas que se aplicam)',
       inputType: 'multiselect',
       required: false,
       options: (Object.keys(SKILL_LABELS) as Skill[]).map((k) => ({
@@ -234,20 +234,20 @@ export function getWizardSteps(): WizardStep[] {
     {
       id: 'rules',
       order: 8,
-      title: 'Mission Rules',
-      prompt: 'Add any mission-specific rules or constraints (one per line, leave empty to skip):',
+      title: 'Regras da Missão',
+      prompt: 'Adicione regras ou restrições específicas da missão (separadas por vírgula, ou deixe vazio para pular):',
       inputType: 'list',
       required: false,
-      hint: 'e.g. "Never delete production data", "Always write tests before implementation"',
+      hint: 'ex: "Nunca deletar dados de produção", "Sempre escrever testes antes da implementação"',
     },
     {
       id: 'initialTasks',
       order: 9,
-      title: 'Initial Tasks',
-      prompt: 'List the initial tasks for this mission (one per line):',
+      title: 'Tarefas Iniciais',
+      prompt: 'Liste as tarefas iniciais desta missão (separadas por vírgula):',
       inputType: 'list',
       required: false,
-      hint: 'You can always add more tasks later.',
+      hint: 'Você sempre pode adicionar mais tarefas depois.',
     },
   ];
 }
@@ -267,11 +267,11 @@ export function validateMissionInput(
   const errors: string[] = [];
 
   if (input.name === undefined || input.name.trim().length === 0) {
-    errors.push('Mission name is required.');
+    errors.push('Nome da missão é obrigatório.');
   } else if (input.name.trim().length < 3) {
-    errors.push('Mission name must be at least 3 characters.');
+    errors.push('Nome da missão deve ter pelo menos 3 caracteres.');
   } else if (input.name.trim().length > 120) {
-    errors.push('Mission name must be at most 120 characters.');
+    errors.push('Nome da missão deve ter no máximo 120 caracteres.');
   }
 
   const validTypes: MissionType[] = [
@@ -283,15 +283,15 @@ export function validateMissionInput(
     'investigation',
   ];
   if (!input.type) {
-    errors.push('Mission type is required.');
+    errors.push('Tipo de missão é obrigatório.');
   } else if (!validTypes.includes(input.type)) {
-    errors.push(`Invalid mission type: "${input.type}". Must be one of: ${validTypes.join(', ')}.`);
+    errors.push(`Tipo de missão inválido: "${input.type}". Deve ser um dos: ${validTypes.join(', ')}.`);
   }
 
   if (input.description === undefined || input.description.trim().length === 0) {
-    errors.push('Mission description is required.');
+    errors.push('Descrição da missão é obrigatória.');
   } else if (input.description.trim().length < 10) {
-    errors.push('Mission description must be at least 10 characters.');
+    errors.push('Descrição da missão deve ter pelo menos 10 caracteres.');
   }
 
   const validMethodologies: Methodology[] = [
@@ -302,19 +302,19 @@ export function validateMissionInput(
     'autonomous',
   ];
   if (!input.methodology) {
-    errors.push('Methodology is required.');
+    errors.push('Metodologia é obrigatória.');
   } else if (!validMethodologies.includes(input.methodology)) {
     errors.push(
-      `Invalid methodology: "${input.methodology}". Must be one of: ${validMethodologies.join(', ')}.`
+      `Metodologia inválida: "${input.methodology}". Deve ser uma das: ${validMethodologies.join(', ')}.`
     );
   }
 
   const validAutonomy: WizardAutonomyLevel[] = ['readonly', 'supervised', 'full'];
   if (!input.autonomyLevel) {
-    errors.push('Autonomy level is required.');
+    errors.push('Nível de autonomia é obrigatório.');
   } else if (!validAutonomy.includes(input.autonomyLevel)) {
     errors.push(
-      `Invalid autonomy level: "${input.autonomyLevel}". Must be one of: ${validAutonomy.join(', ')}.`
+      `Nível de autonomia inválido: "${input.autonomyLevel}". Deve ser um dos: ${validAutonomy.join(', ')}.`
     );
   }
 
@@ -331,7 +331,7 @@ export function validateMissionInput(
     ];
     const invalid = input.techStack.filter((s) => !validStacks.includes(s));
     if (invalid.length > 0) {
-      errors.push(`Invalid tech stack values: ${invalid.join(', ')}.`);
+      errors.push(`Valores de stack inválidos: ${invalid.join(', ')}.`);
     }
   }
 
@@ -346,7 +346,7 @@ export function validateMissionInput(
     ];
     const invalid = input.skills.filter((s) => !validSkills.includes(s));
     if (invalid.length > 0) {
-      errors.push(`Invalid skill values: ${invalid.join(', ')}.`);
+      errors.push(`Valores de skill inválidos: ${invalid.join(', ')}.`);
     }
   }
 
