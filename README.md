@@ -1,18 +1,20 @@
 # Inception Framework v2.0
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-22+-green.svg)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-8+-orange.svg)](https://pnpm.io/)
 [![CI](https://github.com/rabeluslab/inception-v2-rabelus/actions/workflows/ci.yml/badge.svg)](https://github.com/rabeluslab/inception-v2-rabelus/actions)
 
 > **The Claw Evolution** — Runtime TypeScript-nativo para agentes de IA autônomos com metodologia Inception no núcleo.
 
+> **Documentação completa:** [docs/GUIA.md](docs/GUIA.md) — Guia pt-BR "De Zero à Missão Concluída" (instalação, providers, missões, slash commands, metodologia, FAQ)
+
 ---
 
-## O que e o Inception?
+## O que é o Inception?
 
-Inception Framework e um **runtime completo para agentes de IA autônomos**, combinando:
+Inception Framework é um **runtime completo para agentes de IA autônomos**, combinando:
 
 - **Mission System** — Agentes configurados organicamente para cada objetivo (wizard interativo, skills, metodologias)
 - **Metodologia Inception** — Abordagem Mission-first com protocolos IMP/IEP/ISP
@@ -24,11 +26,11 @@ Inception Framework e um **runtime completo para agentes de IA autônomos**, com
 
 ---
 
-## Instalação Rapida
+## Instalação Rápida
 
-### Pre-requisitos
+### Pré-requisitos
 
-- **Node.js 22+** obrigatorio (`node:sqlite` e built-in do Node 22)
+- **Node.js 22+** obrigatório (`node:sqlite` é built-in do Node 22)
 - **pnpm 8+** — `npm install -g pnpm`
 
 ```bash
@@ -67,15 +69,15 @@ inception start
 
 ---
 
-## Sistema de Missoes
+## Sistema de Missões
 
-O sistema de missoes e o nucleo operacional do Inception. Uma missao configura o agente dinamicamente para um objetivo especifico:
+O sistema de missões é o núcleo operacional do Inception. Uma missão configura o agente dinamicamente para um objetivo específico:
 
 ```
 Missao = Objetivo + Tech Stack + Metodologia + Skills + Autonomia + Regras + Tarefas
 ```
 
-### Criar uma Missao
+### Criar uma Missão
 
 ```bash
 node apps/cli/dist/index.js mission create
@@ -84,20 +86,20 @@ node apps/cli/dist/index.js mission create
 O wizard interativo pergunta:
 
 ```
-① Nome da missao
+① Nome da missão
 ② Tipo: Development | Research | Analysis | Automation | Refactor | Investigation
-③ Descricao/objetivo
+③ Descrição/objetivo
 ④ Tech stack: Node/TS | Python | Go | Docker | Browser | API | SQL | NoSQL
-⑤ Metodologia: Exploratorio | TDD | Research-First | Sprint | Autonomo
+⑤ Metodologia: Exploratório | TDD | Research-First | Sprint | Autônomo
 ⑥ Autonomia: Readonly | Supervised | Full
 ⑦ Skills: Web Scraping | Code Gen | Data Analysis | API Integration | Deploy | Docs
-⑧ Regras e restricoes (opcional)
+⑧ Regras e restrições (opcional)
 ⑨ Decompor em tarefas agora?
 ```
 
 Cada resposta **configura o agente automaticamente** — sem precisar editar JSONs.
 
-### Comandos de Missao
+### Comandos de Missão
 
 ```bash
 inception mission create            # wizard interativo
@@ -110,18 +112,20 @@ inception mission archive <id>      # arquivar missao encerrada
 
 ### Slash Commands (dentro do agente)
 
-Enquanto o agente esta rodando, digite:
+Enquanto o agente está rodando, digite:
 
-| Comando | Acao |
+| Comando | Ação |
 |---|---|
-| `/mission` | Exibe missao ativa e progresso |
+| `/mission` | Exibe missão ativa e progresso |
+| `/mission create` | Abre o wizard de missão **dentro do chat** (sem sair do agente) |
 | `/task list` | Lista tasks pendentes |
-| `/task done <texto>` | Marca task concluida |
+| `/task done <texto>` | Marca task concluída |
 | `/task add <desc>` | Adiciona nova task |
 | `/note <texto>` | Entrada no journal |
-| `/rules` | Regras ativas da missao |
+| `/rules` | Regras ativas da missão |
 | `/pause` | Salva e encerra graciosamente |
-| `/status` | Estado: provider, modelo, tokens, missao |
+| `/status` | Estado: provider, modelo, tokens, missão |
+| `/stop` | Cancela wizard em andamento e retorna ao chat |
 | `/help` | Lista todos os comandos |
 
 ---
@@ -141,19 +145,20 @@ Enquanto o agente esta rodando, digite:
 | OpenAI OAuth | `openai-oauth` | ChatGPT Plus/Pro |
 | Google Gemini | `gemini` | gemini-2.5-flash, gemini-2.5-pro |
 | Ollama (local) | `ollama` | llama3, mistral, phi4, qwen2.5 |
+| Ollama (cloud) | `ollama` | modelos via Ollama cloud endpoint |
 | OpenRouter | `openrouter` | 300+ modelos |
 | Kilo Gateway | `kilo` | Gateway com controle de custo |
 
-**Auto-update:** a lista de modelos e atualizada automaticamente na inicializacao (cache 24h).
+**Auto-update:** a lista de modelos é atualizada automaticamente na inicialização (cache 24h).
 
 ---
 
 ## Todos os Comandos CLI
 
 ```bash
-# Configuracao
-inception init                      # wizard de configuracao inicial
-inception config                    # exibe config resolvida
+# Configuração
+inception init                      # wizard de configuração inicial
+inception config                    # exibe configuração resolvida
 inception status                    # verifica ambiente, providers, memoria
 
 # Agente
@@ -204,7 +209,7 @@ inception mission archive <id>      # arquivar missao
 
 ### Packages
 
-| Package | Descricao | Status |
+| Package | Descrição | Status |
 |---|---|---|
 | `@rabeluslab/inception-types` | 200+ tipos/interfaces/enums TypeScript | Completo |
 | `@rabeluslab/inception-config` | Schema Zod, loader, model-registry | Completo |
@@ -215,8 +220,16 @@ inception mission archive <id>      # arquivar missao
 | `@rabeluslab/inception-agent` | AgentLoop (ReAct), ContextBuilder, slash-handler | Completo |
 | `@rabeluslab/inception-provider-anthropic` | Claude integration | Completo |
 | `@rabeluslab/inception-provider-openai` | OpenAI-compat integration | Completo |
+| `@rabeluslab/inception-provider-openai-oauth` | ChatGPT Plus/Pro OAuth | Completo |
 | `@rabeluslab/inception-provider-gemini` | Gemini integration | Completo |
+| `@rabeluslab/inception-provider-gemini-oauth` | Gemini OAuth integration | Completo |
 | `@rabeluslab/inception-provider-ollama` | Ollama local/cloud | Completo |
+| `@rabeluslab/inception-provider-kimi` | Kimi / Moonshot AI | Completo |
+| `@rabeluslab/inception-provider-zai` | Z.AI / Zhipu | Completo |
+| `@rabeluslab/inception-provider-bailian` | Bailian / DashScope | Completo |
+| `@rabeluslab/inception-provider-openrouter` | OpenRouter gateway | Completo |
+| `@rabeluslab/inception-provider-kilo` | Kilo gateway | Completo |
+| `@rabeluslab/inception-provider-opencode-zen` | OpenCode Zen gateway | Completo |
 | `@rabeluslab/inception-channel-cli` | Ink terminal UI | Completo |
 | `@rabeluslab/inception-channel-telegram` | Telegram bot | Completo |
 | `@rabeluslab/inception-tool-filesystem` | Read/Write/ListDir/Stat | Completo |
@@ -230,16 +243,16 @@ inception mission archive <id>      # arquivar missao
 
 ### Modos do Agente
 
-| Modo | Codigo | Descricao |
+| Modo | Código | Descrição |
 |---|---|---|
-| Auditor | A | Planejamento e analise — sem execucao |
-| Executor | B | Implementacao ativa |
-| Archivist | C | Consolidacao e preservacao no journal |
+| Auditor | A | Planejamento e análise — sem execução |
+| Executor | B | Implementação ativa |
+| Archivist | C | Consolidação e preservação no journal |
 | Verifier | D | Leitura somente — SAGRADO |
 
 ### Protocolos
 
-- **IMP** — Mission Protocol: briefing → execucao → arquivamento
+- **IMP** — Mission Protocol: briefing → execução → arquivamento
 - **IEP** — Engineering Protocol: gates (G-TS, G-DI, G-SEC, G-UX, G-REL, G-AI), status de tarefas
 - **ISP** — Safety Protocol: autonomia, approvals, limites
 
@@ -247,9 +260,9 @@ inception mission archive <id>      # arquivar missao
 
 - `Resolved` — implementado e validado
 - `Partial` — parcialmente implementado
-- `Stub` — placeholder, aguardando implementacao
+- `Stub` — placeholder, aguardando implementação
 - `RiskAccepted` — risco conhecido e aceito
-- `Blocked` — bloqueado por dependencia
+- `Blocked` — bloqueado por dependência
 
 ---
 
@@ -282,7 +295,9 @@ inception-v2/
 │   ├── channels/      # Communication channels
 │   └── tools/         # Tool implementations
 ├── docs/
-│   └── missions/      # Mission system documentation
+│   ├── GUIA.md              # Guia completo pt-BR (De Zero à Missão Concluída)
+│   ├── missions/            # Documentação técnica do sistema de missões
+│   └── audit-research/      # Auditorias técnicas e documentos de pesquisa
 └── CHANGELOG.md
 ```
 
@@ -307,11 +322,11 @@ git reset --hard snapshot/mission/phase-N
 
 ---
 
-## Seguranca
+## Segurança
 
-### Niveis de Autonomia
+### Níveis de Autonomia
 
-| Nivel | Comportamento |
+| Nível | Comportamento |
 |---|---|
 | `Readonly` | Apenas le e sugere — nunca escreve ou executa |
 | `Supervised` | Age mas pede aprovacao para acoes destrutivas |
@@ -336,7 +351,7 @@ Configure no `.inception.json` ou no wizard de missao:
 
 ---
 
-## Licenca
+## Licença
 
 MIT — veja [LICENSE](LICENSE).
 

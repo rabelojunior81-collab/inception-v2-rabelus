@@ -64,14 +64,29 @@ Quando o agente está rodando (`inception start` ou `inception mission start <id
 | Comando | Ação |
 |---|---|
 | `/mission` | Exibe missão ativa: título, progresso, tasks |
-| `/mission create` | Roda o wizard inline (pausa chat, abre wizard, retoma) |
+| `/mission create` | Abre o wizard de missão **dentro do chat** (sem readline, sem pausar o Ink) |
 | `/task list` | Lista tasks pendentes da missão ativa |
-| `/task done <id>` | Marca task como concluída no banco |
+| `/task done <texto>` | Marca task como concluída no banco |
 | `/task add <desc>` | Cria nova task na missão ativa |
 | `/note <texto>` | Persiste entrada no journal da missão |
 | `/rules` | Exibe regras e restrições ativas |
 | `/pause` | Salva estado da missão e encerra graciosamente |
 | `/status` | Estado geral: provider, modelo, tokens, missão, tools |
+| `/stop` | Cancela wizard em andamento e retorna ao modo de chat normal |
+
+### Wizard Inline — Como Funciona
+
+O `/mission create` dentro do agente opera sem readline e sem pausar a interface Ink. A implementação usa uma máquina de estado pura em `start.ts`:
+
+1. O slash handler intercepta `/mission create` e chama `startInlineWizard()`
+2. `cliChannel.setWizardInputHandler(handler)` — redireciona todos os inputs do usuário para o handler do wizard (não para a IA)
+3. O wizard exibe cada pergunta via `cliChannel.pushSystemMessage(text)` — injetado diretamente na UI Ink como mensagem de sistema
+4. O usuário responde normalmente no chat — a resposta é capturada pelo handler em vez de ser enviada ao LLM
+5. Ao final dos 9 passos, o wizard valida tudo via `validateMissionInput()`, cria a missão via `MissionProtocol`, e chama `cliChannel.clearWizardInputHandler()` — restaurando o roteamento normal para a IA
+
+**Em caso de falha de validação:** o wizard chama `restart()` — reseta `partial = {}` e `stepIndex = 0` — e exibe a primeira pergunta novamente. O controle **nunca volta para a IA** em caso de erro.
+
+**Para cancelar:** `/stop` durante o wizard chama `clearWizardInputHandler()` e retorna ao chat normal.
 
 ---
 
@@ -103,44 +118,45 @@ O sistema mantém um cache de modelos disponíveis em `~/.inception/models-cache
 
 ## Armazenamento
 
-### SQLite (primário)
-Schema em `packages/protocol/src/schema.ts`. Tabelas: `missions`, `tasks`, `journal`.
+### SQLite (único backend)
 
-### Arquivo local (contexto do agente)
-Gerado automaticamente em `.inception/missions/<id>/` ao criar uma missão:
+Schema em `packages/protocol/src/schema.ts`. Tabelas:
 
-```
-.inception/missions/
-  mission_abc123/
-    context.md    ← objetivo, regras, decisões de arquitetura (carregado no system prompt)
-    tasks.md      ← breakdown de tarefas (editável pelo agente e pelo humano)
-    journal.md    ← log orgânico do que foi feito
-```
+| Tabela | Conteúdo |
+|--------|----------|
+| `missions` | Registro completo de cada missão (título, tipo, status, autonomia, metadata) |
+| `tasks` | Tasks associadas a cada missão (status, technicalStatus, gate, dependências) |
+| `journal` | Entradas imutáveis de journal (snapshots arquivados, relatórios finais) |
 
-O `context.md` é o arquivo que o agente carrega para ter memória densa da missão — inclui objetivo, tech stack, regras, e decisões tomadas durante a execução.
+**Caminho padrão:** `~/.inception/missions.db`
+
+O contexto da missão é injetado no system prompt do agente via `mapMissionToAgentConfig()` + `buildSystemPromptContext()` — não há arquivos locais gerados por missão.
 
 ---
 
 ## Arquitetura dos Packages
 
 ```
-packages/protocol/
-  mission-protocol.ts       ← CRUD SQLite (existente)
-  mission-wizard-logic.ts   ← Lógica pura do wizard (novo)
-  mission-config-mapper.ts  ← Respostas → AgentLoopConfig (novo)
+packages/protocol/src/
+  schema.ts                 ← DDL SQLite (missions, tasks, journal)
+  mission-protocol.ts       ← CRUD SQLite (MissionProtocol class)
+  mission-wizard-logic.ts   ← Lógica pura do wizard, labels pt-BR, validação
+  mission-config-mapper.ts  ← Respostas do wizard → AgentLoopConfig
+  sqlite-native.ts          ← Shim createRequire para node:sqlite (evita bug tsup)
 
 apps/cli/src/commands/
-  mission.ts                ← Todos os subcomandos (novo)
+  mission.ts                ← Subcomandos CLI: create/list/start/status/report/archive
+  start.ts                  ← startInlineWizard() + interceptação de /mission create
 
 packages/agent/src/
-  slash-handler.ts          ← Parser de /comandos (novo)
+  slash-handler.ts          ← Parser de /comandos (handleSlashCommand)
 
 packages/config/src/
-  model-registry.ts         ← Fetch + cache de modelos (novo)
+  model-registry.ts         ← Fetch + cache 24h de modelos por provider
 
 packages/channels/cli/src/
-  components/App.tsx        ← Roteamento de slash commands (modificado)
-  channel.ts                ← setSlashHandler() (modificado)
+  channel.ts                ← pushSystemMessage(), setWizardInputHandler(),
+                               clearWizardInputHandler(), setSlashHandler()
 ```
 
 ---

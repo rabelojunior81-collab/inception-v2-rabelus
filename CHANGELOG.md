@@ -61,7 +61,24 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `packages/agent/src/index.ts` — exports `handleSlashCommand`, `SlashCommandContext`, `SlashCommandResult`
 - `packages/config/src/index.ts` — exports model registry functions and types
 
+#### Inline Mission Wizard (dentro do agente)
+- `packages/channels/cli/src/channel.ts` — suporte ao wizard inline sem readline:
+  - `pushSystemMessage(text)` — injeta mensagem de sistema na UI Ink sem interromper o chat
+  - `setWizardInputHandler(handler)` — redireciona inputs do usuário para o wizard (não para a IA)
+  - `clearWizardInputHandler()` — restaura roteamento normal para a IA
+- `apps/cli/src/commands/start.ts` — `startInlineWizard()`: máquina de estado de 9 passos que opera via `setWizardInputHandler`; sem conflito com readline nem pausa do Ink
+  - Intercepta `/mission create` no slash handler antes de delegar para `handleSlashCommand()`
+  - `/stop` dentro do wizard cancela e retorna ao modo normal
+  - Em falha de validação: reinicia do passo 1 (em vez de sair para a IA)
+
+#### Documentation
+- `docs/GUIA.md` — guia completo pt-BR "De Zero à Missão Concluída" (27 seções, ~500 linhas): fundamentos, conceitos, arquitetura, instalação, providers detalhados, TUI, slash commands, sistema de missões, segurança, memória, metodologia IMP/IEP/ISP, auto-update, FAQ, glossário
+
 ### Fixed
+- `packages/protocol/src/sqlite-native.ts` — shim usando `createRequire(import.meta.url)('node:sqlite')` para impedir tsup/esbuild de remover o prefixo `node:` do import nativo
+- `packages/config/src/loader.ts` — retorna erro correto quando nenhum arquivo de config é encontrado (antes retornava `success: true` com objeto vazio); usa optional chaining `raw.agent?.name` em `resolveConfig` para evitar crash com config parcial
+- `packages/protocol/src/mission-wizard-logic.ts` — tradução completa para pt-BR: todos os `MISSION_TYPE_LABELS`, `MISSION_TYPE_DESCRIPTIONS`, `TECH_STACK_LABELS`, `METHODOLOGY_LABELS`, `METHODOLOGY_DESCRIPTIONS`, `AUTONOMY_LEVEL_LABELS`, `SKILL_LABELS`, títulos/prompts/hints de todos os 9 passos do wizard, e todas as mensagens de erro de validação
+- Wizard restart-on-failure: ao invés de chamar `clearWizardInputHandler()` em erro de validação (que devolveria controle à IA), o wizard agora chama `restart()` — reseta `partial = {}` e `stepIndex = 0` e exibe a primeira pergunta novamente
 - ESLint: 0 errors across all packages (was 10 errors before this branch)
 - CI: Node.js version requirement updated to 22+ throughout
 
