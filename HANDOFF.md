@@ -10,9 +10,37 @@
 
 ## TL;DR
 
-O Inception Framework v2.0 é um **runtime TypeScript-nativo para agentes de IA autônomos**, completamente implementado e funcional. Não há código "a fazer" — todos os packages estão construídos, buildados e integrados.
+O Inception Framework v2.0 é um **runtime TypeScript-nativo para agentes de IA autônomos**, ~87% implementado e funcional. O core está completo — há 12 gaps conhecidos (G1-G12) sendo resolvidos nas Sprints 1-5.
 
 **Estado atual:** funcionando em produção de desenvolvimento. Basta clonar, instalar, buildar e executar.
+
+> **Governança:** Ver [`_gov/governance-spec.md`](_gov/governance-spec.md) para o estado real do projeto e [`_gov/roadmap.md`](_gov/roadmap.md) para o roadmap de resolução dos gaps.
+
+---
+
+## Gaps Conhecidos
+
+> Funcionalidades com implementação incompleta. Não são bugs — são gaps documentados com sprint de resolução.
+
+| ID | Gap | Severidade | Sprint |
+|----|-----|------------|--------|
+| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | Sprint 2 |
+| G2 | Rate limiting configurado mas não aplicado no AgentLoop | MEDIUM | Sprint 2 |
+| G4 | `InceptionRuntime` não conectado ao `ChannelManager` em `start.ts` | MEDIUM | Sprint 2 |
+| G6 | Versionamento inconsistente (`types=2.0.0`, demais `0.0.0`) | MEDIUM | Sprint 1 |
+| G8 | CI sem `pnpm audit`, coverage, triggers completos | MEDIUM | Sprint 3 |
+| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI | MEDIUM | Sprint 2 |
+| G12 | Este `HANDOFF.md` não mencionava gaps — resolvido nesta atualização | HIGH | Sprint 1 ← |
+| G3 | `sandbox: 'none'` sem implementação real | LOW | Sprint 4 |
+| G5 | 9 `ProviderId` no enum sem pacote correspondente | LOW | Sprint 4 |
+| G7 | `.eslintrc.cjs` override `no-console` pendente | LOW | Sprint 0 ✅ |
+| G9 | `docs/en\|pt\|es\|zh` — diretórios vazios | LOW | Sprint 5 |
+| G10 | Memórias Claude obsoletas | HIGH | Sprint 0 ✅ |
+
+**Stubs explícitos (não são bugs):**
+- `packages/channels/discord/` — placeholder, implementação na Sprint 4
+- `packages/tools/browser/` — placeholder Playwright, Sprint 4
+- `packages/tools/memory/` — redirect pendente para `memory/src/tools/`, Sprint 2
 
 ---
 
@@ -132,9 +160,7 @@ inception-v2/
 
 ---
 
-## O que está implementado
-
-Tudo. Sem exceção.
+## O que está implementado (~87%)
 
 | Layer | Package | Status |
 |-------|---------|--------|
@@ -337,9 +363,11 @@ pnpm build
 
 | Documento | Conteúdo |
 |-----------|---------|
+| [_gov/governance-spec.md](_gov/governance-spec.md) | **Documento norte** — estado real, gaps, governança |
+| [_gov/roadmap.md](_gov/roadmap.md) | Roadmap vivo de todas as 6 sprints |
 | [docs/GUIA.md](docs/GUIA.md) | Guia completo pt-BR "De Zero à Missão Concluída" |
 | [docs/missions/mission-system.md](docs/missions/mission-system.md) | Spec técnica do sistema de missões |
-| [docs/audit-research/](docs/audit-research/) | Auditorias técnicas e decisões arquiteturais |
+| [docs/audit-research/README.md](docs/audit-research/README.md) | Redirect para auditorias históricas em `_gov/archive/audits/` |
 | [CHANGELOG.md](CHANGELOG.md) | Histórico completo de mudanças |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Guia de contribuição |
 
@@ -369,6 +397,8 @@ git reset --hard snapshot/mission/phase-N
 
 ## Checklist de Onboarding
 
+- [ ] Leu [`_gov/governance-spec.md`](_gov/governance-spec.md) — estado real do projeto
+- [ ] Verificou [`_gov/bus/active/`](_gov/bus/active/) — mensagens pendentes entre sessões
 - [ ] Node.js 22+ instalado e verificado (`node --version`)
 - [ ] pnpm 8+ instalado (`pnpm --version`)
 - [ ] Repositório clonado e branch `feat/mission-system` ativa

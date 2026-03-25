@@ -7,6 +7,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [Known Gaps] — 2026-03-25
+
+Funcionalidades presentes na interface mas com implementação incompleta. Não são bugs — são gaps documentados com sprint de resolução prevista. Ver [`_gov/roadmap.md`](_gov/roadmap.md) para rastreamento completo.
+
+| ID | Descrição | Severidade | Resolução |
+|----|-----------|------------|-----------|
+| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | Sprint 2 |
+| G2 | Rate limiting configurado mas não aplicado no AgentLoop | MEDIUM | Sprint 2 |
+| G4 | `InceptionRuntime` não conectado ao `ChannelManager` em `start.ts` | MEDIUM | Sprint 2 |
+| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI | MEDIUM | Sprint 2 |
+| G8 | CI sem `pnpm audit`, coverage, triggers completos | MEDIUM | Sprint 3 |
+| G6 | Versionamento inconsistente (`types=2.0.0`, demais `0.0.0`) | MEDIUM | Sprint 1 |
+
+---
+
 ## [Unreleased] — feat/mission-system
 
 ### Added

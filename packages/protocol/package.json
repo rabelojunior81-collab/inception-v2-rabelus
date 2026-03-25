@@ -1,6 +1,6 @@
 {
   "name": "@rabeluslab/inception-protocol",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "IMP/IEP/ISP protocol implementation for Inception Framework",
   "license": "MIT",
   "author": "Rabelus Lab",

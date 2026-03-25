@@ -871,6 +871,8 @@ Você: /task list
 #### `/task done <descrição>`
 Registra uma task como concluída. Útil para marcar progresso durante a conversa.
 
+> **⚠️ Status (Gap G1):** Confirmação visual apenas — a task **não é persistida** no banco de dados SQLite. `/task list` não refletirá a mudança após reiniciar o agente. Resolução prevista: Sprint 2, ss-2.2.
+
 ```
 Você: /task done Implementei o módulo de autenticação JWT com refresh tokens
 
@@ -880,6 +882,8 @@ Você: /task done Implementei o módulo de autenticação JWT com refresh tokens
 
 #### `/task add <descrição>`
 Adiciona uma nova task à missão ativa.
+
+> **⚠️ Status (Gap G1):** Confirmação visual apenas — a task **não é persistida** no SQLite. Resolução prevista: Sprint 2, ss-2.2.
 
 ```
 Você: /task add Implementar rate limiting na API
@@ -921,6 +925,8 @@ Lista todos os slash commands disponíveis.
 
 #### `/note <texto>`
 Registra uma nota no journal da missão.
+
+> **⚠️ Status (Gap G1):** Confirmação visual apenas — a nota **não é persistida** no SQLite. Resolução prevista: Sprint 2, ss-2.2.
 
 ```
 Você: /note Decidimos usar JWT com refresh tokens de 7 dias por questão de segurança
