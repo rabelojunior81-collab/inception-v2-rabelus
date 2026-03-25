@@ -55,22 +55,52 @@ Este é o **Spec de Governança** do Inception Framework v2.0. Ele define:
 
 ---
 
-## 3. Gaps Identificados — Tabela Master
+## 3. Gaps Identificados — Tabela Master (Revisada 2026-03-25)
+
+> Atualizado após auditoria profunda. Gaps originais G1-G12 revisados + 9 novos gaps G13-G21 encontrados.
+
+### Gaps Originais
 
 | ID | Gap | Severidade | Status | Sprint | SS |
 |----|-----|------------|--------|--------|----|
-| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | open | Sprint 2 | ss-2.2 |
-| G2 | Rate limiting configurado mas não aplicado no AgentLoop | MEDIUM | open | Sprint 2 | ss-2.3 |
-| G3 | `sandbox: 'none'` sem implementação real | LOW | open | Sprint 4 | ss-4.6 (doc) |
-| G4 | `InceptionRuntime` não conectado ao ChannelManager em `start.ts` | MEDIUM | open | Sprint 2 | ss-2.4 |
-| G5 | 9 `ProviderId` no enum sem pacote correspondente | LOW | open | Sprint 4 | ss-4.6 |
-| G6 | Versionamento: `types=2.0.0`, todos os outros `0.0.0` | MEDIUM | open | Sprint 1 | ss-1.6 |
-| G7 | `.eslintrc.cjs` com override `no-console` não commitado | LOW | open | Sprint 0 | ss-0.6 |
-| G8 | CI sem `pnpm audit`, coverage, triggers completos | MEDIUM | open | Sprint 3 | ss-3.x |
-| G9 | `docs/en|pt|es|zh` — diretórios vazios | LOW | open | Sprint 5 | ss-5.2 |
-| G10 | Memórias Claude obsoletas (dizem "8% implementado") | HIGH | open | Sprint 0 | ss-0.5 |
-| G11 | `packages/tools/memory/` stub; tools reais em `memory/src/tools/` | MEDIUM | open | Sprint 2 | ss-2.5 |
-| G12 | `HANDOFF.md` não menciona gaps — false sense of completeness | HIGH | open | Sprint 1 | ss-1.2 |
+| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | open | Sprint 2 | ss-2.3 |
+| G2 | Rate limiting: `checkRateLimit()` não implementado no SecurityManager | HIGH | open | Sprint 2 | ss-2.4 |
+| G3 | `sandbox: 'none'` sem implementação real em ToolExecutor | LOW | open | Sprint 4 | ss-4.6 (doc) |
+| G4 | `InceptionRuntime.start()` tem TODO comment: canais não inicializados pelo runtime | MEDIUM | open | Sprint 2 | ss-2.5 |
+| G5 | 9 `ProviderId` no enum sem pacote correspondente | LOW | open | Sprint 4 | ss-4.5 |
+| G6 | Versionamento: `types=2.0.0`, todos os outros `0.0.0` | MEDIUM | ✅ done | Sprint 1 | ss-1.6 |
+| G7 | `.eslintrc.cjs` com override `no-console` não commitado | LOW | ✅ done | Sprint 0 | ss-0.6 |
+| G8 | CI sem `pnpm audit`, coverage, triggers, commitlint | MEDIUM | open | Sprint 3 | ss-3.x |
+| G9 | `docs/en\|pt\|es\|zh` — diretórios vazios | LOW | open | Sprint 5 | ss-5.2 |
+| G10 | Memórias Claude obsoletas | HIGH | ✅ done | Sprint 0 | ss-0.5 |
+| G11 | `packages/tools/memory/src/index.ts` stub — re-export pendente | MEDIUM | open | Sprint 2 | ss-2.6 |
+| G12 | `HANDOFF.md` não mencionava gaps | HIGH | ✅ done | Sprint 1 | ss-1.2 |
+
+### Novos Gaps (Encontrados na Auditoria Profunda 2026-03-25)
+
+| ID | Gap | Severidade | Status | Sprint | SS |
+|----|-----|------------|--------|--------|----|
+| G13 | `SecurityManager` criado mas **DESCARTADO** em `start.ts` (instância nunca armazenada) | **CRITICAL** | open | Sprint 2 | ss-2.2 |
+| G14 | `.gitattributes` **não existe** — warnings LF→CRLF em todo commit Windows | MEDIUM | open | Sprint 3 | ss-3.1 |
+| G15 | `.commitlintrc` **não existe** — commitlint instalado mas sem regras (valida NADA) | MEDIUM | open | Sprint 3 | ss-3.2 |
+| G16 | Husky hooks **não configurados** — `.husky/pre-commit` e `.husky/commit-msg` não existem fora de `_/` | MEDIUM | open | Sprint 3 | ss-3.3 |
+| G17 | `AgentLoopConfig` **sem campo `securityManager`** — impossível aplicar rate limit sem passar a instância | HIGH | open | Sprint 2 | ss-2.2 |
+| G18 | ESLint: `explicit-function-return-type` definido **duas vezes** em conflito + 443 warnings acumulados | LOW | open | Sprint 3 | ss-3.4 |
+| G19 | **Zero testes** para: `packages/protocol`, `packages/core`, `packages/config`, todos os channels, todos os providers | MEDIUM | open | Sprint 3 | ss-3.5 |
+| G20 | `allowedUrls` definido em `SecurityPolicy` mas **não passado** ao `ExecutionContext` em AgentLoop | MEDIUM | open | Sprint 2 | ss-2.5 |
+| G21 | CI executa `pnpm build` **3 vezes** (jobs: lint-and-typecheck, test, build) — sem cache entre jobs | LOW | open | Sprint 3 | ss-3.6 |
+
+### Mapa de Dependências Entre Gaps
+
+```
+G13 (SecurityManager orphaned)
+  ├── bloqueia G2 (rate limiting)
+  └── bloqueia G17 (AgentLoopConfig)
+      └── bloqueia G2 (aplicação)
+G16 (Husky hooks) depende de G15 (.commitlintrc)
+G16 depende de G14 (.gitattributes) — independente
+G21 (CI otimização) depende de G8 (CI refactor)
+```
 
 ---
 
