@@ -3,8 +3,8 @@
 > Atualizado ao início e fim de cada sub-sprint. Fonte da verdade sobre o estado do desenvolvimento.
 
 **Última atualização:** 2026-03-25
-**Sprint ativa:** Sprint 0 — Governance Bootstrap
-**Branch ativa:** `feat/governance`
+**Sprint ativa:** Sprint 2 — Code Gaps
+**Branch ativa:** `feat/gov-sprint-2` (a criar)
 
 ---
 
@@ -12,9 +12,9 @@
 
 | Sprint | Objetivo | Status | Branch | Iniciada | Concluída |
 |--------|----------|--------|--------|----------|-----------|
-| Sprint 0 | Governance Bootstrap | 🔄 in-progress | `feat/governance` | 2026-03-25 | — |
-| Sprint 1 | Memory + Docs | ⏳ pending | `feat/gov-sprint-1` | — | — |
-| Sprint 2 | Code Gaps | ⏳ pending | `feat/gov-sprint-2` | — | — |
+| Sprint 0 | Governance Bootstrap | ✅ done | `feat/governance` | 2026-03-25 | 2026-03-25 |
+| Sprint 1 | Memory + Docs | ✅ done | `feat/gov-sprint-1` | 2026-03-25 | 2026-03-25 |
+| Sprint 2 | Code Gaps | 🔄 in-progress | `feat/gov-sprint-2` | 2026-03-25 | — |
 | Sprint 3 | CI/CD | ⏳ pending | `feat/gov-sprint-3` | — | — |
 | Sprint 4 | Stubs | ⏳ pending | `feat/gov-sprint-4` | — | — |
 | Sprint 5 | Filesystem Sanitization | ⏳ pending | `feat/gov-sprint-5` | — | — |
@@ -30,23 +30,23 @@
 | SS | Nome | Status | Branch | Commit |
 |----|------|--------|--------|--------|
 | ss-0.1 | research-filesystem-audit | ✅ done | — | (integrado ao bootstrap) |
-| ss-0.2 | create-gov-structure | 🔄 in-progress | `feat/governance` | — |
-| ss-0.3 | archive-audits | ⏳ pending | `ss/sprint-0/archive-audits` | — |
-| ss-0.4 | roadmap-initial | 🔄 in-progress | `feat/governance` | — |
-| ss-0.5 | sync-memory-index | ⏳ pending | — (externo ao repo) | — |
-| ss-0.6 | commit-eslint-fix | ⏳ pending | `feat/mission-system` | — |
+| ss-0.2 | create-gov-structure | ✅ done | `feat/governance` | 0de099b |
+| ss-0.3 | archive-audits | ✅ done | `feat/governance` | 0de099b |
+| ss-0.4 | roadmap-initial | ✅ done | `feat/governance` | 0de099b |
+| ss-0.5 | sync-memory-index | ✅ done | — (externo ao repo) | — |
+| ss-0.6 | commit-eslint-fix | ✅ done | `feat/mission-system` | ebff68a |
 
 ### Checklist de Conclusão Sprint 0
 
 ```
-[ ] _gov/ existe com estrutura completa e commitada
-[ ] _gov/archive/audits/ tem os 2 arquivos de auditoria (git mv)
-[ ] docs/audit-research/ tem apenas README.md redirect
-[ ] _gov/roadmap.md atualizado com todas as SS
-[ ] Memórias Claude não mencionam "8% implementado"
-[ ] .eslintrc.cjs commitado (override no-console)
-[ ] pnpm build + lint → verde
-[ ] git status limpo na branch feat/governance
+[x] _gov/ existe com estrutura completa e commitada (0de099b)
+[x] _gov/archive/audits/ tem os 2 arquivos de auditoria (git mv)
+[x] docs/audit-research/ tem apenas README.md redirect
+[x] _gov/roadmap.md atualizado com todas as SS
+[x] Memórias Claude não mencionam "8% implementado"
+[x] .eslintrc.cjs commitado (override no-console) (ebff68a)
+[x] pnpm build → verde (30 packages)
+[x] git status limpo na branch feat/governance
 ```
 
 ---
@@ -57,23 +57,23 @@
 **Bloqueadores:** Sprint 0 (hard)
 **Bloqueia:** Sprint 2 (soft)
 
-| SS | Nome | Gaps resolve | Paralela? |
-|----|------|-------------|-----------|
-| ss-1.1 | sync-claude-memories | G10 | com 1.2, 1.3, 1.4 |
-| ss-1.2 | handoff-update | G12 | com 1.1, 1.3, 1.4 |
-| ss-1.3 | guia-gaps-update | G1 (doc) | com 1.1, 1.2, 1.4 |
-| ss-1.4 | security-md-update | — | com 1.1, 1.2, 1.3 |
-| ss-1.5 | changelog-sync | G1-G5 | depois 1.2 |
-| ss-1.6 | version-alignment | G6 | depois 1.1 |
+| SS | Nome | Gaps resolve | Status | Commit |
+|----|------|-------------|--------|--------|
+| ss-1.1 | sync-claude-memories | G10 | ✅ done | — (externo) |
+| ss-1.2 | handoff-update | G12 | ✅ done | 5dcc1ff |
+| ss-1.3 | guia-gaps-update | G1 (doc) | ✅ done | 5dcc1ff |
+| ss-1.4 | security-md-update | — | ✅ done | 5dcc1ff |
+| ss-1.5 | changelog-sync | G1-G5 | ✅ done | 5dcc1ff |
+| ss-1.6 | version-alignment | G6 | ✅ done | 5dcc1ff |
 
 ### Checklist de Conclusão Sprint 1
 
 ```
-[ ] HANDOFF.md menciona G1-G5 explicitamente
-[ ] SECURITY.md link para security-manager.ts + documentação de gates
-[ ] CHANGELOG.md seção "Known Gaps" com G1-G5
-[ ] Todos os packages em version 2.0.0
-[ ] pnpm build + lint + typecheck → verde
+[x] HANDOFF.md menciona G1-G12 explicitamente
+[x] SECURITY.md documenta SecurityManager + gates + G2 como known gap
+[x] CHANGELOG.md seção "Known Gaps" com G1, G2, G4, G6, G8, G11
+[x] Todos os 29 packages em version 2.0.0
+[x] pnpm build → verde (30 packages, 0 erros)
 ```
 
 ---
@@ -193,10 +193,10 @@
 | G3 | sandbox não implementado | 4 | ss-4.6 (doc) | ⏳ open |
 | G4 | Runtime não conectado ao ChannelManager | 2 | ss-2.4 | ⏳ open |
 | G5 | 9 ProviderId sem pacote | 4 | ss-4.6 | ⏳ open |
-| G6 | Versionamento 2.0.0 vs 0.0.0 | 1 | ss-1.6 | ⏳ open |
-| G7 | .eslintrc.cjs não commitado | 0 | ss-0.6 | ⏳ open |
+| G6 | Versionamento 2.0.0 vs 0.0.0 | 1 | ss-1.6 | ✅ done (5dcc1ff) |
+| G7 | .eslintrc.cjs não commitado | 0 | ss-0.6 | ✅ done (ebff68a) |
 | G8 | CI incompleto | 3 | ss-3.x | ⏳ open |
 | G9 | docs/i18n vazios | 5 | ss-5.2 | ⏳ open |
-| G10 | Memórias Claude obsoletas | 0 | ss-0.5 | ⏳ open |
+| G10 | Memórias Claude obsoletas | 0 | ss-0.5 | ✅ done |
 | G11 | tools/memory stub | 2 | ss-2.5 | ⏳ open |
-| G12 | HANDOFF.md falso positivo | 1 | ss-1.2 | ⏳ open |
+| G12 | HANDOFF.md falso positivo | 1 | ss-1.2 | ✅ done (5dcc1ff) |
