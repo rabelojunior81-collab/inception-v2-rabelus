@@ -1,6 +1,6 @@
 {
   "name": "@rabeluslab/inception-agent",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Agent loop orchestrator for Inception Framework — ReAct pattern with lossless memory",
   "license": "MIT",
   "author": "Rabelus Lab",

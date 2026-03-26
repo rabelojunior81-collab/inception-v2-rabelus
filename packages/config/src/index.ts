@@ -47,3 +47,16 @@ export {
   DEFAULT_SECURITY,
   DEFAULT_RUNTIME,
 } from './defaults.js';
+
+export {
+  // Model registry — auto-update de modelos com cache local
+  readModelsCache,
+  isCacheStale,
+  fetchModelsForProvider,
+  writeModelsCache,
+  getModelsForProvider,
+  refreshModelsInBackground,
+  type ModelOption,
+  type ProviderModelCache,
+  type ModelsCache,
+} from './model-registry.js';

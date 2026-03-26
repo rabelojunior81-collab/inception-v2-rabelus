@@ -189,4 +189,6 @@ export interface IMissionProtocol {
   getActiveMissions(): Promise<Mission[]>;
   getJournal(): Promise<JournalEntry[]>;
   updateTaskStatus(missionId: string, taskId: string, status: TaskStatus): Promise<void>;
+  addTask(missionId: string, description: string): Promise<Task>;
+  addJournalEntry(missionId: string, text: string): Promise<void>;
 }

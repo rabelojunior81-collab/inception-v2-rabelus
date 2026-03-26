@@ -89,6 +89,10 @@
       "allowedVersions": {
         "react": "^18.0.0"
       }
+    },
+    "overrides": {
+      "undici": ">=6.24.0",
+      "picomatch": ">=4.0.4"
     }
   }
 }

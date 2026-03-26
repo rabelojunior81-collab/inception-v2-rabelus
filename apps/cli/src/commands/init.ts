@@ -6,6 +6,8 @@ import { writeFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 
+import { getModelsForProvider } from '@rabeluslab/inception-config';
+
 export interface InitOptions {
   force?: boolean;
   cwd?: string;
@@ -550,11 +552,24 @@ export async function runInit(options: InitOptions = {}): Promise<void> {
       console.log(`\n  Selecionado: ${sel.label}`);
 
       // ── Modelo ────────────────────────────────────────────────────────────
+      // Tenta buscar modelos atualizados para o provider escolhido
+      const envApiKey = sel.keyEnvHint ? process.env[sel.keyEnvHint] : undefined;
+      process.stdout.write('  Verificando modelos disponíveis...');
+      const liveModels = await getModelsForProvider(
+        providerSlug,
+        envApiKey,
+        sel.defaultBaseUrl,
+        sel.models // fallback são os modelos hardcoded
+      );
+      // Usa modelos ao vivo se obtidos com sucesso, senão usa hardcoded
+      const modelsToShow = liveModels.length > 0 ? liveModels : sel.models;
+      // Limpa a linha de status
+      process.stdout.write('\r  \r');
       console.log('\n  Modelos disponíveis:');
-      printModelMenu(sel.models);
+      printModelMenu(modelsToShow);
       const modelRaw = (await ask(rl, `Modelo [1 = ${sel.defaultModel}]: `)) || '1';
       const modelIdx = parseInt(modelRaw, 10) - 1;
-      const selectedModel = sel.models[modelIdx]?.id ?? sel.defaultModel;
+      const selectedModel = modelsToShow[modelIdx]?.id ?? sel.defaultModel;
       console.log(`  Modelo: ${selectedModel}`);
 
       // ── API Key ───────────────────────────────────────────────────────────
