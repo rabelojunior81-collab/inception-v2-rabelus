@@ -2,9 +2,9 @@
 
 > Atualizado ao início e fim de cada sub-sprint. Fonte da verdade sobre o estado do desenvolvimento.
 
-**Última atualização:** 2026-03-25
-**Sprint ativa:** Sprint 2 — Code Gaps
-**Branch ativa:** `feat/gov-sprint-2` (a criar)
+**Última atualização:** 2026-03-26
+**Sprint ativa:** Sprint 3 — Quality Gates + CI/CD
+**Branch ativa:** `feat/gov-sprint-3` (a criar a partir de `feat/gov-sprint-2`)
 
 ---
 
@@ -14,8 +14,8 @@
 |--------|----------|--------|--------|----------|-----------|
 | Sprint 0 | Governance Bootstrap | ✅ done | `feat/governance` | 2026-03-25 | 2026-03-25 |
 | Sprint 1 | Memory + Docs | ✅ done | `feat/gov-sprint-1` | 2026-03-25 | 2026-03-25 |
-| Sprint 2 | Code Gaps | 🔄 in-progress | `feat/gov-sprint-2` | 2026-03-25 | — |
-| Sprint 3 | CI/CD | ⏳ pending | `feat/gov-sprint-3` | — | — |
+| Sprint 2 | Code Gaps | ✅ done | `feat/gov-sprint-2` | 2026-03-25 | 2026-03-26 |
+| Sprint 3 | Quality Gates + CI/CD | 🔄 next | `feat/gov-sprint-3` | — | — |
 | Sprint 4 | Stubs | ⏳ pending | `feat/gov-sprint-4` | — | — |
 | Sprint 5 | Filesystem Sanitization | ⏳ pending | `feat/gov-sprint-5` | — | — |
 
@@ -86,15 +86,15 @@
 
 > **Mudança vs. plano original:** G13 (SecurityManager orphaned) e G17 (AgentLoopConfig sem securityManager) são pré-requisitos de G2. Adicionadas ss-2.2, ss-2.5, ss-2.6. Redefinido G4.
 
-| SS | Nome | Gaps resolve | Dependência | Paralela? |
-|----|------|-------------|-------------|-----------|
-| ss-2.1 | spec-security-and-slash | G1+G2+G13+G17+G20 (spec) | — (PRIMEIRO) | — |
-| ss-2.2 | fix-securitymanager-wiring | G13, G17 | depois 2.1 | — |
-| ss-2.3 | impl-slash-persistence | G1 | depois 2.2 | — |
-| ss-2.4 | impl-rate-limit | G2 | depois 2.2 | com 2.3 (independente) |
-| ss-2.5 | fix-execution-context-urls | G20 | depois 2.2 | com 2.3, 2.4 |
-| ss-2.6 | fix-runtime-lifecycle | G4 | depois 2.2 | com 2.3, 2.4, 2.5 |
-| ss-2.7 | fix-memory-tools-package | G11 | independente | com todas |
+| SS | Nome | Gaps resolve | Status | Commit |
+|----|------|-------------|--------|--------|
+| ss-2.1 | spec-security-and-slash | todos (spec) | ✅ done | ec18560 |
+| ss-2.2 | fix-securitymanager-wiring | G13, G17 | ✅ done | ec18560 |
+| ss-2.3 | impl-slash-persistence | G1 | ✅ done | ec18560 |
+| ss-2.4 | impl-rate-limit | G2 | ✅ done | ec18560 |
+| ss-2.5 | fix-execution-context-urls | G20 | ✅ done | ec18560 |
+| ss-2.6 | fix-runtime-lifecycle | G4 | ✅ done | ec18560 |
+| ss-2.7 | fix-memory-tools-package | G11 | ✅ done | ec18560 |
 
 **Sequência obrigatória:** ss-2.1 → ss-2.2 → {ss-2.3, ss-2.4, ss-2.5, ss-2.6} paralelas → ss-2.7 qualquer hora
 
@@ -135,21 +135,23 @@
 ### Checklist de Conclusão Sprint 2
 
 ```
-[ ] SecurityManager armazenado em start.ts (const securityManager = ...)
-[ ] AgentLoopConfig tem campo securityManager: SecurityManager
-[ ] AgentLoop recebe securityManager na criação
-[ ] IMissionProtocol.addTask() + addJournalEntry() definidos nos tipos
-[ ] MissionProtocol implementa addTask() + addJournalEntry()
-[ ] /task done persiste no SQLite (verificar DB após execução)
-[ ] /task add persiste nova task (visível em /task list)
-[ ] /note persiste no journal
-[ ] SecurityManager.checkRateLimit() implementado com token-bucket
-[ ] AgentLoop chama checkRateLimit() antes de provider.generate()
-[ ] ExecutionContext recebe allowedUrls do config
-[ ] InceptionRuntime.registerChannelManager() funcional
-[ ] runtime.start() coordena channelManager.startAll()
-[ ] packages/tools/memory re-exporta MemorySearchTool etc.
-[ ] pnpm build + pnpm test → verde
+[x] SecurityManager armazenado em start.ts (const securityManager = ...)
+[x] AgentLoopConfig tem campo securityManager: ISecurityManager
+[x] AgentLoop recebe securityManager na criação
+[x] IMissionProtocol.addTask() + addJournalEntry() definidos nos tipos
+[x] MissionProtocol implementa addTask() + addJournalEntry() (+ tabela notes)
+[x] /task done persiste no SQLite via updateTaskStatus / addTask
+[x] /task add persiste nova task via addTask
+[x] /note persiste via addJournalEntry (tabela notes)
+[x] SecurityManager.checkRateLimit() implementado com token-bucket in-memory
+[x] AgentLoop chama checkRateLimit() antes de provider.generate()
+[x] allowedUrls: cfg.security.network.allowedHosts passado ao AgentLoop
+[x] InceptionRuntime.registerChannelManager() implementado
+[x] runtime.start() chama channelManager.startAll()
+[x] runtime.stop() chama channelManager.stopAll()
+[x] packages/tools/memory re-exporta MemorySearchTool, DescribeTool, ExpandTool
+[x] pnpm build → 30/30 verde
+[x] pnpm test → 34 tarefas, 91 testes passando
 ```
 
 ---
@@ -338,24 +340,24 @@
 
 | ID | Gap | Sprint | SS | Status |
 |----|-----|--------|----|--------|
-| G1 | `/task done/add/note` sem persistência SQLite | 2 | ss-2.3 | ⏳ open |
-| G2 | Rate limiting: `checkRateLimit()` não implementado | 2 | ss-2.4 | ⏳ open |
+| G1 | `/task done/add/note` sem persistência SQLite | 2 | ss-2.3 | ✅ done (ec18560) |
+| G2 | Rate limiting: `checkRateLimit()` não implementado | 2 | ss-2.4 | ✅ done (ec18560) |
 | G3 | `sandbox: 'none'` sem implementação (doc apenas) | 4 | ss-4.5 | ⏳ open |
-| G4 | `InceptionRuntime` não coordena lifecycle dos canais | 2 | ss-2.6 | ⏳ open |
+| G4 | `InceptionRuntime` não coordena lifecycle dos canais | 2 | ss-2.6 | ✅ done (ec18560) |
 | G5 | 9 ProviderId sem pacote (Groq, Together, etc.) | 4 | ss-4.5 | ⏳ open |
 | G6 | Versionamento 2.0.0 vs 0.0.0 | 1 | ss-1.6 | ✅ done (5dcc1ff) |
 | G7 | .eslintrc.cjs não commitado | 0 | ss-0.6 | ✅ done (ebff68a) |
 | G8 | CI: sem audit, coverage, commitlint, triggers incompletos | 3 | ss-3.5 | ⏳ open |
 | G9 | docs/en\|pt vazios | 5 | ss-5.2 | ⏳ open |
 | G10 | Memórias Claude obsoletas | 0 | ss-0.5 | ✅ done |
-| G11 | `packages/tools/memory/` stub — re-export pendente | 2 | ss-2.7 | ⏳ open |
+| G11 | `packages/tools/memory/` stub — re-export pendente | 2 | ss-2.7 | ✅ done (ec18560) |
 | G12 | HANDOFF.md sem gaps | 1 | ss-1.2 | ✅ done (5dcc1ff) |
-| **G13** | **SecurityManager DESCARTADO em start.ts (linha 74-83)** | **2** | **ss-2.2** | **⏳ open** |
+| G13 | SecurityManager DESCARTADO em start.ts (linha 74-83) | 2 | ss-2.2 | ✅ done (ec18560) |
 | **G14** | **.gitattributes não existe — LF→CRLF warnings** | **3** | **ss-3.1** | **⏳ open** |
 | **G15** | **.commitlintrc não existe — commitlint sem regras** | **3** | **ss-3.2** | **⏳ open** |
 | **G16** | **Husky hooks não configurados (.husky/pre-commit vazio)** | **3** | **ss-3.3** | **⏳ open** |
-| **G17** | **AgentLoopConfig sem campo securityManager** | **2** | **ss-2.2** | **⏳ open** |
+| G17 | AgentLoopConfig sem campo securityManager | 2 | ss-2.2 | ✅ done (ec18560) |
 | **G18** | **ESLint: regra duplicada + 443 warnings acumulados** | **3** | **ss-3.4** | **⏳ open** |
 | **G19** | **Zero testes para protocol, core, config, channels, providers** | **3** | **ss-3.6** | **⏳ open** |
-| **G20** | **allowedUrls não passado ao ExecutionContext** | **2** | **ss-2.5** | **⏳ open** |
+| G20 | allowedUrls não passado ao AgentLoop/ExecutionContext | 2 | ss-2.5 | ✅ done (ec18560) |
 | **G21** | **CI executa pnpm build 3x sem cache entre jobs** | **3** | **ss-3.5** | **⏳ open** |
