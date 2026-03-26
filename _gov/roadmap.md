@@ -3,8 +3,8 @@
 > Atualizado ao início e fim de cada sub-sprint. Fonte da verdade sobre o estado do desenvolvimento.
 
 **Última atualização:** 2026-03-26
-**Sprint ativa:** Sprint 5 — Filesystem Sanitization
-**Branch ativa:** `feat/gov-sprint-5` (a criar a partir de `feat/gov-sprint-4`)
+**Sprint ativa:** — (todas as sprints concluídas — aguardando PR para main)
+**Branch ativa:** `feat/gov-sprint-5` → PR para `main`
 
 ---
 
@@ -17,7 +17,7 @@
 | Sprint 2 | Code Gaps               | ✅ done | `feat/gov-sprint-2` | 2026-03-25 | 2026-03-26 |
 | Sprint 3 | Quality Gates + CI/CD   | ✅ done | `feat/gov-sprint-3` | 2026-03-26 | 2026-03-26 |
 | Sprint 4 | Stubs                   | ✅ done | `feat/gov-sprint-4` | 2026-03-26 | 2026-03-26 |
-| Sprint 5 | Filesystem Sanitization | 🔄 next | `feat/gov-sprint-5` | —          | —          |
+| Sprint 5 | Filesystem Sanitization | ✅ done | `feat/gov-sprint-5` | 2026-03-26 | 2026-03-26 |
 
 ---
 
@@ -346,12 +346,12 @@
 ### Checklist de Conclusão Sprint 5 (= Conclusão do Plano)
 
 ```
-[ ] docs/pt/index.md e docs/en/index.md existem
-[ ] docs/audit-research/ só tem README.md redirect
-[ ] Naming consistente em todo _gov/
-[ ] pnpm build + lint + typecheck + test + audit → verde (tudo)
+[x] docs/pt/index.md e docs/en/index.md existem (+ es, zh stubs)
+[x] docs/audit-research/ só tem README.md redirect
+[x] Naming consistente em todo _gov/ (revisão: zero inconsistências)
+[x] pnpm build + lint + typecheck + test + audit → verde (tudo)
 [ ] PR para main criado com todos os gaps G1-G21 documentados
-[ ] _gov/roadmap.md: todas as sprints com status done
+[x] _gov/roadmap.md: todas as sprints com status done
 ```
 
 ---
@@ -368,7 +368,7 @@
 | G6  | Versionamento 2.0.0 vs 0.0.0                                 | 1      | ss-1.6 | ✅ done (5dcc1ff)           |
 | G7  | .eslintrc.cjs não commitado                                  | 0      | ss-0.6 | ✅ done (ebff68a)           |
 | G8  | CI: sem audit, coverage, commitlint, triggers incompletos    | 3      | ss-3.5 | ✅ done (feat/gov-sprint-3) |
-| G9  | docs/en\|pt vazios                                           | 5      | ss-5.2 | ⏳ open                     |
+| G9  | docs/en\|pt vazios                                           | 5      | ss-5.2 | ✅ done (feat/gov-sprint-5) |
 | G10 | Memórias Claude obsoletas                                    | 0      | ss-0.5 | ✅ done                     |
 | G11 | `packages/tools/memory/` stub — re-export pendente           | 2      | ss-2.7 | ✅ done (ec18560)           |
 | G12 | HANDOFF.md sem gaps                                          | 1      | ss-1.2 | ✅ done (5dcc1ff)           |
