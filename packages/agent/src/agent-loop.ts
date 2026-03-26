@@ -8,6 +8,7 @@ import {
 } from '@rabeluslab/inception-memory';
 import type {
   IProvider,
+  ISecurityManager,
   IToolRegistry,
   InboundMessage,
   OutboundMessage,
@@ -41,6 +42,7 @@ export interface AgentLoopConfig {
   readonly allowedCommands?: readonly string[]; // shell tool allowlist
   readonly allowedPaths?: readonly string[]; // filesystem allowlist
   readonly allowedUrls?: readonly string[]; // http tool allowlist
+  readonly securityManager?: ISecurityManager;
 }
 
 export interface TurnResult {
@@ -167,6 +169,7 @@ export class AgentLoop {
         temperature: 0.7,
       };
 
+      this.cfg.securityManager?.checkRateLimit(`provider:${this.cfg.model}`);
       const response = await this.cfg.provider.generate(request);
       finalContent = response.content;
 

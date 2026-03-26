@@ -132,6 +132,7 @@ export interface ISecurityManager {
   validateFilesystemAccess(path: string, operation: 'read' | 'write'): boolean;
   validateCommand(command: string): boolean;
   validateNetworkRequest(url: string): boolean;
+  checkRateLimit(key: string): void;
   createPairingCode(): Promise<string>;
   validatePairingCode(code: string): Promise<boolean>;
   generateBearerToken(pairingCode: string): Promise<string>;

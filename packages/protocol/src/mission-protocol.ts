@@ -250,6 +250,42 @@ export class MissionProtocol implements IMissionProtocol {
     return rows.map(rowToJournalEntry);
   }
 
+  async addTask(missionId: string, description: string): Promise<Task> {
+    const id = generateId('task');
+    this.db
+      .prepare(
+        `INSERT INTO tasks (id, mission_id, grp, description, status, dependencies, tech_status)
+         VALUES (@id, @mission_id, @grp, @description, @status, @dependencies, @tech_status)`
+      )
+      .run({
+        id,
+        mission_id: missionId,
+        grp: 'B',
+        description,
+        status: TaskStatus.Pending,
+        dependencies: '[]',
+        tech_status: TechnicalStatus.Stub,
+      } as Record<string, SQLInputValue>);
+    const row = this.db
+      .prepare('SELECT * FROM tasks WHERE id = ?')
+      .get(id) as unknown as TaskRow;
+    return rowToTask(row);
+  }
+
+  async addJournalEntry(missionId: string, text: string): Promise<void> {
+    const id = generateId('note');
+    this.db
+      .prepare(
+        `INSERT INTO notes (id, mission_id, text, created_at) VALUES (@id, @mission_id, @text, @created_at)`
+      )
+      .run({
+        id,
+        mission_id: missionId,
+        text,
+        created_at: new Date().toISOString(),
+      } as Record<string, SQLInputValue>);
+  }
+
   async updateTaskStatus(missionId: string, taskId: string, status: TaskStatus): Promise<void> {
     const now = new Date().toISOString();
     const updates: Record<string, SQLInputValue> = { status, id: taskId, mission_id: missionId };

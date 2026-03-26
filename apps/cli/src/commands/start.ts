@@ -71,7 +71,7 @@ export async function runStart(options: StartOptions): Promise<void> {
   const toolRegistry = buildToolRegistry();
 
   // ── Create security manager (validates tool execution against policy) ───────
-  new SecurityManager({
+  const securityManager = new SecurityManager({
     network: cfg.security.network,
     filesystem: {
       ...cfg.security.filesystem,
@@ -81,6 +81,9 @@ export async function runStart(options: StartOptions): Promise<void> {
     authentication: cfg.security.authentication,
     rateLimit: cfg.security.rateLimit,
   });
+
+  // ── Create mission protocol (shared instance for slash commands) ────────────
+  const missionProtocol = new MissionProtocol(join(homedir(), '.inception', 'missions.db'));
 
   // ── Create CLI channel ─────────────────────────────────────────────────────
   const cliChannel = new CliChannel();
@@ -120,6 +123,8 @@ export async function runStart(options: StartOptions): Promise<void> {
     activeMission: options.activeMission,
     allowedCommands: cfg.security.execution.allowedCommands,
     allowedPaths: cfg.security.filesystem.allowedPaths,
+    allowedUrls: cfg.security.network.allowedHosts,
+    securityManager,
   });
 
   // ── Wire slash commands ────────────────────────────────────────────────────
@@ -135,6 +140,7 @@ export async function runStart(options: StartOptions): Promise<void> {
     agentName: cfg.agent.identity.name,
     provider: provider.id,
     model,
+    missionProtocol,
   });
 
   // ── Inline mission wizard ─────────────────────────────────────────────────
@@ -263,11 +269,8 @@ export async function runStart(options: StartOptions): Promise<void> {
       cliChannel.clearWizardInputHandler();
 
       try {
-        const dbPath = join(homedir(), '.inception', 'missions.db');
-        const protocol = new MissionProtocol(dbPath);
         const payload = wizardInputToMissionCreate(input, 'cli');
-        const mission = await protocol.createMission(payload);
-        protocol.close();
+        const mission = await missionProtocol.createMission(payload);
 
         currentMission = mission;
         cliChannel.setActiveMission(mission.title);
@@ -286,7 +289,7 @@ export async function runStart(options: StartOptions): Promise<void> {
     });
   }
 
-  cliChannel.setSlashHandler((cmd: string) => {
+  cliChannel.setSlashHandler(async (cmd: string) => {
     const trimmed = cmd.trim();
 
     // /mission create — inline wizard via chat
@@ -299,7 +302,7 @@ export async function runStart(options: StartOptions): Promise<void> {
       };
     }
 
-    const result = handleSlashCommand(cmd, slashCtx());
+    const result = await handleSlashCommand(cmd, slashCtx());
     // Handle /pause — trigger graceful shutdown after response
     if (trimmed === '/pause') {
       setTimeout(() => void shutdown(), 500);
@@ -333,11 +336,11 @@ export async function runStart(options: StartOptions): Promise<void> {
   // ── Initialize runtime ─────────────────────────────────────────────────────
   const runtime = new InceptionRuntime();
   await runtime.initialize(cfg.runtime);
+  runtime.registerChannelManager(channelManager);
 
-  // ── Start everything ───────────────────────────────────────────────────────
+  // ── Start everything (runtime.start() calls channelManager.startAll()) ─────
   await runtime.start();
   cliChannel.setRuntimeState('Pronto');
-  await channelManager.startAll();
 
   // ── Refresh de modelos em background (fire and forget) ────────────────────
   refreshModelsInBackground(
@@ -381,8 +384,9 @@ export async function runStart(options: StartOptions): Promise<void> {
   // ── Graceful shutdown ──────────────────────────────────────────────────────
   const shutdown = async (): Promise<void> => {
     cliChannel.setRuntimeState('Encerrando...');
-    await channelManager.stopAll();
+    // runtime.stop() coordinates channelManager.stopAll() internally
     await memory.close();
+    missionProtocol.close();
     await runtime.stop();
     process.exit(0);
   };

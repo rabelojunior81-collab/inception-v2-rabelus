@@ -29,7 +29,7 @@ export class CliChannel implements IChannel {
   private readonly errorHandlers: ((err: Error) => void)[] = [];
   private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private inkInstance: ReturnType<typeof render> | undefined;
-  private slashHandler: ((cmd: string) => SlashCommandResult) | undefined;
+  private slashHandler: ((cmd: string) => SlashCommandResult | Promise<SlashCommandResult>) | undefined;
   private wizardInputHandler: ((text: string) => void | Promise<void>) | undefined;
 
   // Mutable UI state — updated via setState()
@@ -169,7 +169,7 @@ export class CliChannel implements IChannel {
    * Quando o usuário digita um comando (exceto /stop e /exit),
    * o handler é invocado e o output é exibido como mensagem do sistema.
    */
-  setSlashHandler(handler: (cmd: string) => SlashCommandResult): void {
+  setSlashHandler(handler: (cmd: string) => SlashCommandResult | Promise<SlashCommandResult>): void {
     this.slashHandler = handler;
   }
 
@@ -234,26 +234,33 @@ export class CliChannel implements IChannel {
   }
 
   private _handleSlashCommand(text: string): void {
-    let output: string;
-
-    if (this.slashHandler) {
-      const result = this.slashHandler(text);
-      output = result.output;
-    } else {
-      output = `Slash commands não configurados. Use /stop ou /exit para sair.`;
-    }
-
-    const sysMsg: ChatMessage = {
-      id: randomUUID(),
-      role: 'system',
-      content: output,
-      timestamp: new Date().toISOString(),
+    const pushOutput = (output: string): void => {
+      const sysMsg: ChatMessage = {
+        id: randomUUID(),
+        role: 'system',
+        content: output,
+        timestamp: new Date().toISOString(),
+      };
+      this._updateState((prev) => ({ ...prev, messages: [...prev.messages, sysMsg] }));
     };
 
-    this._updateState((prev) => ({
-      ...prev,
-      messages: [...prev.messages, sysMsg],
-    }));
+    if (!this.slashHandler) {
+      pushOutput(`Slash commands não configurados. Use /stop ou /exit para sair.`);
+      return;
+    }
+
+    const resultOrPromise = this.slashHandler(text);
+    if (resultOrPromise instanceof Promise) {
+      resultOrPromise
+        .then((result) => pushOutput(result.output))
+        .catch((err: unknown) => {
+          pushOutput(
+            `Erro no slash command: ${err instanceof Error ? err.message : String(err)}`
+          );
+        });
+    } else {
+      pushOutput(resultOrPromise.output);
+    }
   }
 
   private _handleApprovalDecision(_approvalId: string, _approved: boolean): void {

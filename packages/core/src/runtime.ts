@@ -10,6 +10,7 @@ import type {
 } from '@rabeluslab/inception-types';
 import { RuntimeState as State } from '@rabeluslab/inception-types';
 
+import type { ChannelManager } from './channel-manager.js';
 import { RuntimeError, ConfigError } from './errors.js';
 import { TypedEventBus } from './events.js';
 
@@ -46,6 +47,13 @@ export class InceptionRuntime implements IRuntime {
   };
 
   private config: RuntimeConfig | undefined;
+  private channelManager: ChannelManager | undefined;
+
+  // ── ChannelManager coordination ───────────────────────────────────────────
+
+  registerChannelManager(cm: ChannelManager): void {
+    this.channelManager = cm;
+  }
 
   // ── IRuntime: State ────────────────────────────────────────────────────────
 
@@ -103,7 +111,9 @@ export class InceptionRuntime implements IRuntime {
 
     this._state = State.Starting;
     try {
-      // Future: initialize registered channels, providers, memory
+      if (this.channelManager) {
+        await this.channelManager.startAll();
+      }
       this._startedAt = new Date().toISOString();
       this._state = State.Running;
     } catch (err) {
@@ -142,7 +152,9 @@ export class InceptionRuntime implements IRuntime {
 
     this._state = State.Stopping;
     try {
-      // Future: gracefully shut down channels and providers
+      if (this.channelManager) {
+        await this.channelManager.stopAll();
+      }
       await this.bus.emitAsync(
         'shutdown' as RuntimeEvent.Shutdown,
         {

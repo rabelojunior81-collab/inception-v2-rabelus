@@ -63,9 +63,13 @@ O plano original listava ss-2.3 impl-rate-limit diretamente, sem perceber que:
 
 ### ss-2.5 — fix-execution-context-urls (G20)
 
+**Correção após leitura do código real:**
+`agent-loop.ts:205` **já tem** `urls: this.cfg.allowedUrls` no ExecutionContext.
+O gap real é que `start.ts` nunca passa `allowedUrls` ao construtor do AgentLoop.
+
 | Arquivo | Linha | Mudança |
 |---------|-------|---------|
-| `packages/agent/src/agent-loop.ts` | montagem do ExecutionContext | Adicionar `urls: this.cfg.allowedUrls` ao `allowlist` |
+| `apps/cli/src/commands/start.ts` | 111-123 (construtor AgentLoop) | Adicionar `allowedUrls: cfg.security.network.allowedHosts` |
 
 ### ss-2.6 — fix-runtime-lifecycle (G4)
 

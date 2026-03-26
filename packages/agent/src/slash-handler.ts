@@ -2,7 +2,7 @@
 // Slash Command Handler — lógica pura, sem React ou readline
 // ============================================================================
 
-import type { Mission } from '@rabeluslab/inception-types';
+import type { IMissionProtocol, Mission } from '@rabeluslab/inception-types';
 import { TaskStatus } from '@rabeluslab/inception-types';
 
 export interface SlashCommandContext {
@@ -12,6 +12,7 @@ export interface SlashCommandContext {
   provider: string;
   model: string;
   tokenCount?: number;
+  missionProtocol?: IMissionProtocol;
 }
 
 export interface SlashCommandResult {
@@ -117,10 +118,10 @@ function formatStatus(ctx: SlashCommandContext): string {
   return lines.join('\n');
 }
 
-export function handleSlashCommand(
+export async function handleSlashCommand(
   input: string,
   ctx: SlashCommandContext,
-): SlashCommandResult {
+): Promise<SlashCommandResult> {
   const trimmed = input.trim();
 
   if (!trimmed.startsWith('/')) {
@@ -161,30 +162,46 @@ export function handleSlashCommand(
 
       if (sub === 'done') {
         if (!rest) {
-          return {
-            type: 'display',
-            output: 'Uso: /task done <texto>',
-            handled: true,
-          };
+          return { type: 'display', output: 'Uso: /task done <texto>', handled: true };
+        }
+        if (ctx.activeMission && ctx.missionProtocol) {
+          const task = ctx.activeMission.tasks.find((t) =>
+            t.description.toLowerCase().includes(rest.toLowerCase())
+          );
+          if (task) {
+            await ctx.missionProtocol.updateTaskStatus(
+              ctx.activeMission.id,
+              task.id,
+              TaskStatus.Completed
+            );
+          } else {
+            const newTask = await ctx.missionProtocol.addTask(ctx.activeMission.id, rest);
+            await ctx.missionProtocol.updateTaskStatus(
+              ctx.activeMission.id,
+              newTask.id,
+              TaskStatus.Completed
+            );
+          }
+          return { type: 'display', output: `[Task concluída e persistida] ${rest}`, handled: true };
         }
         return {
           type: 'display',
-          output: `[Task concluída] ${rest}\n(persistência no MissionProtocol será integrada em breve)`,
+          output: `[Task concluída] ${rest}\n(sem missão ativa — não persistido)`,
           handled: true,
         };
       }
 
       if (sub === 'add') {
         if (!rest) {
-          return {
-            type: 'display',
-            output: 'Uso: /task add <descrição>',
-            handled: true,
-          };
+          return { type: 'display', output: 'Uso: /task add <descrição>', handled: true };
+        }
+        if (ctx.activeMission && ctx.missionProtocol) {
+          await ctx.missionProtocol.addTask(ctx.activeMission.id, rest);
+          return { type: 'display', output: `[Task adicionada e persistida] ${rest}`, handled: true };
         }
         return {
           type: 'display',
-          output: `[Task adicionada] ${rest}\n(persistência no MissionProtocol será integrada em breve)`,
+          output: `[Task adicionada] ${rest}\n(sem missão ativa — não persistido)`,
           handled: true,
         };
       }
@@ -200,9 +217,13 @@ export function handleSlashCommand(
       if (!args) {
         return { type: 'display', output: 'Uso: /note <texto>', handled: true };
       }
+      if (ctx.activeMission && ctx.missionProtocol) {
+        await ctx.missionProtocol.addJournalEntry(ctx.activeMission.id, args);
+        return { type: 'display', output: `[Nota persistida no journal] ${args}`, handled: true };
+      }
       return {
         type: 'display',
-        output: `[Nota registrada] ${args}\n(persistência no journal será integrada em breve)`,
+        output: `[Nota registrada] ${args}\n(sem missão ativa — não persistido)`,
         handled: true,
       };
     }
