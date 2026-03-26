@@ -5,6 +5,8 @@
 [![Node.js](https://img.shields.io/badge/Node.js-22+-green.svg)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-8+-orange.svg)](https://pnpm.io/)
 [![CI](https://github.com/rabeluslab/inception-v2-rabelus/actions/workflows/ci.yml/badge.svg)](https://github.com/rabeluslab/inception-v2-rabelus/actions)
+[![Tests](https://img.shields.io/badge/tests-131%20passing-brightgreen.svg)](https://github.com/rabeluslab/inception-v2-rabelus/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-artifact-blue.svg)](https://github.com/rabeluslab/inception-v2-rabelus/actions/workflows/ci.yml)
 
 > **The Claw Evolution** — Runtime TypeScript-nativo para agentes de IA autônomos com metodologia Inception no núcleo.
 
@@ -114,40 +116,40 @@ inception mission archive <id>      # arquivar missao encerrada
 
 Enquanto o agente está rodando, digite:
 
-| Comando | Ação |
-|---|---|
-| `/mission` | Exibe missão ativa e progresso |
-| `/mission create` | Abre o wizard de missão **dentro do chat** (sem sair do agente) |
-| `/task list` | Lista tasks pendentes |
-| `/task done <texto>` | Marca task concluída |
-| `/task add <desc>` | Adiciona nova task |
-| `/note <texto>` | Entrada no journal |
-| `/rules` | Regras ativas da missão |
-| `/pause` | Salva e encerra graciosamente |
-| `/status` | Estado: provider, modelo, tokens, missão |
-| `/stop` | Cancela wizard em andamento e retorna ao chat |
-| `/help` | Lista todos os comandos |
+| Comando              | Ação                                                            |
+| -------------------- | --------------------------------------------------------------- |
+| `/mission`           | Exibe missão ativa e progresso                                  |
+| `/mission create`    | Abre o wizard de missão **dentro do chat** (sem sair do agente) |
+| `/task list`         | Lista tasks pendentes                                           |
+| `/task done <texto>` | Marca task concluída                                            |
+| `/task add <desc>`   | Adiciona nova task                                              |
+| `/note <texto>`      | Entrada no journal                                              |
+| `/rules`             | Regras ativas da missão                                         |
+| `/pause`             | Salva e encerra graciosamente                                   |
+| `/status`            | Estado: provider, modelo, tokens, missão                        |
+| `/stop`              | Cancela wizard em andamento e retorna ao chat                   |
+| `/help`              | Lista todos os comandos                                         |
 
 ---
 
 ## Providers Suportados
 
-| Provider | Slug | Modelos principais |
-|---|---|---|
-| Kimi / Moonshot AI | `kimi` | kimi-k2.5, kimi-k2-thinking |
-| Kimi Coding Plan | `kimi-coding` | kimi-for-coding |
-| Z.AI / Zhipu | `zai` | GLM-5, GLM-4.7 |
-| Z.AI Coding Plan | `zai-coding` | GLM-4.7 |
-| Bailian Coding | `bailian` | Qwen+GLM+Kimi hub |
-| Bailian PAYG | `bailian-payg` | qwen3.5-plus, qwen-max |
-| Anthropic Claude | `anthropic` | claude-sonnet-4-6, claude-opus-4-6 |
-| OpenAI | `openai` | gpt-4o, o3, o4-mini |
-| OpenAI OAuth | `openai-oauth` | ChatGPT Plus/Pro |
-| Google Gemini | `gemini` | gemini-2.5-flash, gemini-2.5-pro |
-| Ollama (local) | `ollama` | llama3, mistral, phi4, qwen2.5 |
-| Ollama (cloud) | `ollama` | modelos via Ollama cloud endpoint |
-| OpenRouter | `openrouter` | 300+ modelos |
-| Kilo Gateway | `kilo` | Gateway com controle de custo |
+| Provider           | Slug           | Modelos principais                 |
+| ------------------ | -------------- | ---------------------------------- |
+| Kimi / Moonshot AI | `kimi`         | kimi-k2.5, kimi-k2-thinking        |
+| Kimi Coding Plan   | `kimi-coding`  | kimi-for-coding                    |
+| Z.AI / Zhipu       | `zai`          | GLM-5, GLM-4.7                     |
+| Z.AI Coding Plan   | `zai-coding`   | GLM-4.7                            |
+| Bailian Coding     | `bailian`      | Qwen+GLM+Kimi hub                  |
+| Bailian PAYG       | `bailian-payg` | qwen3.5-plus, qwen-max             |
+| Anthropic Claude   | `anthropic`    | claude-sonnet-4-6, claude-opus-4-6 |
+| OpenAI             | `openai`       | gpt-4o, o3, o4-mini                |
+| OpenAI OAuth       | `openai-oauth` | ChatGPT Plus/Pro                   |
+| Google Gemini      | `gemini`       | gemini-2.5-flash, gemini-2.5-pro   |
+| Ollama (local)     | `ollama`       | llama3, mistral, phi4, qwen2.5     |
+| Ollama (cloud)     | `ollama`       | modelos via Ollama cloud endpoint  |
+| OpenRouter         | `openrouter`   | 300+ modelos                       |
+| Kilo Gateway       | `kilo`         | Gateway com controle de custo      |
 
 **Auto-update:** a lista de modelos é atualizada automaticamente na inicialização (cache 24h).
 
@@ -209,33 +211,33 @@ inception mission archive <id>      # arquivar missao
 
 ### Packages
 
-| Package | Descrição | Status |
-|---|---|---|
-| `@rabeluslab/inception-types` | 200+ tipos/interfaces/enums TypeScript | Completo |
-| `@rabeluslab/inception-config` | Schema Zod, loader, model-registry | Completo |
-| `@rabeluslab/inception-core` | Runtime engine, ChannelManager, DI | Completo |
-| `@rabeluslab/inception-memory` | SQLite + FTS5 + vector search + compaction | Completo |
-| `@rabeluslab/inception-security` | Gates, allowlists, approval flows | Completo |
-| `@rabeluslab/inception-protocol` | Mission CRUD SQLite, wizard-logic, config-mapper | Completo |
-| `@rabeluslab/inception-agent` | AgentLoop (ReAct), ContextBuilder, slash-handler | Completo |
-| `@rabeluslab/inception-provider-anthropic` | Claude integration | Completo |
-| `@rabeluslab/inception-provider-openai` | OpenAI-compat integration | Completo |
-| `@rabeluslab/inception-provider-openai-oauth` | ChatGPT Plus/Pro OAuth | Completo |
-| `@rabeluslab/inception-provider-gemini` | Gemini integration | Completo |
-| `@rabeluslab/inception-provider-gemini-oauth` | Gemini OAuth integration | Completo |
-| `@rabeluslab/inception-provider-ollama` | Ollama local/cloud | Completo |
-| `@rabeluslab/inception-provider-kimi` | Kimi / Moonshot AI | Completo |
-| `@rabeluslab/inception-provider-zai` | Z.AI / Zhipu | Completo |
-| `@rabeluslab/inception-provider-bailian` | Bailian / DashScope | Completo |
-| `@rabeluslab/inception-provider-openrouter` | OpenRouter gateway | Completo |
-| `@rabeluslab/inception-provider-kilo` | Kilo gateway | Completo |
-| `@rabeluslab/inception-provider-opencode-zen` | OpenCode Zen gateway | Completo |
-| `@rabeluslab/inception-channel-cli` | Ink terminal UI | Completo |
-| `@rabeluslab/inception-channel-telegram` | Telegram bot | Completo |
-| `@rabeluslab/inception-tool-filesystem` | Read/Write/ListDir/Stat | Completo |
-| `@rabeluslab/inception-tool-shell` | RunCommand com allowlist | Completo |
-| `@rabeluslab/inception-tool-http` | HttpGet/HttpPost | Completo |
-| `@rabeluslab/inception` | CLI app (inception init/start/mission/...) | Completo |
+| Package                                       | Descrição                                        | Status   |
+| --------------------------------------------- | ------------------------------------------------ | -------- |
+| `@rabeluslab/inception-types`                 | 200+ tipos/interfaces/enums TypeScript           | Completo |
+| `@rabeluslab/inception-config`                | Schema Zod, loader, model-registry               | Completo |
+| `@rabeluslab/inception-core`                  | Runtime engine, ChannelManager, DI               | Completo |
+| `@rabeluslab/inception-memory`                | SQLite + FTS5 + vector search + compaction       | Completo |
+| `@rabeluslab/inception-security`              | Gates, allowlists, approval flows                | Completo |
+| `@rabeluslab/inception-protocol`              | Mission CRUD SQLite, wizard-logic, config-mapper | Completo |
+| `@rabeluslab/inception-agent`                 | AgentLoop (ReAct), ContextBuilder, slash-handler | Completo |
+| `@rabeluslab/inception-provider-anthropic`    | Claude integration                               | Completo |
+| `@rabeluslab/inception-provider-openai`       | OpenAI-compat integration                        | Completo |
+| `@rabeluslab/inception-provider-openai-oauth` | ChatGPT Plus/Pro OAuth                           | Completo |
+| `@rabeluslab/inception-provider-gemini`       | Gemini integration                               | Completo |
+| `@rabeluslab/inception-provider-gemini-oauth` | Gemini OAuth integration                         | Completo |
+| `@rabeluslab/inception-provider-ollama`       | Ollama local/cloud                               | Completo |
+| `@rabeluslab/inception-provider-kimi`         | Kimi / Moonshot AI                               | Completo |
+| `@rabeluslab/inception-provider-zai`          | Z.AI / Zhipu                                     | Completo |
+| `@rabeluslab/inception-provider-bailian`      | Bailian / DashScope                              | Completo |
+| `@rabeluslab/inception-provider-openrouter`   | OpenRouter gateway                               | Completo |
+| `@rabeluslab/inception-provider-kilo`         | Kilo gateway                                     | Completo |
+| `@rabeluslab/inception-provider-opencode-zen` | OpenCode Zen gateway                             | Completo |
+| `@rabeluslab/inception-channel-cli`           | Ink terminal UI                                  | Completo |
+| `@rabeluslab/inception-channel-telegram`      | Telegram bot                                     | Completo |
+| `@rabeluslab/inception-tool-filesystem`       | Read/Write/ListDir/Stat                          | Completo |
+| `@rabeluslab/inception-tool-shell`            | RunCommand com allowlist                         | Completo |
+| `@rabeluslab/inception-tool-http`             | HttpGet/HttpPost                                 | Completo |
+| `@rabeluslab/inception`                       | CLI app (inception init/start/mission/...)       | Completo |
 
 ---
 
@@ -243,12 +245,12 @@ inception mission archive <id>      # arquivar missao
 
 ### Modos do Agente
 
-| Modo | Código | Descrição |
-|---|---|---|
-| Auditor | A | Planejamento e análise — sem execução |
-| Executor | B | Implementação ativa |
-| Archivist | C | Consolidação e preservação no journal |
-| Verifier | D | Leitura somente — SAGRADO |
+| Modo      | Código | Descrição                             |
+| --------- | ------ | ------------------------------------- |
+| Auditor   | A      | Planejamento e análise — sem execução |
+| Executor  | B      | Implementação ativa                   |
+| Archivist | C      | Consolidação e preservação no journal |
+| Verifier  | D      | Leitura somente — SAGRADO             |
 
 ### Protocolos
 
@@ -316,6 +318,7 @@ main
 ```
 
 **Rollback:**
+
 ```bash
 git reset --hard snapshot/mission/phase-N
 ```
@@ -326,11 +329,11 @@ git reset --hard snapshot/mission/phase-N
 
 ### Níveis de Autonomia
 
-| Nível | Comportamento |
-|---|---|
-| `Readonly` | Apenas le e sugere — nunca escreve ou executa |
-| `Supervised` | Age mas pede aprovacao para acoes destrutivas |
-| `Full` | Age autonomamente — recomendado apenas para ambientes seguros |
+| Nível        | Comportamento                                                 |
+| ------------ | ------------------------------------------------------------- |
+| `Readonly`   | Apenas le e sugere — nunca escreve ou executa                 |
+| `Supervised` | Age mas pede aprovacao para acoes destrutivas                 |
+| `Full`       | Age autonomamente — recomendado apenas para ambientes seguros |
 
 ### Allowlists
 

@@ -27,6 +27,7 @@ git checkout -b feat/gov-sprint-3
 ```
 
 Depois:
+
 1. Ler `_gov/sprints/sprint-3-cicd/plan.md`
 2. Criar `_gov/sprints/sprint-3-cicd/ss-3.1-fix-gitattributes/brief.md`
 3. Criar `.gitattributes` (G14 — URGENTE, warnings em cada commit)
@@ -36,6 +37,7 @@ Depois:
 **Arquivo do plano:** `_gov/sprints/sprint-3-cicd/plan.md`
 
 **7 sub-sprints:**
+
 - ss-3.1: `.gitattributes` (G14) — primeiro e urgente
 - ss-3.2: `.commitlintrc.json` (G15) — commitlint sem config
 - ss-3.3: `.husky/pre-commit` + `.husky/commit-msg` (G16) — hooks ausentes
@@ -49,6 +51,7 @@ Depois:
 ### O que Sprint 2 Fez (contexto para não refazer)
 
 Todos estes arquivos foram modificados em `ec18560`:
+
 - `packages/types/src/security.ts` — `ISecurityManager.checkRateLimit()` adicionado
 - `packages/types/src/protocol.ts` — `addTask()` + `addJournalEntry()` em `IMissionProtocol`
 - `packages/protocol/src/schema.ts` — tabela `notes` adicionada ao schema SQLite
