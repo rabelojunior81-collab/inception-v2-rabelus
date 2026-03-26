@@ -3,21 +3,21 @@
 > Atualizado ao início e fim de cada sub-sprint. Fonte da verdade sobre o estado do desenvolvimento.
 
 **Última atualização:** 2026-03-26
-**Sprint ativa:** Sprint 4 — Stubs
-**Branch ativa:** `feat/gov-sprint-4` (a criar a partir de `feat/gov-sprint-3`)
+**Sprint ativa:** Sprint 5 — Filesystem Sanitization
+**Branch ativa:** `feat/gov-sprint-5` (a criar a partir de `feat/gov-sprint-4`)
 
 ---
 
 ## Status Geral
 
-| Sprint   | Objetivo                | Status     | Branch              | Iniciada   | Concluída  |
-| -------- | ----------------------- | ---------- | ------------------- | ---------- | ---------- |
-| Sprint 0 | Governance Bootstrap    | ✅ done    | `feat/governance`   | 2026-03-25 | 2026-03-25 |
-| Sprint 1 | Memory + Docs           | ✅ done    | `feat/gov-sprint-1` | 2026-03-25 | 2026-03-25 |
-| Sprint 2 | Code Gaps               | ✅ done    | `feat/gov-sprint-2` | 2026-03-25 | 2026-03-26 |
-| Sprint 3 | Quality Gates + CI/CD   | ✅ done    | `feat/gov-sprint-3` | 2026-03-26 | 2026-03-26 |
-| Sprint 4 | Stubs                   | 🔄 next    | `feat/gov-sprint-4` | —          | —          |
-| Sprint 5 | Filesystem Sanitization | ⏳ pending | `feat/gov-sprint-5` | —          | —          |
+| Sprint   | Objetivo                | Status  | Branch              | Iniciada   | Concluída  |
+| -------- | ----------------------- | ------- | ------------------- | ---------- | ---------- |
+| Sprint 0 | Governance Bootstrap    | ✅ done | `feat/governance`   | 2026-03-25 | 2026-03-25 |
+| Sprint 1 | Memory + Docs           | ✅ done | `feat/gov-sprint-1` | 2026-03-25 | 2026-03-25 |
+| Sprint 2 | Code Gaps               | ✅ done | `feat/gov-sprint-2` | 2026-03-25 | 2026-03-26 |
+| Sprint 3 | Quality Gates + CI/CD   | ✅ done | `feat/gov-sprint-3` | 2026-03-26 | 2026-03-26 |
+| Sprint 4 | Stubs                   | ✅ done | `feat/gov-sprint-4` | 2026-03-26 | 2026-03-26 |
+| Sprint 5 | Filesystem Sanitization | 🔄 next | `feat/gov-sprint-5` | —          | —          |
 
 ---
 
@@ -318,14 +318,15 @@
 ### Checklist de Conclusão Sprint 4
 
 ```
-[ ] DiscordChannel implementa IChannel (não export {})
-[ ] DiscordChannel: start, stop, send, onMessage, approval reactions
-[ ] BrowserTool: navigate, screenshot, click, fill, select implementados
-[ ] BrowserTool: SecurityManager.checkUrl() antes de navigate
-[ ] packages/tools/memory re-exporta memory tools (de Sprint 2, confirmar)
-[ ] 9 providers sem pacote têm @future JSDoc + docs/decisions/provider-stubs.md
-[ ] G3 (sandbox) documentado no JSDoc do ExecutionPolicy
-[ ] pnpm build + pnpm test → verde
+[x] DiscordChannel implementa IChannel (não export {})
+[x] DiscordChannel: start, stop, send, onMessage, filtro allowedUserIds, filtro guildIds
+[x] BrowserTool: navigate, screenshot, click, fill, select implementados
+[x] BrowserTool: context.allowlist.urls verificado antes de navigate
+[x] packages/tools/memory re-exporta memory tools (feito na Sprint 2 — confirmado)
+[x] 9 providers sem pacote têm @future JSDoc + docs/decisions/provider-stubs.md
+[x] G3 (sandbox) documentado no JSDoc do ExecutionPolicy
+[x] pnpm build → 30/30 verde
+[x] pnpm test → 131 testes passando
 ```
 
 ---
@@ -361,9 +362,9 @@
 | --- | ------------------------------------------------------------ | ------ | ------ | --------------------------- |
 | G1  | `/task done/add/note` sem persistência SQLite                | 2      | ss-2.3 | ✅ done (ec18560)           |
 | G2  | Rate limiting: `checkRateLimit()` não implementado           | 2      | ss-2.4 | ✅ done (ec18560)           |
-| G3  | `sandbox: 'none'` sem implementação (doc apenas)             | 4      | ss-4.5 | ⏳ open                     |
+| G3  | `sandbox: 'none'` sem implementação (doc apenas)             | 4      | ss-4.5 | ✅ done (feat/gov-sprint-4) |
 | G4  | `InceptionRuntime` não coordena lifecycle dos canais         | 2      | ss-2.6 | ✅ done (ec18560)           |
-| G5  | 9 ProviderId sem pacote (Groq, Together, etc.)               | 4      | ss-4.5 | ⏳ open                     |
+| G5  | 9 ProviderId sem pacote (Groq, Together, etc.)               | 4      | ss-4.5 | ✅ done (feat/gov-sprint-4) |
 | G6  | Versionamento 2.0.0 vs 0.0.0                                 | 1      | ss-1.6 | ✅ done (5dcc1ff)           |
 | G7  | .eslintrc.cjs não commitado                                  | 0      | ss-0.6 | ✅ done (ebff68a)           |
 | G8  | CI: sem audit, coverage, commitlint, triggers incompletos    | 3      | ss-3.5 | ✅ done (feat/gov-sprint-3) |

@@ -26,15 +26,30 @@ export enum ProviderId {
   // Regional / cloud platform providers
   ZAi = 'zai', // https://docs.z.ai/devpack/overview
   Bailian = 'bailian', // Alibaba AI Model Studio (Tongyi Qianwen)
-  // Other providers
+  // ── Future providers — planned, not yet implemented ────────────────────────
+  // Each entry below has an architectural decision record at:
+  // docs/decisions/provider-stubs.md
+  //
+  /** @future Groq provider — not yet implemented. See docs/decisions/provider-stubs.md */
   Groq = 'groq',
+  /** @future Together AI provider — not yet implemented. See docs/decisions/provider-stubs.md */
   Together = 'together',
+  /** @future Fireworks AI provider — not yet implemented. See docs/decisions/provider-stubs.md */
   Fireworks = 'fireworks',
+  /** @future Perplexity provider — not yet implemented. See docs/decisions/provider-stubs.md */
   Perplexity = 'perplexity',
+  /** @future Cohere provider — not yet implemented. See docs/decisions/provider-stubs.md */
   Cohere = 'cohere',
+  /** @future Mistral AI provider — not yet implemented. See docs/decisions/provider-stubs.md */
   Mistral = 'mistral',
+  /** @future xAI (Grok) provider — not yet implemented. See docs/decisions/provider-stubs.md */
   XAI = 'xai',
+  /** @future DeepSeek provider — not yet implemented. See docs/decisions/provider-stubs.md */
   DeepSeek = 'deepseek',
+  /**
+   * @future Custom/self-hosted provider — not yet implemented.
+   * Intended for bring-your-own-endpoint scenarios. See docs/decisions/provider-stubs.md
+   */
   Custom = 'custom',
 }
 
