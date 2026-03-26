@@ -350,7 +350,7 @@
 [x] docs/audit-research/ só tem README.md redirect
 [x] Naming consistente em todo _gov/ (revisão: zero inconsistências)
 [x] pnpm build + lint + typecheck + test + audit → verde (tudo)
-[ ] PR para main criado com todos os gaps G1-G21 documentados
+[x] PR para main criado com todos os gaps G1-G21 documentados (PR #1)
 [x] _gov/roadmap.md: todas as sprints com status done
 ```
 
