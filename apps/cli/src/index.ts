@@ -6,6 +6,7 @@ import { Command } from 'commander';
 
 import { runConfig } from './commands/config.js';
 import { runInit } from './commands/init.js';
+import { runMission } from './commands/mission.js';
 import { runStart } from './commands/start.js';
 import { runStatus } from './commands/status.js';
 
@@ -67,6 +68,55 @@ program
   .option('-c, --config <path>', 'Caminho para o arquivo de configuração')
   .action(async (opts: { config?: string }) => {
     await runStatus(opts);
+  });
+
+// ── inception mission ───────────────────────────────────────────────────────
+
+const missionCmd = program
+  .command('mission')
+  .description('Gerencia missões do agente');
+
+missionCmd
+  .command('create')
+  .description('Cria uma nova missão com wizard interativo')
+  .action(async () => {
+    await runMission('create', {});
+  });
+
+missionCmd
+  .command('list')
+  .description('Lista todas as missões')
+  .action(async () => {
+    await runMission('list', {});
+  });
+
+missionCmd
+  .command('start <id>')
+  .description('Inicia o agente com uma missão específica')
+  .option('-c, --config <path>', 'Caminho para o arquivo de configuração')
+  .action(async (id: string, opts: { config?: string }) => {
+    await runMission('start', { id, ...opts });
+  });
+
+missionCmd
+  .command('status [id]')
+  .description('Exibe o status de uma ou todas as missões')
+  .action(async (id?: string) => {
+    await runMission('status', { id });
+  });
+
+missionCmd
+  .command('report [id]')
+  .description('Gera relatório de uma missão em markdown')
+  .action(async (id?: string) => {
+    await runMission('report', { id });
+  });
+
+missionCmd
+  .command('archive <id>')
+  .description('Arquiva uma missão encerrada')
+  .action(async (id: string) => {
+    await runMission('archive', { id });
   });
 
 // ── Parse ──────────────────────────────────────────────────────────────────

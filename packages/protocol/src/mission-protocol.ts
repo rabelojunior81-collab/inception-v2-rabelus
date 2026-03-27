@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
+import type { SQLInputValue } from 'node:sqlite';
 
 import type {
   IMissionProtocol,
@@ -19,6 +19,7 @@ import {
 } from '@rabeluslab/inception-types';
 
 import { PROTOCOL_SCHEMA_SQL } from './schema.js';
+import { DatabaseSync, type DatabaseSyncInstance } from './sqlite-native.js';
 
 function generateId(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
@@ -100,7 +101,7 @@ function rowToMission(row: MissionRow, tasks: Task[]): Mission {
 }
 
 export class MissionProtocol implements IMissionProtocol {
-  private readonly db: DatabaseSync;
+  private readonly db: DatabaseSyncInstance;
 
   constructor(dbPath?: string) {
     const resolvedPath = dbPath ?? join(homedir(), '.inception', 'protocol.db');
@@ -247,6 +248,42 @@ export class MissionProtocol implements IMissionProtocol {
       .prepare('SELECT * FROM journal ORDER BY archived_at DESC')
       .all() as unknown as JournalRow[];
     return rows.map(rowToJournalEntry);
+  }
+
+  async addTask(missionId: string, description: string): Promise<Task> {
+    const id = generateId('task');
+    this.db
+      .prepare(
+        `INSERT INTO tasks (id, mission_id, grp, description, status, dependencies, tech_status)
+         VALUES (@id, @mission_id, @grp, @description, @status, @dependencies, @tech_status)`
+      )
+      .run({
+        id,
+        mission_id: missionId,
+        grp: 'B',
+        description,
+        status: TaskStatus.Pending,
+        dependencies: '[]',
+        tech_status: TechnicalStatus.Stub,
+      } as Record<string, SQLInputValue>);
+    const row = this.db
+      .prepare('SELECT * FROM tasks WHERE id = ?')
+      .get(id) as unknown as TaskRow;
+    return rowToTask(row);
+  }
+
+  async addJournalEntry(missionId: string, text: string): Promise<void> {
+    const id = generateId('note');
+    this.db
+      .prepare(
+        `INSERT INTO notes (id, mission_id, text, created_at) VALUES (@id, @mission_id, @text, @created_at)`
+      )
+      .run({
+        id,
+        mission_id: missionId,
+        text,
+        created_at: new Date().toISOString(),
+      } as Record<string, SQLInputValue>);
   }
 
   async updateTaskStatus(missionId: string, taskId: string, status: TaskStatus): Promise<void> {

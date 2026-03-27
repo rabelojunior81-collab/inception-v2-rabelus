@@ -1,6 +1,6 @@
 {
   "name": "@rabeluslab/inception-tool-shell",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Shell execution tool for Inception Framework",
   "license": "MIT",
   "author": "Rabelus Lab",

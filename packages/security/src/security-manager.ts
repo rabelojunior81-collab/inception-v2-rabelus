@@ -15,9 +15,15 @@ import { generatePairingCode, generateBearerToken } from './token.js';
 
 type ApprovalHandler = (request: ApprovalRequest) => Promise<boolean>;
 
+interface RateBucket {
+  tokens: number;
+  lastRefill: number;
+}
+
 export class SecurityManager implements ISecurityManager {
   private readonly store = new PairingStore();
   private approvalHandler: ApprovalHandler | undefined;
+  private readonly buckets = new Map<string, RateBucket>();
 
   constructor(
     private readonly policy: SecurityPolicy,
@@ -28,6 +34,37 @@ export class SecurityManager implements ISecurityManager {
 
   setApprovalHandler(fn: ApprovalHandler): void {
     this.approvalHandler = fn;
+  }
+
+  // ── Rate limiting ─────────────────────────────────────────────────────────
+
+  checkRateLimit(key: string): void {
+    const rl = this.policy.rateLimit;
+    const maxPerMinute = rl.requestsPerMinute;
+    if (maxPerMinute <= 0) return;
+
+    const now = Date.now();
+    const windowMs = 60_000;
+    const maxTokens = rl.burstSize > 0 ? rl.burstSize : maxPerMinute;
+    const refillRate = maxPerMinute / windowMs; // tokens per ms
+
+    let bucket = this.buckets.get(key);
+    if (!bucket) {
+      bucket = { tokens: maxTokens, lastRefill: now };
+      this.buckets.set(key, bucket);
+    }
+
+    const elapsed = now - bucket.lastRefill;
+    bucket.tokens = Math.min(maxTokens, bucket.tokens + elapsed * refillRate);
+    bucket.lastRefill = now;
+
+    if (bucket.tokens < 1) {
+      throw new Error(
+        `Rate limit exceeded for "${key}" (limit: ${maxPerMinute} req/min)`
+      );
+    }
+
+    bucket.tokens -= 1;
   }
 
   // ── Filesystem validation ──────────────────────────────────────────────────

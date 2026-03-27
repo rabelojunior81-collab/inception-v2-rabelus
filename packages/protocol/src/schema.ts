@@ -39,7 +39,15 @@ CREATE TABLE IF NOT EXISTS journal (
   final_report    TEXT
 );
 
+CREATE TABLE IF NOT EXISTS notes (
+  id         TEXT PRIMARY KEY,
+  mission_id TEXT NOT NULL REFERENCES missions(id) ON DELETE CASCADE,
+  text       TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_missions_status ON missions(status);
 CREATE INDEX IF NOT EXISTS idx_tasks_mission ON tasks(mission_id);
 CREATE INDEX IF NOT EXISTS idx_journal_mission ON journal(mission_id);
+CREATE INDEX IF NOT EXISTS idx_notes_mission ON notes(mission_id);
 `;

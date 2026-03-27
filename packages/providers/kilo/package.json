@@ -1,6 +1,6 @@
 {
   "name": "@rabeluslab/inception-provider-kilo",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Kilo.ai Gateway provider for Inception Framework — see https://kilo.ai/docs/gateway",
   "license": "MIT",
   "author": "Rabelus Lab",

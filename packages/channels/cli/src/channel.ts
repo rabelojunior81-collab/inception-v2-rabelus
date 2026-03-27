@@ -18,7 +18,7 @@ import React from 'react';
 
 import { App } from './components/App.js';
 import type { ChatMessage } from './components/MessageList.js';
-import type { CliAppState, PendingApprovalDisplay } from './types.js';
+import type { CliAppState, PendingApprovalDisplay, SlashCommandResult } from './types.js';
 
 export class CliChannel implements IChannel {
   readonly id = ChannelId.CLI;
@@ -29,6 +29,8 @@ export class CliChannel implements IChannel {
   private readonly errorHandlers: ((err: Error) => void)[] = [];
   private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private inkInstance: ReturnType<typeof render> | undefined;
+  private slashHandler: ((cmd: string) => SlashCommandResult | Promise<SlashCommandResult>) | undefined;
+  private wizardInputHandler: ((text: string) => void | Promise<void>) | undefined;
 
   // Mutable UI state — updated via setState()
   private uiState: CliAppState = {
@@ -69,6 +71,9 @@ export class CliChannel implements IChannel {
         },
         onApprovalDecision: (approvalId: string, approved: boolean) => {
           this._handleApprovalDecision(approvalId, approved);
+        },
+        onSlashCommand: (text: string) => {
+          this._handleSlashCommand(text);
         },
       });
     };
@@ -138,9 +143,59 @@ export class CliChannel implements IChannel {
     this._updateState((prev) => ({ ...prev, activeMission: mission }));
   }
 
+  /** Push a system message directly into the chat (used by inline wizard) */
+  pushSystemMessage(text: string): void {
+    const sysMsg: ChatMessage = {
+      id: randomUUID(),
+      role: 'system',
+      content: text,
+      timestamp: new Date().toISOString(),
+    };
+    this._updateState((prev) => ({ ...prev, messages: [...prev.messages, sysMsg] }));
+  }
+
+  /** When set, user input is routed to this handler instead of the AI */
+  setWizardInputHandler(handler: (text: string) => void | Promise<void>): void {
+    this.wizardInputHandler = handler;
+  }
+
+  /** Clear wizard mode — input returns to AI */
+  clearWizardInputHandler(): void {
+    this.wizardInputHandler = undefined;
+  }
+
+  /**
+   * Registra um handler externo para slash commands.
+   * Quando o usuário digita um comando (exceto /stop e /exit),
+   * o handler é invocado e o output é exibido como mensagem do sistema.
+   */
+  setSlashHandler(handler: (cmd: string) => SlashCommandResult | Promise<SlashCommandResult>): void {
+    this.slashHandler = handler;
+  }
+
   // ── Private ──────────────────────────────────────────────────────────────
 
   private _handleUserInput(text: string): void {
+    // Wizard mode: route input to wizard handler, not AI
+    if (this.wizardInputHandler) {
+      const userMsg: ChatMessage = {
+        id: randomUUID(),
+        role: 'user',
+        content: text,
+        timestamp: new Date().toISOString(),
+      };
+      this._updateState((prev) => ({ ...prev, messages: [...prev.messages, userMsg] }));
+      const maybePromise = this.wizardInputHandler(text);
+      if (maybePromise instanceof Promise) {
+        maybePromise.catch((err: unknown) => {
+          this.errorHandlers.forEach((h) =>
+            h(err instanceof Error ? err : new Error(String(err)))
+          );
+        });
+      }
+      return;
+    }
+
     if (!this.inboundHandler) return;
 
     const userMsg: ChatMessage = {
@@ -176,6 +231,36 @@ export class CliChannel implements IChannel {
       this.errorHandlers.forEach((h) => h(err instanceof Error ? err : new Error(String(err))));
       this._updateState((prev) => ({ ...prev, isProcessing: false }));
     });
+  }
+
+  private _handleSlashCommand(text: string): void {
+    const pushOutput = (output: string): void => {
+      const sysMsg: ChatMessage = {
+        id: randomUUID(),
+        role: 'system',
+        content: output,
+        timestamp: new Date().toISOString(),
+      };
+      this._updateState((prev) => ({ ...prev, messages: [...prev.messages, sysMsg] }));
+    };
+
+    if (!this.slashHandler) {
+      pushOutput(`Slash commands não configurados. Use /stop ou /exit para sair.`);
+      return;
+    }
+
+    const resultOrPromise = this.slashHandler(text);
+    if (resultOrPromise instanceof Promise) {
+      resultOrPromise
+        .then((result) => pushOutput(result.output))
+        .catch((err: unknown) => {
+          pushOutput(
+            `Erro no slash command: ${err instanceof Error ? err.message : String(err)}`
+          );
+        });
+    } else {
+      pushOutput(resultOrPromise.output);
+    }
   }
 
   private _handleApprovalDecision(_approvalId: string, _approved: boolean): void {
