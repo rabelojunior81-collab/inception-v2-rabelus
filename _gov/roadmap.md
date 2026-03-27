@@ -2,9 +2,9 @@
 
 > Atualizado ao início e fim de cada sub-sprint. Fonte da verdade sobre o estado do desenvolvimento.
 
-**Última atualização:** 2026-03-26
-**Sprint ativa:** — (todas as sprints concluídas — aguardando PR para main)
-**Branch ativa:** `feat/gov-sprint-5` → PR para `main`
+**Última atualização:** 2026-03-27
+**Sprint ativa:** Sprint 6 — CI Fixes (em andamento)
+**Branch ativa:** `feat/gov-sprint-6` → PR para `main`
 
 ---
 
@@ -18,6 +18,7 @@
 | Sprint 3 | Quality Gates + CI/CD   | ✅ done | `feat/gov-sprint-3` | 2026-03-26 | 2026-03-26 |
 | Sprint 4 | Stubs                   | ✅ done | `feat/gov-sprint-4` | 2026-03-26 | 2026-03-26 |
 | Sprint 5 | Filesystem Sanitization | ✅ done | `feat/gov-sprint-5` | 2026-03-26 | 2026-03-26 |
+| Sprint 6 | CI Fixes — Audit-driven | ✅ done | `feat/gov-sprint-6` | 2026-03-27 | 2026-03-27 |
 
 ---
 
@@ -352,6 +353,45 @@
 [x] pnpm build + lint + typecheck + test + audit → verde (tudo)
 [x] PR para main criado com todos os gaps G1-G21 documentados (PR #1)
 [x] _gov/roadmap.md: todas as sprints com status done
+```
+
+---
+
+## Sprint 6: CI Fixes — Audit-driven
+
+**Objetivo:** Corrigir problemas identificados por auditoria pós-PR#1. CI nunca havia
+passado por erros introduzidos nas sprints de governança.
+**Origem:** Auditoria molecular solicitada pelo usuário após falhas na CI.
+
+| SS     | Nome                      | Resolve | Paralela?      |
+| ------ | ------------------------- | ------- | -------------- |
+| ss-6.1 | fix-ci-artifact-paths     | C1      | com ss-6.2     |
+| ss-6.2 | add-coverage-dependency   | C2      | com ss-6.1     |
+| ss-6.3 | strengthen-protocol-tests | C3      | depois 6.1+6.2 |
+| ss-6.4 | final-validation          | —       | última         |
+
+### Problemas Resolvidos
+
+| ID  | Problema                                           | Causa                                                                              | Fix                                    |
+| --- | -------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------- |
+| C1  | ESLint `import/no-unresolved` em CI (21 erros)     | Artifact `packages/*/dist` não capturava `channels/*/`, `providers/*/`, `tools/*/` | Expandir paths do artifact no workflow |
+| C2  | `pnpm test:coverage` falha antes de rodar 1 teste  | `@vitest/coverage-v8` ausente das devDependencies                                  | Adicionar ao root `package.json`       |
+| C3  | 4 testes "no error = success" sem verificar estado | `updateTaskStatus` e `addJournalEntry` sem assertions de estado                    | Reescrever testes com verificação real |
+
+### Checklist de Conclusão Sprint 6
+
+```
+[x] CI artifact: packages/channels/*/dist + providers/*/dist + tools/*/dist incluídos
+[x] @vitest/coverage-v8 em devDependencies do root package.json
+[x] pnpm test:coverage: 131 testes passam, exit 0
+[x] updateTaskStatus tests verificam status via getActiveMissions()
+[x] addJournalEntry tests: 1 happy path + 1 FK constraint enforcement
+[x] pnpm build → 30/30 verde
+[x] pnpm lint → 0 errors
+[x] pnpm typecheck → todos passando
+[x] pnpm test → 131 testes (turbo)
+[x] pnpm test:coverage → 131 testes com coverage
+[x] pnpm audit --audit-level=high → 0 high/critical
 ```
 
 ---

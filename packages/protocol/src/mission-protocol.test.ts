@@ -154,18 +154,22 @@ describe('MissionProtocol — updateTaskStatus', () => {
     protocol.close();
   });
 
-  it('updates task status to in-progress', async () => {
+  it('updates task status to in-progress — reflected in getActiveMissions', async () => {
     const mission = await protocol.createMission(baseConfig);
     const task = await protocol.addTask(mission.id, 'Task to update');
     await protocol.updateTaskStatus(mission.id, task.id, TaskStatus.InProgress);
-    // No error = success (updateTaskStatus doesn't return the updated task)
+    const [active] = await protocol.getActiveMissions();
+    const updated = active.tasks.find((t) => t.id === task.id);
+    expect(updated?.status).toBe(TaskStatus.InProgress);
   });
 
-  it('updates task status to completed', async () => {
+  it('updates task status to completed — reflected in getActiveMissions', async () => {
     const mission = await protocol.createMission(baseConfig);
     const task = await protocol.addTask(mission.id, 'Task to complete');
     await protocol.updateTaskStatus(mission.id, task.id, TaskStatus.Completed);
-    // No error = success
+    const [active] = await protocol.getActiveMissions();
+    const updated = active.tasks.find((t) => t.id === task.id);
+    expect(updated?.status).toBe(TaskStatus.Completed);
   });
 });
 
@@ -180,18 +184,16 @@ describe('MissionProtocol — addJournalEntry', () => {
     protocol.close();
   });
 
-  it('adds a journal note without throwing', async () => {
+  it('adds a note to an existing mission without throwing', async () => {
     const mission = await protocol.createMission(baseConfig);
     await expect(
       protocol.addJournalEntry(mission.id, 'Note: mission started successfully')
     ).resolves.not.toThrow();
   });
 
-  it('allows multiple notes for the same mission', async () => {
-    const mission = await protocol.createMission(baseConfig);
-    await protocol.addJournalEntry(mission.id, 'Note 1');
-    await protocol.addJournalEntry(mission.id, 'Note 2');
-    // No error = success
+  it('rejects a note for a non-existent mission (FK constraint enforced)', async () => {
+    // PRAGMA foreign_keys = ON ensures integrity: notes.mission_id → missions.id
+    await expect(protocol.addJournalEntry('miss_nonexistent_000', 'Orphan note')).rejects.toThrow();
   });
 });
 
