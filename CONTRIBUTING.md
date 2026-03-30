@@ -22,7 +22,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](./CODE_OF_CON
 
 ### Prerequisites
 
-- **Node.js**: >= 20.0.0 (LTS recommended)
+- **Node.js**: >= 22.0.0 (required — uses `node:sqlite` built-in, not available in Node 20/21)
 - **pnpm**: >= 8.0.0
 - **Git**: >= 2.30.0
 

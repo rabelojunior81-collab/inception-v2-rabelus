@@ -1,520 +1,418 @@
-# 🎯 HANDOFF: Inception Framework v2.0
+# HANDOFF: Inception Framework v2.0
 
-> **Documento de Transferência de Conhecimento**  
-> **Data:** 2026-03-12  
-> **Versão:** 1.0.0  
+> **Documento de Transferência de Conhecimento**
+> **Data:** 2026-03-23
+> **Versão do Framework:** 2.0.0
+> **Branch ativa:** `feat/mission-system`
 > **Autor:** Rabelus Lab
 
 ---
 
-## 📋 TL;DR (Resumo Rápido)
+## TL;DR
 
-Este é um **novo repositório** que contém a evolução do `inception-tui` para um **runtime completo de agentes autônomos** ao estilo ZeroClaw/OpenClaw.
+O Inception Framework v2.0 é um **runtime TypeScript-nativo para agentes de IA autônomos**, ~87% implementado e funcional. O core está completo — há 12 gaps conhecidos (G1-G12) sendo resolvidos nas Sprints 1-5.
 
-**O que já existe:**
+**Estado atual:** funcionando em produção de desenvolvimento. Basta clonar, instalar, buildar e executar.
 
-- ✅ Arquitetura completa definida (trait-driven)
-- ✅ Tipagens TypeScript (@inception/types)
-- ✅ Estrutura de monorepo configurada
-- ✅ Documentação internacionalizada
-
-**O que falta implementar:**
-
-- ⏳ Código fonte dos pacotes (core, providers, channels, etc.)
-- ⏳ CLI interativo (Opencode-inspired)
-- ⏳ Integração Telegram/Discord
-- ⏳ Runtime engine
+> **Governança:** Ver [`_gov/governance-spec.md`](_gov/governance-spec.md) para o estado real do projeto e [`_gov/roadmap.md`](_gov/roadmap.md) para o roadmap de resolução dos gaps.
 
 ---
 
-## 🚀 Tutorial para Leigos: Instalação do Zero
+## Gaps Conhecidos
 
-### Passo 0: O que você precisa (Pré-requisitos)
+> Funcionalidades com implementação incompleta. Não são bugs — são gaps documentados com sprint de resolução.
 
-Antes de começar, verifique se você tem:
+| ID  | Gap                                                                        | Severidade | Sprint      |
+| --- | -------------------------------------------------------------------------- | ---------- | ----------- |
+| G1  | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH       | Sprint 2    |
+| G2  | Rate limiting configurado mas não aplicado no AgentLoop                    | MEDIUM     | Sprint 2    |
+| G4  | `InceptionRuntime` não conectado ao `ChannelManager` em `start.ts`         | MEDIUM     | Sprint 2    |
+| G6  | Versionamento inconsistente (`types=2.0.0`, demais `0.0.0`)                | MEDIUM     | Sprint 1    |
+| G8  | CI sem `pnpm audit`, coverage, triggers completos                          | MEDIUM     | Sprint 3    |
+| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI        | MEDIUM     | Sprint 2    |
+| G12 | Este `HANDOFF.md` não mencionava gaps — resolvido nesta atualização        | HIGH       | Sprint 1 ←  |
+| G3  | `sandbox: 'none'` sem implementação real                                   | LOW        | Sprint 4    |
+| G5  | 9 `ProviderId` no enum sem pacote correspondente                           | LOW        | Sprint 4    |
+| G7  | `.eslintrc.cjs` override `no-console` pendente                             | LOW        | Sprint 0 ✅ |
+| G9  | `docs/en\|pt\|es\|zh` — diretórios vazios                                  | LOW        | Sprint 5    |
+| G10 | Memórias Claude obsoletas                                                  | HIGH       | Sprint 0 ✅ |
 
-#### 1. Node.js (Versão 20 ou superior)
+**Stubs explícitos (não são bugs):**
 
-**Windows:**
-
-```powershell
-# Baixe em: https://nodejs.org/en/download/
-# Escolha a versão LTS (20.x.x)
-# Instale com todas as opções padrão
-
-# Depois, abra um NOVO terminal e verifique:
-node --version
-# Deve mostrar: v20.x.x
-```
-
-**Mac/Linux:**
-
-```bash
-# Usando navegador (recomendado para iniciantes):
-# 1. Acesse: https://nodejs.org/en/download/
-# 2. Baixe o instalador para seu sistema
-# 3. Execute o instalador
-
-# Ou usando terminal (avançado):
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Verifique a instalação:
-node --version
-# Deve mostrar: v20.x.x
-```
-
-#### 2. pnpm (Gerenciador de pacotes)
-
-**Windows/Mac/Linux (todos os sistemas):**
-
-```bash
-# Execute este comando no terminal:
-npm install -g pnpm
-
-# Verifique:
-pnpm --version
-# Deve mostrar: 8.x.x ou superior
-```
-
-#### 3. Git (Controle de versão)
-
-**Windows:**
-
-```powershell
-# Baixe em: https://git-scm.com/download/win
-# Instale com opções padrão
-# Importante: escolha "Use Git from the Windows Command Prompt"
-
-# Verifique no NOVO terminal:
-git --version
-```
-
-**Mac:**
-
-```bash
-# Git geralmente já vem instalado no Mac
-# Verifique:
-git --version
-
-# Se não tiver, instale o Xcode Command Line Tools:
-xcode-select --install
-```
-
-**Linux:**
-
-```bash
-sudo apt update
-sudo apt install git
-
-# Verifique:
-git --version
-```
-
-#### 4. Uma conta no GitHub
-
-Se ainda não tiver, crie em: https://github.com/signup
+- `packages/channels/discord/` — placeholder, implementação na Sprint 4
+- `packages/tools/browser/` — placeholder Playwright, Sprint 4
+- `packages/tools/memory/` — redirect pendente para `memory/src/tools/`, Sprint 2
 
 ---
 
-### Passo 1: Clonar o Repositório
+## Pré-requisitos OBRIGATÓRIOS
 
-Abra o terminal (Prompt de Comando no Windows, Terminal no Mac/Linux) e execute:
+| Dependência | Versão mínima | Por quê                                                           |
+| ----------- | ------------- | ----------------------------------------------------------------- |
+| **Node.js** | **22+**       | `node:sqlite` é built-in do Node 22 — versões 20/21 não funcionam |
+| **pnpm**    | **8+**        | Gerenciador de pacotes do monorepo                                |
+| **Git**     | 2.30+         | Controle de versão                                                |
 
 ```bash
-# Navegue para a pasta onde quer guardar o projeto
-# Windows:
-cd Documents
+node --version   # deve mostrar v22.x.x ou superior
+pnpm --version   # deve mostrar 8.x.x ou superior
+```
 
-# Mac/Linux:
-cd ~
+> **Atenção:** Node 20 e Node 21 causam erro fatal na inicialização. O runtime depende de `node:sqlite` que só existe no Node 22.
 
-# Clone o repositório (quando estiver no GitHub)
+---
+
+## Instalação do Zero
+
+```bash
+# 1. Clonar
 git clone https://github.com/rabeluslab/inception.git
+cd inception-v2
 
-# Entre na pasta do projeto
-cd inception
-
-# Veja o que temos até agora
-ls  # Mac/Linux
-dir  # Windows
-```
-
----
-
-### Passo 2: Instalar Dependências
-
-```bash
-# Instale TODAS as dependências do monorepo
+# 2. Instalar dependências (monorepo completo)
 pnpm install
 
-# Isso pode demorar 2-5 minutos na primeira vez
-# Você verá barras de progresso baixando pacotes
-```
-
-**Se der erro:**
-
-- Verifique se está na pasta correta (`pwd` no Mac/Linux, `cd` no Windows)
-- Verifique se o pnpm está instalado (`pnpm --version`)
-
----
-
-### Passo 3: Verificar a Instalação
-
-```bash
-# Verifique se o TypeScript está ok
-pnpm typecheck
-
-# Deve mostrar algo como:
-# > @inception/root@2.0.0 typecheck /caminho/inception
-# > tsc --noEmit
-#
-# (sem erros = sucesso!)
-```
-
----
-
-### Passo 4: Build dos Pacotes
-
-```bash
-# Compile todos os pacotes
+# 3. Build de todos os packages
 pnpm build
 
-# Você verá:
-# - Compilação do @inception/types
-# - Criação das pastas dist/
+# 4. Verificar
+pnpm lint         # deve retornar 0 erros
+pnpm typecheck    # deve retornar 0 erros
 ```
 
----
-
-### Passo 5: Testar
+### Configurar o primeiro agente
 
 ```bash
-# Rode os testes (quando existirem)
-pnpm test
+# Em um diretório de projeto:
+mkdir meu-projeto && cd meu-projeto
+node ../apps/cli/dist/index.js init
+# → wizard interativo configura .inception.json
+```
 
-# Por enquanto, pode mostrar "No tests found" - isso é normal!
+### Iniciar o agente
+
+```bash
+node ../apps/cli/dist/index.js start
+# → abre a TUI Ink com o agente pronto
 ```
 
 ---
 
-## 🎉 Sucesso! Agora o que?
-
-Se você chegou até aqui sem erros, parabéns! O ambiente está configurado.
-
----
-
-## 📁 Estrutura do Projeto Explicada
-
-Imagine o projeto como um **shopping center**:
+## Estrutura do Repositório
 
 ```
-inception/                      ← Shopping center (monorepo)
-├── packages/                   ← Lojas do shopping
-│   ├── types/                  ← Loja de "definições"
-│   │                           └─ Tipos TypeScript (já implementado!)
-│   ├── core/                   ← Loja do "motor principal"
-│   │                           └─ Runtime engine (VOCÊ VAI FAZER)
-│   ├── providers/              ← Loja de "cérebros de IA"
-│   │   ├── openai/             └─ Conecta com ChatGPT
-│   │   ├── anthropic/          └─ Conecta com Claude
-│   │   ├── gemini/             └─ Conecta com Google
-│   │   └── ollama/             └─ Conecta com modelos locais
-│   ├── channels/               ← Loja de "comunicação"
-│   │   ├── cli/                └─ Terminal
-│   │   ├── telegram/           └─ Bot do Telegram
-│   │   ├── discord/            └─ Bot do Discord
-│   │   └── http/               └─ API Web
-│   ├── memory/                 ← Loja de "memória"
-│   │                           └─ SQLite + Gemini Embeddings
-│   ├── tools/                  ← Loja de "ferramentas"
-│   │   ├── shell/              └─ Executa comandos
-│   │   ├── filesystem/         └─ Lê/escreve arquivos
-│   │   ├── browser/            └─ Navegador automático
-│   │   └── http/               └─ Faz requisições web
-│   ├── security/               ← Loja de "segurança"
-│   │                           └─ Autenticação, Gates
-│   └── protocol/               ← Loja da "metodologia"
-│                               └─ IMP/IEP/ISP implementados
+inception-v2/
 ├── apps/
-│   ├── cli/                    ← Aplicativo principal (terminal)
-│   └── daemon/                 ← Serviço de fundo (futuro)
-└── docs/                       ← Manual de instruções
-    ├── en/                     └─ Em inglês
-    ├── pt/                     └─ Em português
-    └── ...
+│   ├── cli/                    ← CLI principal (@rabeluslab/inception)
+│   │   └── src/
+│   │       ├── index.ts        ← Entry point, roteamento de comandos
+│   │       ├── provider-factory.ts  ← Seleção de provider (3-tier priority)
+│   │       ├── tool-registry.ts     ← Registro de ferramentas
+│   │       └── commands/
+│   │           ├── init.ts     ← inception init (wizard de configuração)
+│   │           ├── start.ts    ← inception start (runtime + wizard inline)
+│   │           ├── mission.ts  ← inception mission create/list/start/...
+│   │           ├── config.ts   ← inception config
+│   │           └── status.ts   ← inception status
+│   └── daemon/                 ← Daemon experimental (não usar em produção)
+│
+├── packages/
+│   ├── types/                  ← @rabeluslab/inception-types (v2.0.0)
+│   │                              200+ interfaces/tipos/enums TypeScript
+│   ├── config/                 ← @rabeluslab/inception-config
+│   │                              Schema Zod, loader cosmiconfig, model-registry
+│   ├── core/                   ← @rabeluslab/inception-core
+│   │                              InceptionRuntime, ChannelManager, Container (DI), TypedEventBus
+│   ├── memory/                 ← @rabeluslab/inception-memory
+│   │                              SQLite + FTS5 + vector search + DAG compaction
+│   ├── security/               ← @rabeluslab/inception-security
+│   │                              SecurityManager, gates, allowlists, approval flows
+│   ├── protocol/               ← @rabeluslab/inception-protocol
+│   │                              MissionProtocol (CRUD SQLite), wizard-logic, config-mapper
+│   ├── agent/                  ← @rabeluslab/inception-agent
+│   │                              AgentLoop (ReAct), ContextBuilder, slash-handler, ApprovalGate
+│   ├── providers/              ← 12+ adapters de LLM providers
+│   │   ├── anthropic/          ← Claude (claude-sonnet-4-6, claude-opus-4-6)
+│   │   ├── openai/             ← GPT (gpt-4o, o3, o4-mini)
+│   │   ├── openai-oauth/       ← ChatGPT Plus/Pro OAuth
+│   │   ├── gemini/             ← Gemini (2.5-flash, 2.5-pro)
+│   │   ├── gemini-oauth/       ← Gemini OAuth
+│   │   ├── ollama/             ← Ollama local/cloud
+│   │   ├── kimi/               ← Kimi / Moonshot AI
+│   │   ├── zai/                ← Z.AI / Zhipu
+│   │   ├── bailian/            ← Bailian / DashScope
+│   │   ├── openrouter/         ← OpenRouter (300+ modelos)
+│   │   ├── kilo/               ← Kilo gateway
+│   │   └── opencode-zen/       ← OpenCode Zen gateway
+│   ├── channels/
+│   │   ├── cli/                ← @rabeluslab/inception-channel-cli (Ink/React TUI)
+│   │   ├── telegram/           ← @rabeluslab/inception-channel-telegram
+│   │   └── http/               ← @rabeluslab/inception-channel-http
+│   └── tools/
+│       ├── filesystem/         ← Read, Write, ListDir, FileExists, StatFile
+│       ├── shell/              ← RunCommand com allowlist
+│       └── http/               ← HttpGet, HttpPost
+│
+└── docs/
+    ├── GUIA.md                 ← Guia completo pt-BR (27 seções)
+    ├── missions/               ← Spec técnica do sistema de missões
+    └── audit-research/         ← Auditorias técnicas e decisões arquiteturais
 ```
-
-### O que já está pronto (✅)
-
-1. **@inception/types** - Todas as interfaces TypeScript
-   - Como usar: `import type { IProvider, IChannel } from '@inception/types'`
-2. **Configuração do monorepo** - Turborepo + pnpm configurados
-3. **Documentação** - CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md
-
-### O que você precisa implementar (⏳)
-
-Veja a seção "Próximos Passos Priorizados" abaixo.
 
 ---
 
-## 🔧 Comandos Úteis (Guia de Bolso)
+## O que está implementado (~87%)
+
+| Layer          | Package                                  | Status                                                                                                    |
+| -------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Tipos          | `@rabeluslab/inception-types`            | ✅ 200+ interfaces/enums                                                                                  |
+| Config         | `@rabeluslab/inception-config`           | ✅ Zod schema, loader, model-registry                                                                     |
+| Core           | `@rabeluslab/inception-core`             | ✅ Runtime, ChannelManager, DI, EventBus                                                                  |
+| Memória        | `@rabeluslab/inception-memory`           | ✅ SQLite + FTS5 + vector + DAG compaction                                                                |
+| Segurança      | `@rabeluslab/inception-security`         | ✅ Gates, allowlists, pairing, approval flows                                                             |
+| Protocolo      | `@rabeluslab/inception-protocol`         | ✅ Mission CRUD, wizard, config-mapper                                                                    |
+| Agente         | `@rabeluslab/inception-agent`            | ✅ ReAct loop, context, tools, slash commands                                                             |
+| Providers      | todos os 12 packages                     | ✅ Anthropic, OpenAI, Gemini, Ollama, Kimi, Z.AI, Bailian, OpenRouter, Kilo, OpenCodeZen + OAuth variants |
+| Canal CLI      | `@rabeluslab/inception-channel-cli`      | ✅ Ink TUI, wizard inline, slash commands                                                                 |
+| Canal Telegram | `@rabeluslab/inception-channel-telegram` | ✅ Bot Telegram                                                                                           |
+| Ferramentas    | filesystem, shell, http                  | ✅ Todos funcionais                                                                                       |
+| CLI App        | `@rabeluslab/inception`                  | ✅ init, start, config, status, mission (6 subcomandos)                                                   |
+
+---
+
+## Comandos CLI Completos
 
 ```bash
-# Desenvolvimento
-pnpm dev              # Inicia modo de desenvolvimento (hot reload)
-pnpm build            # Compila tudo
-pnpm build --filter=@inception/types   # Compila só um pacote
+# Configuração
+node apps/cli/dist/index.js init                    # wizard de configuração inicial
+node apps/cli/dist/index.js config                  # exibe configuração resolvida
+node apps/cli/dist/index.js status                  # health check (config, providers, memória)
 
-# Qualidade de código
-pnpm lint             # Verifica erros de estilo
-pnpm lint:fix         # Corrige erros automaticamente
-pnpm format           # Formata o código
-pnpm typecheck        # Verifica tipos TypeScript
+# Agente
+node apps/cli/dist/index.js start                   # inicia agente (TUI interativa)
+node apps/cli/dist/index.js start --provider kimi   # força provider
+node apps/cli/dist/index.js start --model GLM-5     # força modelo
+node apps/cli/dist/index.js start --debug           # modo debug
 
-# Testes
-pnpm test             # Roda todos os testes
-pnpm test:coverage    # Roda testes com cobertura
+# Missões
+node apps/cli/dist/index.js mission create          # wizard de nova missão
+node apps/cli/dist/index.js mission list            # listar todas as missões
+node apps/cli/dist/index.js mission start <id>      # iniciar agente com missão ativa
+node apps/cli/dist/index.js mission status [id]     # progresso e tasks
+node apps/cli/dist/index.js mission report [id]     # relatório markdown
+node apps/cli/dist/index.js mission archive <id>    # arquivar missão encerrada
+```
 
-# Limpeza
-pnpm clean            # Limpa builds e node_modules
+### Slash Commands (dentro do agente)
+
+| Comando              | Ação                                                       |
+| -------------------- | ---------------------------------------------------------- |
+| `/mission`           | Exibe missão ativa e progresso                             |
+| `/mission create`    | Abre wizard inline **dentro do chat** (sem sair do agente) |
+| `/task list`         | Lista tasks pendentes                                      |
+| `/task done <texto>` | Marca task concluída                                       |
+| `/task add <desc>`   | Adiciona nova task                                         |
+| `/note <texto>`      | Entrada no journal                                         |
+| `/rules`             | Regras ativas da missão                                    |
+| `/pause`             | Salva estado e encerra graciosamente                       |
+| `/status`            | Estado: provider, modelo, tokens, missão                   |
+| `/stop`              | Cancela wizard em andamento                                |
+| `/help`              | Lista todos os comandos                                    |
+
+---
+
+## Arquitetura Técnica
+
+### Agent Loop (ReAct)
+
+```
+Mensagem do usuário
+  → ContextBuilder (busca memória relevante, monta system prompt)
+  → AgentLoop.turn() → LLM.generate()
+  → [tool_calls?] → ApprovalGate → ToolExecutor → resultado
+  → loop até finish_reason = "stop"
+  → armazena na memória
+  → resposta para o canal
+```
+
+### Wizard Inline (sem readline)
+
+O `/mission create` dentro do agente opera sem conflito com o Ink (que controla stdin):
+
+1. `setWizardInputHandler(fn)` — redireciona inputs do chat para o wizard
+2. `pushSystemMessage(text)` — injeta perguntas na UI Ink como mensagens de sistema
+3. Máquina de estado: 9 passos, closures `partial` e `stepIndex`
+4. Em falha de validação: `restart()` (reseta para passo 1 — nunca devolve para a IA)
+5. `clearWizardInputHandler()` — restaura roteamento normal ao finalizar
+
+### Provider Priority (3-tier)
+
+```
+1. CLI flags (--provider, --model)          ← maior prioridade
+2. .inception.json (defaultProvider)
+3. Environment variables (ANTHROPIC_API_KEY, OPENAI_API_KEY, ...)
+4. Ollama local (fallback automático)
+```
+
+### Memória (Lossless Claw)
+
+- **Mensagens:** nunca deletadas — armazenadas em SQLite com FTS5 full-text search
+- **Compaction:** DAG hierárquico de summaries (depth 0 = leaf, depth N = condensado)
+- **Context assembly:** fresh tail protegido + summaries até 60% do budget de tokens
+- **Vector search:** embeddings via Gemini API ou Ollama (cosine similarity)
+
+---
+
+## Providers — Slugs e Configuração
+
+| Slug           | Provider                  | Autenticação                 |
+| -------------- | ------------------------- | ---------------------------- |
+| `anthropic`    | Anthropic Claude          | `ANTHROPIC_API_KEY`          |
+| `openai`       | OpenAI                    | `OPENAI_API_KEY`             |
+| `openai-oauth` | ChatGPT Plus/Pro          | OAuth token                  |
+| `gemini`       | Google Gemini             | `GEMINI_API_KEY`             |
+| `ollama`       | Ollama local ou cloud     | `OLLAMA_BASE_URL` (opcional) |
+| `kimi`         | Kimi PAYG (Moonshot AI)   | `KIMI_API_KEY`               |
+| `kimi-coding`  | Kimi Coding Plan          | `KIMI_API_KEY`               |
+| `zai`          | Z.AI PAYG (Zhipu)         | `ZAI_API_KEY`                |
+| `zai-coding`   | Z.AI Coding Plan          | `ZAI_API_KEY`                |
+| `bailian`      | Bailian Coding Plan       | `BAILIAN_API_KEY`            |
+| `bailian-payg` | Bailian PAYG (DashScope)  | `BAILIAN_API_KEY`            |
+| `openrouter`   | OpenRouter (300+ modelos) | `OPENROUTER_API_KEY`         |
+| `kilo`         | Kilo gateway              | `KILO_API_KEY`               |
+
+---
+
+## Segurança
+
+### Níveis de Autonomia
+
+| Nível        | Comportamento                                             |
+| ------------ | --------------------------------------------------------- |
+| `Readonly`   | Apenas lê e sugere — nunca escreve, nunca executa         |
+| `Supervised` | Age, mas pede aprovação para ações destrutivas _(padrão)_ |
+| `Full`       | Age autonomamente — use apenas em ambientes controlados   |
+
+### Gates de Qualidade (IEP)
+
+| Gate            | Código | Significado                      |
+| --------------- | ------ | -------------------------------- |
+| TypeScript Gate | G-TS   | Tipos corretos, sem `any`        |
+| Design Gate     | G-DI   | Decisões de design validadas     |
+| Security Gate   | G-SEC  | Segurança verificada             |
+| UX Gate         | G-UX   | Experiência do usuário aprovada  |
+| Release Gate    | G-REL  | Pronto para release              |
+| AI Gate         | G-AI   | Comportamento do agente validado |
+
+---
+
+## Comandos de Desenvolvimento
+
+```bash
+pnpm install          # instalar dependências
+pnpm build            # build de todos os packages
+pnpm lint             # ESLint (zero erros)
+pnpm typecheck        # TypeScript strict check
+pnpm test             # testes
+pnpm clean            # limpar dist + node_modules
+```
+
+### Build de package individual
+
+```bash
+pnpm --filter @rabeluslab/inception-protocol build
+pnpm --filter @rabeluslab/inception-channel-cli build
 ```
 
 ---
 
-## 🐛 Troubleshooting (Problemas Comuns)
+## Troubleshooting
 
-### "pnpm não é reconhecido como comando"
+### "Cannot find module 'node:sqlite'"
 
-**Windows:**
-
-```powershell
-# Feche e REABRA o terminal (Prompt de Comando ou PowerShell)
-# O PATH só atualiza em novas janelas
-```
-
-**Mac/Linux:**
+Node.js < 22. Atualize para Node 22+.
 
 ```bash
-# Adicione ao PATH manualmente:
-export PATH="$HOME/.local/share/pnpm:$PATH"
-
-# Ou recarregue o shell:
-source ~/.zshrc  # Se usar zsh
-source ~/.bashrc # Se usar bash
+node --version   # deve ser v22.x.x
 ```
 
-### "Cannot find module '@inception/types'"
+### "Config error: No Inception config found"
+
+Execute `inception init` no diretório do projeto para criar `.inception.json`.
+
+### "Provider init error"
+
+Verifique se a API key do provider está configurada no `.inception.json` ou como variável de ambiente.
+
+### ESLint errors após edição
 
 ```bash
-# Significa que os pacotes não foram buildados
+pnpm lint:fix
+```
+
+### Build falha com "Cannot find module '@rabeluslab/inception-types'"
+
+Build na ordem correta (Turborepo faz isso automaticamente):
+
+```bash
 pnpm build
-
-# Ou a versão está desatualizada
-pnpm install
-pnpm build
 ```
 
-### "permission denied" (Mac/Linux)
+---
+
+## Documentação de Referência
+
+| Documento                                                          | Conteúdo                                                      |
+| ------------------------------------------------------------------ | ------------------------------------------------------------- |
+| [\_gov/governance-spec.md](_gov/governance-spec.md)                | **Documento norte** — estado real, gaps, governança           |
+| [\_gov/roadmap.md](_gov/roadmap.md)                                | Roadmap vivo de todas as 6 sprints                            |
+| [docs/GUIA.md](docs/GUIA.md)                                       | Guia completo pt-BR "De Zero à Missão Concluída"              |
+| [docs/missions/mission-system.md](docs/missions/mission-system.md) | Spec técnica do sistema de missões                            |
+| [docs/audit-research/README.md](docs/audit-research/README.md)     | Redirect para auditorias históricas em `_gov/archive/audits/` |
+| [CHANGELOG.md](CHANGELOG.md)                                       | Histórico completo de mudanças                                |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                                 | Guia de contribuição                                          |
+
+---
+
+## Branch Strategy
+
+```
+main
+└── feat/mission-system          ← branch ativa
+    ├── snapshot/mission/phase-0-baseline  (CI verde, 0 erros ESLint)
+    ├── snapshot/mission/phase-0           (docs/missions/mission-system.md)
+    ├── snapshot/mission/phase-1           (Protocol Layer)
+    ├── snapshot/mission/phase-2           (CLI Commands)
+    ├── snapshot/mission/phase-3           (Slash Commands)
+    ├── snapshot/mission/phase-4           (Auto-Update Models)
+    └── snapshot/mission/phase-5           (Integração final)
+```
+
+**Rollback:**
 
 ```bash
-# Use sudo para comandos globais
-sudo npm install -g pnpm
-
-# Ou configure npm para não precisar de sudo:
-mkdir ~/.npm-global
-npm config set prefix '~/.npm-global'
-echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
-```
-
-### Erros de TypeScript estranhos
-
-```bash
-# Limpe tudo e reinstale
-pnpm clean
-pnpm install
-pnpm build
+git reset --hard snapshot/mission/phase-N
 ```
 
 ---
 
-## 📚 Documentação Importante
+## Checklist de Onboarding
 
-Leia estes arquivos na ordem:
-
-1. **`packages/types/src/`** - Veja as interfaces que já existem (LEIA PRIMEIRO — é o contrato de tudo!)
-2. **`docs/audit-research/claude-sonnet-audit-2026-03-16.md`** - Auditoria técnica completa e roadmap revisado
-3. **`CONTRIBUTING.md`** - Como contribuir, commits, padrões
-4. **`SECURITY.md`** - Políticas de segurança
-
-> **Nota:** O arquivo `MISSION_BRIEFING.md` foi referenciado aqui anteriormente mas não chegou a ser criado.
-> A auditoria técnica em `docs/audit-research/` cobre o mesmo propósito.
-
----
-
-## 🎯 Próximos Passos Priorizados
-
-### Fase 1: Fundação (FAÇA PRIMEIRO)
-
-#### 1.1 Config Package
-
-```
-packages/config/
-├── src/
-│   ├── index.ts
-│   ├── schema.ts          # Zod schemas
-│   ├── loader.ts          # Cosmiconfig integration
-│   └── validation.ts
-├── package.json
-└── tsconfig.json
-```
-
-**Tarefa:** Criar validação de configuração usando Zod
-
-#### 1.2 Core Package
-
-```
-packages/core/
-├── src/
-│   ├── index.ts
-│   ├── runtime.ts         # Main runtime class
-│   ├── events.ts          # Event bus
-│   ├── container.ts       # Dependency injection
-│   └── errors.ts          # Error classes
-```
-
-**Tarefa:** Implementar o runtime engine com event bus
-
-### Fase 2: Provedores
-
-#### 2.1 OpenAI Provider
-
-Implementar `IProvider` para OpenAI
-
-#### 2.2 Gemini Embeddings
-
-Implementar `IEmbeddingProvider` usando API Gemini
-
-### Fase 3: Canais
-
-#### 3.1 CLI Channel (Ink-based)
-
-Interface terminal rica
-
-#### 3.2 Telegram Channel
-
-Bot do Telegram
-
-### Fase 4: Memória
-
-#### 4.1 SQLite Backend
-
-Implementar `IMemoryBackend` com SQLite
-
-#### 4.2 Gemini Integration
-
-Integrar embeddings da Gemini
-
-### Fase 5: CLI App
-
-```
-apps/cli/
-├── src/
-│   ├── index.ts           # Entry point
-│   ├── commands/
-│   │   ├── init.ts        # inception init
-│   │   ├── start.ts       # inception start
-│   │   └── config.ts      # inception config
-│   └── components/        # Ink React components
-```
-
----
-
-## 🔗 Links Úteis
-
-- **Repositório:** https://github.com/rabeluslab/inception
-- **Documentação:** https://inception.rabeluslab.dev (futuro)
-- **Issues:** https://github.com/rabeluslab/inception/issues
-- **Discord:** https://discord.gg/inception (futuro)
-
-### Referências Técnicas
-
-- [Turborepo Docs](https://turbo.build/repo/docs)
-- [pnpm Workspaces](https://pnpm.io/workspaces)
-- [Zod Documentation](https://zod.dev/)
-- [Ink (React for CLI)](https://github.com/vadimdemedes/ink)
-- [Gemini Embeddings API](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-embedding-2/)
-
----
-
-## 💡 Dicas para Novos Desenvolvedores
-
-### 1. Comece pelo types
-
-Veja como as interfaces estão definidas em `packages/types/src/`. Isso mostra o "contrato" que todas as implementações devem seguir.
-
-### 2. Use o Zod Playground
-
-Teste seus schemas de validação em: https://zod-playground.vercel.app/
-
-### 3. Teste pequenas partes
-
-Não tente implementar tudo de uma vez. Faça um pacote, teste, depois vá para o próximo.
-
-### 4. Siga os exemplos
-
-Veja como outros projetos open source estruturam monorepos:
-
-- https://github.com/vercel/turborepo (exemplos)
-- https://github.com/calcom/cal.com
-
-### 5. Pergunte!
-
-Se travar em algo por mais de 30 minutos, pergunte. Não fique preso.
-
----
-
-## ✅ Checklist de Transferência
-
-Antes de assumir o projeto, verifique:
-
-- [ ] Node.js 20+ instalado
-- [ ] pnpm instalado
-- [ ] Git instalado
-- [ ] Repositório clonado
+- [ ] Leu [`_gov/governance-spec.md`](_gov/governance-spec.md) — estado real do projeto
+- [ ] Verificou [`_gov/bus/active/`](_gov/bus/active/) — mensagens pendentes entre sessões
+- [ ] Node.js 22+ instalado e verificado (`node --version`)
+- [ ] pnpm 8+ instalado (`pnpm --version`)
+- [ ] Repositório clonado e branch `feat/mission-system` ativa
 - [ ] `pnpm install` executado sem erros
 - [ ] `pnpm build` executado sem erros
-- [ ] Leu `MISSION_BRIEFING.md` completo
-- [ ] Leu `CONTRIBUTING.md`
-- [ ] Entendeu a estrutura do monorepo
-- [ ] Sabe quais pacotes já existem vs. o que precisa criar
+- [ ] `pnpm lint` retorna 0 erros
+- [ ] Leu [docs/GUIA.md](docs/GUIA.md) completo
+- [ ] Criou `.inception.json` com `inception init` em um projeto de teste
+- [ ] Executou `inception start` e conversou com o agente
+- [ ] Executou `inception mission create` e criou uma missão de teste
+- [ ] Testou `/mission create` dentro do agente (wizard inline)
 
 ---
 
-## 🆘 Contato de Emergência
-
-Se absolutamente travar:
-
-1. Leia a mensagem de erro **completamente**
-2. Google o erro (copie e cole a mensagem)
-3. Verifique se seguiu o tutorial passo a passo
-4. Pergunte no GitHub Issues
-
----
-
-## 📝 Notas do Desenvolvedor Anterior
-
-> Este projeto é ambicioso mas totalmente factível. A arquitetura está bem definida, os tipos TypeScript são rigorosos, e a estrutura do monorepo é profissional.
->
-> O maior desafio será o runtime engine (packages/core) - é o coração de tudo. Depois disso, os provedores e canais são mais mecânicos.
->
-> Não tenha medo de Typescript strict - ele vai te salvar de muitos bugs.
->
-> Boa sorte! 🚀
-
----
-
-**Document Version:** 1.0.0  
-**Last Updated:** 2026-03-12  
-**Next Review:** 2026-03-19
+**Document Version:** 2.0.0
+**Last Updated:** 2026-03-23

@@ -69,13 +69,39 @@ We aim to respond within 48 hours and will keep you updated on our progress.
 4. **Secrets**: Never hardcode secrets; use environment variables
 5. **Dependencies**: Keep dependencies updated; audit with `pnpm audit`
 
+## Runtime Security Implementation
+
+### SecurityManager (`packages/security/src/security-manager.ts`)
+
+The `SecurityManager` class is the central security enforcement point, fully implemented and applied to every tool execution:
+
+| Protection                 | What it does                                                                            |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| **SSRF prevention**        | Blocks requests to private IP ranges (10.x, 172.16-31.x, 192.168.x, localhost variants) |
+| **Path traversal**         | Rejects `..` sequences, null bytes, and symlink escapes outside `workspacePath`         |
+| **Command injection**      | Validates shell commands against an explicit `allowedCommands` allowlist                |
+| **Pairing authentication** | Generates and validates one-time pairing codes for remote channels (HTTP, Telegram)     |
+| **URL allowlist**          | HTTP tools check URLs against `allowedUrls` config before any request                   |
+
+### Approval Gates (`packages/agent/src/agent-loop.ts`)
+
+The `AgentLoop` enforces an `ApprovalGate` before executing any tool call when `autonomyLevel` is `Supervised`:
+
+- `AutonomyLevel.Supervised` (default) — user must approve destructive actions
+- `AutonomyLevel.Full` — no gates, autonomous execution
+- `AutonomyLevel.Readonly` — no writes, no shell, read-only mode
+
+### Known Gap: Rate Limiting (G2)
+
+> **⚠️ Gap G2 (MEDIUM):** Rate limiting is configured in `.inception.json` (`security.rateLimit`) but `SecurityManager.checkRateLimit()` is not yet implemented. The AgentLoop does not call it before `generate()`. Scheduled for Sprint 2, ss-2.3.
+
 ## Security Features
 
 ### Built-in Protections
 
 - **Sandbox Mode**: Docker containerization for tool execution
 - **Allowlists**: Command and path restrictions
-- **Rate Limiting**: Prevent API abuse
+- **Rate Limiting**: Configured but not yet enforced (Gap G2 — Sprint 2)
 - **Authentication**: Bearer token and pairing code support
 - **Autonomy Levels**: readonly/supervised/full control
 - **Gate System**: Mandatory checks for sensitive operations

@@ -45,6 +45,16 @@ export interface FilesystemPolicy {
  * Execution security policy
  */
 export interface ExecutionPolicy {
+  /**
+   * Sandbox mode for tool execution.
+   *
+   * - `'none'` — no sandboxing; commands run in the host Node.js process. **Only implemented value.**
+   * - `'docker'` — @unimplemented planned. Intended to isolate execution in a Docker container.
+   * - `'vm'` — @unimplemented planned. Intended to isolate execution in a lightweight VM (e.g. gVisor).
+   *
+   * Setting `'docker'` or `'vm'` today falls through to `'none'` behaviour.
+   * Tracked as G3 in _gov/roadmap.md.
+   */
   readonly sandbox: 'none' | 'docker' | 'vm';
   readonly allowedCommands: readonly string[];
   readonly blockedCommands: readonly string[];
@@ -132,6 +142,7 @@ export interface ISecurityManager {
   validateFilesystemAccess(path: string, operation: 'read' | 'write'): boolean;
   validateCommand(command: string): boolean;
   validateNetworkRequest(url: string): boolean;
+  checkRateLimit(key: string): void;
   createPairingCode(): Promise<string>;
   validatePairingCode(code: string): Promise<boolean>;
   generateBearerToken(pairingCode: string): Promise<string>;

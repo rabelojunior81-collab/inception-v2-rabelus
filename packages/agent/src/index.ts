@@ -23,3 +23,6 @@ export {
   messageToMemoryEntry,
   toolResultToMessage,
 } from './message-adapter.js';
+
+export { handleSlashCommand } from './slash-handler.js';
+export type { SlashCommandContext, SlashCommandResult } from './slash-handler.js';

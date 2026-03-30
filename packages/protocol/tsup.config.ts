@@ -7,5 +7,6 @@ export default defineConfig({
   clean: true,
   outDir: 'dist',
   target: 'node22',
+  platform: 'node',
   external: ['@rabeluslab/inception-types'],
 });

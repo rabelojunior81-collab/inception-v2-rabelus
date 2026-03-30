@@ -59,8 +59,12 @@ export async function loadConfigFile(
 
     if (result === null) {
       return {
-        success: true,
-        data: { raw: {} as InceptionConfigFile, filePath: undefined },
+        success: false,
+        error: new Error(
+          'Nenhum arquivo de configuração encontrado.\n' +
+            'Execute: node apps/cli/dist/index.js init\n' +
+            '(ou inception init) para criar o arquivo .inception.json'
+        ),
       };
     }
 
@@ -97,13 +101,13 @@ export function resolveConfig(
   const agentConfigInput = {
     identity: {
       ...DEFAULT_AGENT_IDENTITY,
-      name: raw.agent.name,
-      purpose: raw.agent.purpose,
-      nature: raw.agent.nature ?? DEFAULT_AGENT_IDENTITY.nature,
-      tone: raw.agent.tone ?? DEFAULT_AGENT_IDENTITY.tone,
-      language: raw.agent.language ?? DEFAULT_AGENT_IDENTITY.language,
-      values: raw.agent.values ?? DEFAULT_AGENT_IDENTITY.values,
-      limits: raw.agent.limits ?? DEFAULT_AGENT_IDENTITY.limits,
+      name: raw.agent?.name ?? DEFAULT_AGENT_IDENTITY.name,
+      purpose: raw.agent?.purpose ?? DEFAULT_AGENT_IDENTITY.purpose,
+      nature: raw.agent?.nature ?? DEFAULT_AGENT_IDENTITY.nature,
+      tone: raw.agent?.tone ?? DEFAULT_AGENT_IDENTITY.tone,
+      language: raw.agent?.language ?? DEFAULT_AGENT_IDENTITY.language,
+      values: raw.agent?.values ?? DEFAULT_AGENT_IDENTITY.values,
+      limits: raw.agent?.limits ?? DEFAULT_AGENT_IDENTITY.limits,
       updatedAt: now,
     },
     operator: raw.operator

@@ -1,2 +1,1 @@
-// Discord channel — not yet implemented
-export {};
+export { DiscordChannel } from './channel.js';
