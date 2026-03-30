@@ -21,6 +21,7 @@ Sessão nova. Memórias Claude desatualizadas. HANDOFF.md diz "tudo implementado
 ## Scope
 
 ### Dentro:
+
 - Varredura completa de `packages/`, `apps/`, `channels/`, `tools/`
 - Identificação de stubs explícitos (arquivos com `export {}` ou sem implementação real)
 - Leitura de todos os `package.json` (versão, nome, exports)
@@ -30,12 +31,14 @@ Sessão nova. Memórias Claude desatualizadas. HANDOFF.md diz "tudo implementado
 - Comparação com memórias Claude existentes
 
 ### Fora:
+
 - Leitura de código fonte linha-a-linha (escopo de Sprint 2)
 - Auditoria de segurança profunda (coberta pelos packages de security)
 
 ## Spec Técnica
 
 ### Arquivos a criar:
+
 - `_gov/sprints/sprint-0-governance-bootstrap/ss-0.1-research-filesystem-audit/brief.md` (este arquivo)
 - `_gov/sprints/sprint-0-governance-bootstrap/ss-0.1-research-filesystem-audit/handoff.md`
 
@@ -46,11 +49,13 @@ Sessão nova. Memórias Claude desatualizadas. HANDOFF.md diz "tudo implementado
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [x] Lista de todos os packages com status (completo/stub)
 - [x] Lista de 12 gaps identificados (G1-G12)
 - [x] Confirmação de versões nos package.json
 
 ### Testes do Usuário (manual):
+
 - [x] Revisão do entendimento apresentado pelo Claude
 
 ## Commit Message

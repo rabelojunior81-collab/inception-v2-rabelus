@@ -1,4 +1,5 @@
 # Guia Completo do Inception Framework
+
 ## De Zero à Missão Concluída — Guia Oficial pt-BR
 
 > **Versão do guia:** 1.0.0 — 2026-03-23
@@ -55,15 +56,15 @@ O **Inception Framework** é um runtime TypeScript-nativo para agentes de inteli
 
 A maioria das ferramentas de IA funciona como um chat: você pergunta, a IA responde. O Inception vai além:
 
-| Característica | Chat comum | Inception Framework |
-|---|---|---|
-| Executa código real | Não | Sim (com aprovação) |
-| Lê e escreve arquivos | Não | Sim (com controle de segurança) |
-| Tem memória entre sessões | Não | Sim (SQLite persistente) |
-| Pode ser orientado por missão | Não | Sim (wizard + contexto automático) |
-| Controla nível de autonomia | Não | Sim (Readonly / Supervised / Full) |
-| Suporta múltiplos providers | Limitado | 14+ providers simultâneos |
-| Interface terminal rica | Não | Sim (Ink/React TUI) |
+| Característica                | Chat comum | Inception Framework                |
+| ----------------------------- | ---------- | ---------------------------------- |
+| Executa código real           | Não        | Sim (com aprovação)                |
+| Lê e escreve arquivos         | Não        | Sim (com controle de segurança)    |
+| Tem memória entre sessões     | Não        | Sim (SQLite persistente)           |
+| Pode ser orientado por missão | Não        | Sim (wizard + contexto automático) |
+| Controla nível de autonomia   | Não        | Sim (Readonly / Supervised / Full) |
+| Suporta múltiplos providers   | Limitado   | 14+ providers simultâneos          |
+| Interface terminal rica       | Não        | Sim (Ink/React TUI)                |
 
 ### Para quem é o Inception?
 
@@ -111,21 +112,21 @@ O agente tem **memória persistente** entre sessões, armazenada em SQLite com b
 O **nível de autonomia** define o quanto o agente pode agir sem pedir sua aprovação:
 
 - **Readonly** — apenas lê e sugere. Nunca escreve, nunca executa nada
-- **Supervised** *(padrão)* — age, mas pede aprovação antes de ações potencialmente destrutivas (escrever arquivos, executar comandos)
+- **Supervised** _(padrão)_ — age, mas pede aprovação antes de ações potencialmente destrutivas (escrever arquivos, executar comandos)
 - **Full** — age completamente de forma autônoma, sem pedir aprovação
 
 ### Gates (Portões de Qualidade)
 
 Os **gates** são verificações formais de qualidade na metodologia Inception:
 
-| Gate | Código | Significado |
-|------|--------|-------------|
-| TypeScript Gate | G-TS | Tipos corretos, sem any |
-| Design Gate | G-DI | Decisões de design validadas |
-| Security Gate | G-SEC | Segurança verificada |
-| UX Gate | G-UX | Experiência do usuário aprovada |
-| Release Gate | G-REL | Pronto para release |
-| AI Gate | G-AI | Comportamento do agente validado |
+| Gate            | Código | Significado                      |
+| --------------- | ------ | -------------------------------- |
+| TypeScript Gate | G-TS   | Tipos corretos, sem any          |
+| Design Gate     | G-DI   | Decisões de design validadas     |
+| Security Gate   | G-SEC  | Segurança verificada             |
+| UX Gate         | G-UX   | Experiência do usuário aprovada  |
+| Release Gate    | G-REL  | Pronto para release              |
+| AI Gate         | G-AI   | Comportamento do agente validado |
 
 ---
 
@@ -180,6 +181,7 @@ Os **gates** são verificações formais de qualidade na metodologia Inception:
 O Inception usa `node:sqlite`, um módulo nativo disponível apenas a partir do **Node.js 22**. Versões anteriores (20, 21) não funcionarão.
 
 **Como verificar:**
+
 ```bash
 node --version
 # Deve mostrar: v22.x.x ou v23.x.x ou v25.x.x
@@ -239,15 +241,15 @@ xcode-select --install
 
 Você precisará de pelo menos uma chave de API para um dos providers suportados. As opções mais comuns:
 
-| Provider | Onde obter a chave | Tem plano gratuito? |
-|---|---|---|
-| Ollama (local) | Não precisa de chave | Sim, totalmente gratuito |
+| Provider        | Onde obter a chave                    | Tem plano gratuito?         |
+| --------------- | ------------------------------------- | --------------------------- |
+| Ollama (local)  | Não precisa de chave                  | Sim, totalmente gratuito    |
 | Kimi / Moonshot | platform.moonshot.ai/console/api-keys | Créditos iniciais gratuitos |
-| Z.AI / Zhipu | z.ai | Tier gratuito disponível |
-| Anthropic | console.anthropic.com | Não (requer cartão) |
-| OpenAI | platform.openai.com/api-keys | Não (requer cartão) |
-| Google Gemini | aistudio.google.com/apikey | Sim (Gemini Flash gratuito) |
-| OpenRouter | openrouter.ai/keys | Créditos gratuitos iniciais |
+| Z.AI / Zhipu    | z.ai                                  | Tier gratuito disponível    |
+| Anthropic       | console.anthropic.com                 | Não (requer cartão)         |
+| OpenAI          | platform.openai.com/api-keys          | Não (requer cartão)         |
+| Google Gemini   | aistudio.google.com/apikey            | Sim (Gemini Flash gratuito) |
+| OpenRouter      | openrouter.ai/keys                    | Créditos gratuitos iniciais |
 
 > **Recomendação para iniciantes:** Use **Ollama** (totalmente local e gratuito) para aprender o sistema, depois migre para um provider cloud conforme sua necessidade.
 
@@ -273,6 +275,7 @@ pnpm install
 Este comando instala todas as dependências de todos os pacotes do monorepo. Pode demorar 1-3 minutos na primeira execução.
 
 **Se der erro:**
+
 - Verifique se está na pasta correta: `ls` deve mostrar `package.json`, `apps/`, `packages/`
 - Verifique a versão do pnpm: `pnpm --version` (deve ser 8+)
 - Verifique a versão do Node: `node --version` (deve ser 22+)
@@ -286,6 +289,7 @@ pnpm build
 Compila todos os 20+ pacotes do monorepo usando tsup/esbuild. A saída vai para `dist/` em cada pacote.
 
 **Saída esperada:**
+
 ```
 Tasks:    30 successful, 30 total
 Time:     ~15s
@@ -329,6 +333,7 @@ node /caminho/para/inception-v2-rabelus/apps/cli/dist/index.js init
 ```
 
 > **Dica de produtividade:** Crie um alias no seu shell para não precisar digitar o caminho completo toda vez:
+>
 > ```bash
 > # Adicione ao ~/.bashrc ou ~/.zshrc:
 > alias inception="node /caminho/para/inception-v2-rabelus/apps/cli/dist/index.js"
@@ -340,20 +345,24 @@ O wizard passa por várias etapas. Aqui está o que cada pergunta significa e o 
 
 **① Nome do agente**
 Como o agente se chamará. Aparece na barra de status do terminal.
+
 - Exemplo: `Leilai`, `Tessy`, `MeuAgente`
 
 **② Provider**
 Qual serviço de IA usar. Você verá uma lista numerada com todos os providers disponíveis. Digite o número correspondente.
+
 - Para começar sem custo: escolha `ollama`
 - Para a melhor qualidade: escolha `anthropic` ou `kimi`
 
 **③ Chave de API**
 A chave de API do provider escolhido. Para Ollama, deixe em branco (não precisa).
+
 - A chave é armazenada no `.inception.json` local — nunca sai da sua máquina
 - Nunca versione o `.inception.json` com a chave em repositórios públicos
 
 **④ Modelo**
 O modelo específico do provider. O wizard mostra uma lista atualizada automaticamente dos modelos disponíveis.
+
 - Para Kimi: `kimi-k2.5` (padrão, mais capaz)
 - Para Anthropic: `claude-sonnet-4-6`
 - Para OpenAI: `gpt-5.4`
@@ -361,19 +370,23 @@ O modelo específico do provider. O wizard mostra uma lista atualizada automatic
 
 **⑤ Nome do operador**
 Seu nome ou o papel que você exerce. O agente usa isso para se referir a você.
+
 - Exemplo: `Rabelus`, `Operador`, `Dev`
 
 **⑥ Idioma**
 O idioma padrão de resposta do agente.
+
 - `pt-BR` para português do Brasil
 - `en` para inglês
 
 **⑦ Propósito do agente**
 Uma frase descrevendo a finalidade principal do agente neste projeto.
+
 - Exemplo: `Assistente de desenvolvimento de software para o projeto X`
 
 **⑧ Tom**
 O estilo de comunicação do agente:
+
 - `direct` — respostas diretas e objetivas
 - `formal` — linguagem formal
 - `friendly` — tom amigável e conversacional
@@ -404,6 +417,7 @@ Ao terminar, o wizard cria `.inception.json` no diretório atual. Exemplo:
 ```
 
 > **IMPORTANTE:** Adicione `.inception.json` ao `.gitignore` se seu projeto for open source, pois ele contém sua chave de API:
+>
 > ```bash
 > echo ".inception.json" >> .gitignore
 > ```
@@ -482,6 +496,7 @@ Você pode configurar vários providers e alternar entre eles:
 ```
 
 Para usar um provider específico ao iniciar:
+
 ```bash
 node apps/cli/dist/index.js start --provider anthropic
 node apps/cli/dist/index.js start --provider ollama --model qwen2.5
@@ -509,7 +524,8 @@ O provider mais recomendado para uso geral. Excelente relação custo/benefício
 ```
 
 **Modelos disponíveis:**
-- `kimi-k2.5` — flagship, 256K contexto, multimodal, agentic *(padrão)*
+
+- `kimi-k2.5` — flagship, 256K contexto, multimodal, agentic _(padrão)_
 - `kimi-k2-thinking` — modo de raciocínio estendido
 - `kimi-k2-thinking-turbo` — raciocínio mais rápido
 - `kimi-k2-turbo-preview` — menor custo
@@ -550,9 +566,10 @@ Provider chinês de alta qualidade. GLM-5 é excelente para tarefas de engenhari
 ```
 
 **Modelos principais:**
+
 - `GLM-5` — próxima geração, agentic engineering
 - `GLM-5-Turbo` — mais rápido para workloads longos
-- `GLM-4.7` — flagship atual *(padrão)*
+- `GLM-4.7` — flagship atual _(padrão)_
 - `GLM-4.5-air` — gratuito (tier free)
 
 ### Bailian / DashScope (`bailian`)
@@ -571,6 +588,7 @@ Gateway da Alibaba Cloud com acesso a Qwen, GLM, Kimi e outros.
 ```
 
 > **Atenção:** Bailian tem dois endpoints distintos:
+>
 > - **Coding Plan** (`sk-sp-...`): `https://coding-intl.dashscope.aliyuncs.com/v1`
 > - **PAYG** (`sk-...`): `https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
 
@@ -589,7 +607,8 @@ Melhor qualidade para raciocínio complexo e tarefas técnicas.
 ```
 
 **Modelos:**
-- `claude-sonnet-4-6` — equilíbrio velocidade/qualidade *(padrão)*
+
+- `claude-sonnet-4-6` — equilíbrio velocidade/qualidade _(padrão)_
 - `claude-opus-4-6` — máxima qualidade
 - `claude-haiku-4-5-20251001` — mais rápido e barato
 
@@ -621,7 +640,7 @@ Melhor qualidade para raciocínio complexo e tarefas técnicas.
 }
 ```
 
-**Modelos:** `gemini-2.5-flash` *(padrão)*, `gemini-2.5-pro`
+**Modelos:** `gemini-2.5-flash` _(padrão)_, `gemini-2.5-pro`
 
 **Onde obter:** https://aistudio.google.com/apikey
 
@@ -738,30 +757,33 @@ Quando o agente está rodando, você vê:
 ### Elementos da interface
 
 **Barra de status (topo):**
+
 - Nome do agente
 - Estado atual: `Pronto` / `Pensando...` / `Executando tool` / `Aguardando aprovação`
 - Missão ativa (se houver)
 - Atalho para sair
 
 **Área de mensagens (centro):**
+
 - `◆ Agente` — mensagens do agente
 - `▶ Você` — suas mensagens
 - `• Sistema` — mensagens de sistema (slash commands, notificações)
 
 **Input (baixo):**
+
 - Campo de texto para digitar mensagens e slash commands
 - Mostra `Processando...` durante execução
 - Durante o wizard de missão: mostra as perguntas do wizard
 
 ### Estados do agente
 
-| Estado | Significado |
-|--------|-------------|
-| `Pronto` | Aguardando sua entrada |
-| `Pensando...` | Consultando o modelo de linguagem |
-| `Executando tool` | Executando uma ferramenta (ler arquivo, etc.) |
-| `Aguardando aprovação` | Esperando você aprovar uma ação |
-| `Erro` | Ocorreu um erro (verifique o log) |
+| Estado                 | Significado                                   |
+| ---------------------- | --------------------------------------------- |
+| `Pronto`               | Aguardando sua entrada                        |
+| `Pensando...`          | Consultando o modelo de linguagem             |
+| `Executando tool`      | Executando uma ferramenta (ler arquivo, etc.) |
+| `Aguardando aprovação` | Esperando você aprovar uma ação               |
+| `Erro`                 | Ocorreu um erro (verifique o log)             |
 
 ### Aprovações
 
@@ -837,6 +859,7 @@ Os slash commands são comandos especiais digitados no chat do agente. Eles NÃO
 ### Comandos de missão
 
 #### `/mission`
+
 Exibe o resumo completo da missão ativa.
 
 ```
@@ -852,11 +875,13 @@ Exibe o resumo completo da missão ativa.
 ```
 
 #### `/mission create`
+
 Inicia o wizard de criação de missão **diretamente no chat**, sem sair do agente. Veja a [Parte IV](#parte-iv--sistema-de-missões) para detalhes completos.
 
 ### Comandos de tarefas
 
 #### `/task list`
+
 Lista todas as tasks pendentes da missão ativa.
 
 ```
@@ -869,6 +894,7 @@ Você: /task list
 ```
 
 #### `/task done <descrição>`
+
 Registra uma task como concluída. Útil para marcar progresso durante a conversa.
 
 > **⚠️ Status (Gap G1):** Confirmação visual apenas — a task **não é persistida** no banco de dados SQLite. `/task list` não refletirá a mudança após reiniciar o agente. Resolução prevista: Sprint 2, ss-2.2.
@@ -881,6 +907,7 @@ Você: /task done Implementei o módulo de autenticação JWT com refresh tokens
 ```
 
 #### `/task add <descrição>`
+
 Adiciona uma nova task à missão ativa.
 
 > **⚠️ Status (Gap G1):** Confirmação visual apenas — a task **não é persistida** no SQLite. Resolução prevista: Sprint 2, ss-2.2.
@@ -895,6 +922,7 @@ Você: /task add Implementar rate limiting na API
 ### Comandos informativos
 
 #### `/status`
+
 Exibe o estado completo do agente: provider, modelo, tokens usados, missão ativa.
 
 ```
@@ -907,6 +935,7 @@ Exibe o estado completo do agente: provider, modelo, tokens usados, missão ativ
 ```
 
 #### `/rules`
+
 Exibe as regras e metadados da missão ativa.
 
 ```
@@ -919,11 +948,13 @@ Exibe as regras e metadados da missão ativa.
 ```
 
 #### `/help`
+
 Lista todos os slash commands disponíveis.
 
 ### Comandos de controle
 
 #### `/note <texto>`
+
 Registra uma nota no journal da missão.
 
 > **⚠️ Status (Gap G1):** Confirmação visual apenas — a nota **não é persistida** no SQLite. Resolução prevista: Sprint 2, ss-2.2.
@@ -936,9 +967,11 @@ Você: /note Decidimos usar JWT com refresh tokens de 7 dias por questão de seg
 ```
 
 #### `/pause`
+
 Encerra o agente de forma graciosa.
 
 #### `/stop` / `/exit`
+
 Encerra o agente imediatamente.
 
 > **Dica:** Para sair de qualquer jeito, pressione `Ctrl+C`.
@@ -974,16 +1007,16 @@ Sem missão, o agente é um assistente genérico. **Com missão**, o agente é u
 
 Quando você cria uma missão, as suas escolhas no wizard **configuram o agente automaticamente**:
 
-| Você escolhe no wizard | O sistema configura automaticamente |
-|---|---|
-| Tipo `Development` | ReadFileTool + WriteFileTool + RunCommandTool, git na allowlist |
-| Tech Stack `Python` | `python`, `pip`, `venv`, `pytest` em allowedCommands |
-| Tech Stack `Docker` | `docker`, `docker-compose`, `kubectl` em allowedCommands |
-| Skill `Deploy/DevOps` | `gh`, `ssh`, `scp`, `rsync` em allowedCommands |
-| Autonomia `Full` | AutonomyLevel.Full — zero aprovações necessárias |
-| Autonomia `Supervised` | AutonomyLevel.Supervised — aprovação para ações destrutivas |
-| Autonomia `Readonly` | AutonomyLevel.Readonly — agente só lê e sugere |
-| Metodologia `TDD` | Contexto TDD injetado no system prompt |
+| Você escolhe no wizard       | O sistema configura automaticamente                               |
+| ---------------------------- | ----------------------------------------------------------------- |
+| Tipo `Development`           | ReadFileTool + WriteFileTool + RunCommandTool, git na allowlist   |
+| Tech Stack `Python`          | `python`, `pip`, `venv`, `pytest` em allowedCommands              |
+| Tech Stack `Docker`          | `docker`, `docker-compose`, `kubectl` em allowedCommands          |
+| Skill `Deploy/DevOps`        | `gh`, `ssh`, `scp`, `rsync` em allowedCommands                    |
+| Autonomia `Full`             | AutonomyLevel.Full — zero aprovações necessárias                  |
+| Autonomia `Supervised`       | AutonomyLevel.Supervised — aprovação para ações destrutivas       |
+| Autonomia `Readonly`         | AutonomyLevel.Readonly — agente só lê e sugere                    |
+| Metodologia `TDD`            | Contexto TDD injetado no system prompt                            |
 | Metodologia `Research-First` | Agente inicia em modo Auditor (A), depois migra para Executor (B) |
 
 ---
@@ -999,7 +1032,9 @@ node apps/cli/dist/index.js mission create
 O wizard interativo guia você pelos 9 passos:
 
 ### Passo 1: Nome da Missão
+
 Dê um nome curto e descritivo.
+
 ```
 ── [1/9] Nome da Missão ──
 Qual é o nome desta missão?
@@ -1009,6 +1044,7 @@ Dica: Use um nome curto e descritivo (ex: "Implementar módulo de autenticação
 ```
 
 ### Passo 2: Tipo de Missão
+
 Escolha o tipo que melhor descreve o trabalho.
 
 ```
@@ -1024,9 +1060,11 @@ Qual é o tipo desta missão?
 ```
 
 ### Passo 3: Descrição
+
 Descreva detalhadamente o objetivo. Quanto mais específico, melhor o contexto do agente.
 
 ### Passo 4: Stack de Tecnologias
+
 Selecione todas as tecnologias envolvidas (múltipla escolha — números separados por espaço ou vírgula).
 
 ```
@@ -1043,6 +1081,7 @@ Selecione todas as tecnologias envolvidas (múltipla escolha — números separa
 Para selecionar Node.js, API e SQL: `1 6 7` ou `1,6,7`
 
 ### Passo 5: Metodologia
+
 Como o trabalho deve ser conduzido.
 
 ```
@@ -1054,6 +1093,7 @@ Como o trabalho deve ser conduzido.
 ```
 
 ### Passo 6: Nível de Autonomia
+
 Quanto o agente pode fazer sem pedir sua aprovação.
 
 ```
@@ -1063,6 +1103,7 @@ Quanto o agente pode fazer sem pedir sua aprovação.
 ```
 
 ### Passo 7: Skills Necessárias
+
 Capacidades específicas que serão necessárias (múltipla escolha).
 
 ```
@@ -1075,6 +1116,7 @@ Capacidades específicas que serão necessárias (múltipla escolha).
 ```
 
 ### Passo 8: Regras da Missão (opcional)
+
 Regras e restrições específicas para este projeto. Separe por vírgula.
 
 ```
@@ -1084,6 +1126,7 @@ Dica: ex: "Nunca deletar dados de produção", "Sempre escrever testes antes da 
 ```
 
 ### Passo 9: Tarefas Iniciais (opcional)
+
 O breakdown inicial das tarefas. Separe por vírgula.
 
 ```
@@ -1184,6 +1227,7 @@ node apps/cli/dist/index.js mission list
 ```
 
 Saída:
+
 ```
 ╔════════════════════════════════════════════════════════════════╗
 ║ MISSOES INCEPTION                                              ║
@@ -1208,6 +1252,7 @@ node apps/cli/dist/index.js mission status miss_abc123_xyz
 ```
 
 Saída com progresso:
+
 ```
 ── STATUS DA MISSAO: Gestão Leilões Elo Dourado ──
 
@@ -1239,6 +1284,7 @@ node apps/cli/dist/index.js mission report miss_abc123_xyz
 ```
 
 O relatório é salvo em `~/.inception/reports/mission_<id>_<data>.md` e inclui:
+
 - Objetivo e descrição
 - Tarefas concluídas
 - Tarefas com falha/bloqueadas
@@ -1263,13 +1309,13 @@ O sistema pede confirmação antes de arquivar (ação irreversível). Após arq
 
 As tasks de uma missão têm os seguintes estados:
 
-| Estado | Ícone | Significado |
-|--------|-------|-------------|
-| `pending` | `[ ]` | Aguardando execução |
-| `in_progress` | `[>]` | Em andamento |
-| `completed` | `[v]` | Concluída com sucesso |
-| `blocked` | `[!]` | Bloqueada por dependência ou problema |
-| `skipped` | `[-]` | Ignorada (decisão deliberada) |
+| Estado        | Ícone | Significado                           |
+| ------------- | ----- | ------------------------------------- |
+| `pending`     | `[ ]` | Aguardando execução                   |
+| `in_progress` | `[>]` | Em andamento                          |
+| `completed`   | `[v]` | Concluída com sucesso                 |
+| `blocked`     | `[!]` | Bloqueada por dependência ou problema |
+| `skipped`     | `[-]` | Ignorada (decisão deliberada)         |
 
 ### Journal
 
@@ -1284,10 +1330,12 @@ O journal é um registro **imutável** de tudo que aconteceu durante a missão. 
 ### Como funciona o sistema de aprovações
 
 No modo **Supervised** (padrão), o agente pede aprovação antes de executar qualquer ação que:
+
 - Escreve ou modifica arquivos (`filesystem.write`, `filesystem.delete`)
 - Executa comandos no shell (`shell.exec`)
 
 Quando o agente pede aprovação, você vê um prompt com:
+
 - O nome da ferramenta sendo usada
 - O argumento exato (qual arquivo, qual comando)
 - Um timer de expiração (120s por padrão)
@@ -1301,26 +1349,20 @@ As allowlists controlam o que o agente pode fazer:
   "security": {
     "execution": {
       "allowedCommands": [
-        "git", "node", "npm", "pnpm",
-        "python", "pip",
-        "docker", "docker-compose"
+        "git",
+        "node",
+        "npm",
+        "pnpm",
+        "python",
+        "pip",
+        "docker",
+        "docker-compose"
       ],
-      "blockedCommands": [
-        "rm", "del", "format", "mkfs", "dd"
-      ]
+      "blockedCommands": ["rm", "del", "format", "mkfs", "dd"]
     },
     "filesystem": {
-      "allowedPaths": [
-        "./src",
-        "./tests",
-        "./docs",
-        "./package.json"
-      ],
-      "blockedPaths": [
-        "/etc",
-        "~/.ssh",
-        ".env"
-      ]
+      "allowedPaths": ["./src", "./tests", "./docs", "./package.json"],
+      "blockedPaths": ["/etc", "~/.ssh", ".env"]
     }
   }
 }
@@ -1331,17 +1373,20 @@ As allowlists controlam o que o agente pode fazer:
 ### Modos de operação por autonomia
 
 **Readonly:**
+
 ```
 Agente: "Para criar o arquivo src/auth.ts com este conteúdo..."
 Agente: [NÃO executa — apenas descreve o que faria]
 ```
 
 **Supervised (padrão):**
+
 ```
 Agente solicita aprovação → Você aprova → Agente executa
 ```
 
 **Full:**
+
 ```
 Agente executa diretamente → Informa o que fez
 ```
@@ -1355,11 +1400,13 @@ Agente executa diretamente → Informa o que fez
 ### Como a memória funciona
 
 O Inception armazena **todas as conversas** em um banco SQLite (`~/.inception/memory.db`) com:
+
 - Busca por texto completo (FTS5) — recuperação por palavras-chave
 - Busca vetorial (embeddings) — recuperação por similaridade semântica
 - Compactação automática quando o histórico é muito longo
 
 A cada mensagem, o agente:
+
 1. Busca na memória por contexto relevante à conversa atual
 2. Inclui esse contexto no prompt enviado ao modelo
 3. Armazena a nova conversa para uso futuro
@@ -1367,6 +1414,7 @@ A cada mensagem, o agente:
 ### Contexto de missão no system prompt
 
 Quando há uma missão ativa, o system prompt do agente inclui automaticamente:
+
 - Nome e descrição da missão
 - Modo de operação (Auditor/Executor)
 - Tasks pendentes
@@ -1376,13 +1424,13 @@ Isso garante que o agente sempre saiba o que está fazendo e quais são as regra
 
 ### Onde os dados ficam
 
-| Dado | Localização |
-|------|-------------|
-| Memória de conversas | `~/.inception/memory.db` |
-| Banco de missões | `~/.inception/missions.db` |
-| Cache de modelos | `~/.inception/models-cache.json` |
-| Relatórios gerados | `~/.inception/reports/` |
-| Configuração do projeto | `<seu-projeto>/.inception.json` |
+| Dado                    | Localização                      |
+| ----------------------- | -------------------------------- |
+| Memória de conversas    | `~/.inception/memory.db`         |
+| Banco de missões        | `~/.inception/missions.db`       |
+| Cache de modelos        | `~/.inception/models-cache.json` |
+| Relatórios gerados      | `~/.inception/reports/`          |
+| Configuração do projeto | `<seu-projeto>/.inception.json`  |
 
 ---
 
@@ -1393,6 +1441,7 @@ O Inception implementa três protocolos metodológicos:
 ### IMP — Inception Mission Protocol
 
 O protocolo de missão define o ciclo de vida de uma missão:
+
 1. **Briefing** — definição do objetivo e escopo
 2. **Decomposição** — quebrar em tarefas atômicas
 3. **Execução** — agente opera dentro das regras da missão
@@ -1402,14 +1451,14 @@ O protocolo de missão define o ciclo de vida de uma missão:
 
 Protocolo de engenharia com **gates** de qualidade:
 
-| Gate | Código | Quando usar |
-|------|--------|-------------|
-| TypeScript Gate | G-TS | Antes de commitar código TypeScript |
-| Design Gate | G-DI | Antes de iniciar uma feature nova |
-| Security Gate | G-SEC | Em qualquer mudança de segurança |
-| UX Gate | G-UX | Em mudanças de interface |
-| Release Gate | G-REL | Antes de publicar uma versão |
-| AI Gate | G-AI | Ao mudar comportamento do agente |
+| Gate            | Código | Quando usar                         |
+| --------------- | ------ | ----------------------------------- |
+| TypeScript Gate | G-TS   | Antes de commitar código TypeScript |
+| Design Gate     | G-DI   | Antes de iniciar uma feature nova   |
+| Security Gate   | G-SEC  | Em qualquer mudança de segurança    |
+| UX Gate         | G-UX   | Em mudanças de interface            |
+| Release Gate    | G-REL  | Antes de publicar uma versão        |
+| AI Gate         | G-AI   | Ao mudar comportamento do agente    |
 
 ### ISP — Inception Safety Protocol
 
@@ -1417,12 +1466,12 @@ Protocolo de segurança com níveis de autonomia e aprovações. É o que garant
 
 ### Modos do Agente
 
-| Modo | Código | Quando o agente usa |
-|------|--------|---------------------|
-| Auditor | A | Planejamento, análise, sem execução |
-| Executor | B | Implementação ativa |
-| Archivist | C | Consolidação e preservação no journal |
-| Verifier | D | Apenas leitura — nunca modifica nada |
+| Modo      | Código | Quando o agente usa                   |
+| --------- | ------ | ------------------------------------- |
+| Auditor   | A      | Planejamento, análise, sem execução   |
+| Executor  | B      | Implementação ativa                   |
+| Archivist | C      | Consolidação e preservação no journal |
+| Verifier  | D      | Apenas leitura — nunca modifica nada  |
 
 A metodologia `Research-First` faz o agente iniciar no modo **A** (Auditor) — lê, pesquisa, planeja — e depois migra para **B** (Executor) quando o plano está pronto.
 
@@ -1441,16 +1490,16 @@ O sistema mantém um cache de modelos disponíveis para cada provider.
 
 ### Endpoints consultados por provider
 
-| Provider | Endpoint de modelos |
-|---|---|
-| Anthropic | `GET /v1/models` |
-| OpenAI | `GET /v1/models` |
-| Ollama | `GET http://localhost:11434/api/tags` |
-| Google Gemini | `GET /v1beta/models` |
-| OpenRouter | `GET /v1/models` |
-| Kimi / Moonshot | `GET /v1/models` |
-| Z.AI | `GET /api/paas/v4/models` |
-| Bailian | `GET /compatible-mode/v1/models` |
+| Provider        | Endpoint de modelos                   |
+| --------------- | ------------------------------------- |
+| Anthropic       | `GET /v1/models`                      |
+| OpenAI          | `GET /v1/models`                      |
+| Ollama          | `GET http://localhost:11434/api/tags` |
+| Google Gemini   | `GET /v1beta/models`                  |
+| OpenRouter      | `GET /v1/models`                      |
+| Kimi / Moonshot | `GET /v1/models`                      |
+| Z.AI            | `GET /api/paas/v4/models`             |
+| Bailian         | `GET /compatible-mode/v1/models`      |
 
 ---
 
@@ -1525,20 +1574,20 @@ node apps/cli/dist/index.js mission archive <id>
 
 Estes comandos funcionam **dentro do agente** (após `start` ou `mission start`).
 
-| Comando | Descrição | Exemplo |
-|---------|-----------|---------|
-| `/help` | Lista todos os slash commands | `/help` |
-| `/status` | Estado do agente (provider, modelo, tokens, missão) | `/status` |
-| `/mission` | Exibe missão ativa e tasks | `/mission` |
-| `/mission create` | Inicia wizard de criação inline | `/mission create` |
-| `/task list` | Lista tasks pendentes da missão ativa | `/task list` |
-| `/task done <texto>` | Registra task como concluída | `/task done Autenticação JWT implementada` |
-| `/task add <desc>` | Adiciona nova task à missão | `/task add Implementar rate limiting` |
-| `/note <texto>` | Registra nota no journal | `/note Decidimos usar Redis para sessões` |
-| `/rules` | Exibe regras e metadados da missão | `/rules` |
-| `/pause` | Encerra o agente graciosamente | `/pause` |
-| `/stop` | Encerra o agente | `/stop` |
-| `/exit` | Encerra o agente | `/exit` |
+| Comando              | Descrição                                           | Exemplo                                    |
+| -------------------- | --------------------------------------------------- | ------------------------------------------ |
+| `/help`              | Lista todos os slash commands                       | `/help`                                    |
+| `/status`            | Estado do agente (provider, modelo, tokens, missão) | `/status`                                  |
+| `/mission`           | Exibe missão ativa e tasks                          | `/mission`                                 |
+| `/mission create`    | Inicia wizard de criação inline                     | `/mission create`                          |
+| `/task list`         | Lista tasks pendentes da missão ativa               | `/task list`                               |
+| `/task done <texto>` | Registra task como concluída                        | `/task done Autenticação JWT implementada` |
+| `/task add <desc>`   | Adiciona nova task à missão                         | `/task add Implementar rate limiting`      |
+| `/note <texto>`      | Registra nota no journal                            | `/note Decidimos usar Redis para sessões`  |
+| `/rules`             | Exibe regras e metadados da missão                  | `/rules`                                   |
+| `/pause`             | Encerra o agente graciosamente                      | `/pause`                                   |
+| `/stop`              | Encerra o agente                                    | `/stop`                                    |
+| `/exit`              | Encerra o agente                                    | `/exit`                                    |
 
 ---
 
@@ -1549,47 +1598,47 @@ Referência completa de todos os campos do arquivo de configuração:
 ```json
 {
   "agent": {
-    "name": "string",           // Nome do agente na TUI
-    "purpose": "string",        // Propósito geral do agente
-    "nature": "AI",             // "AI" | "Human" | "Hybrid"
-    "tone": "direct",           // "direct" | "formal" | "friendly"
-    "language": "pt-BR",        // Idioma das respostas
-    "values": [],               // Valores operacionais (array de objetos)
-    "limits": []                // Limites inegociáveis (array de objetos)
+    "name": "string", // Nome do agente na TUI
+    "purpose": "string", // Propósito geral do agente
+    "nature": "AI", // "AI" | "Human" | "Hybrid"
+    "tone": "direct", // "direct" | "formal" | "friendly"
+    "language": "pt-BR", // Idioma das respostas
+    "values": [], // Valores operacionais (array de objetos)
+    "limits": [] // Limites inegociáveis (array de objetos)
   },
 
   "operator": {
-    "name": "string",           // Seu nome ou papel
-    "autonomyLevel": "Supervised",    // "Readonly" | "Supervised" | "Full"
-    "reportFrequency": "PerMission",  // "PerTurn" | "PerMission" | "Manual"
-    "reportFormat": "Markdown",       // "Markdown" | "JSON"
-    "contact": "string"               // Contato do operador (opcional)
+    "name": "string", // Seu nome ou papel
+    "autonomyLevel": "Supervised", // "Readonly" | "Supervised" | "Full"
+    "reportFrequency": "PerMission", // "PerTurn" | "PerMission" | "Manual"
+    "reportFormat": "Markdown", // "Markdown" | "JSON"
+    "contact": "string" // Contato do operador (opcional)
   },
 
-  "defaultProvider": "string",        // Slug do provider padrão
+  "defaultProvider": "string", // Slug do provider padrão
 
   "providers": {
     "<slug>": {
-      "apiKey": "string",       // Chave de API (obrigatório para providers cloud)
-      "baseUrl": "string"       // URL base da API (opcional)
+      "apiKey": "string", // Chave de API (obrigatório para providers cloud)
+      "baseUrl": "string" // URL base da API (opcional)
     }
   },
 
   "security": {
     "network": {
-      "allowedHosts": [],       // Hosts permitidos para requisições
-      "blockedHosts": [],       // Hosts bloqueados
+      "allowedHosts": [], // Hosts permitidos para requisições
+      "blockedHosts": [], // Hosts bloqueados
       "allowedPorts": [443, 80]
     },
     "filesystem": {
-      "allowedPaths": [],       // Caminhos que o agente pode acessar
-      "blockedPaths": [],       // Caminhos sempre bloqueados
-      "maxFileSize": 10485760,  // Tamanho máximo de arquivo (bytes)
+      "allowedPaths": [], // Caminhos que o agente pode acessar
+      "blockedPaths": [], // Caminhos sempre bloqueados
+      "maxFileSize": 10485760, // Tamanho máximo de arquivo (bytes)
       "blockedExtensions": [".exe", ".bat"]
     },
     "execution": {
-      "allowedCommands": [],    // Comandos que o agente pode executar
-      "blockedCommands": [],    // Comandos sempre bloqueados
+      "allowedCommands": [], // Comandos que o agente pode executar
+      "blockedCommands": [], // Comandos sempre bloqueados
       "maxExecutionTime": 30000 // Timeout em ms
     },
     "rateLimit": {
@@ -1599,11 +1648,11 @@ Referência completa de todos os campos do arquivo de configuração:
   },
 
   "logging": {
-    "level": "info",            // "debug" | "info" | "warn" | "error"
-    "file": "string"            // Caminho do arquivo de log (opcional)
+    "level": "info", // "debug" | "info" | "warn" | "error"
+    "file": "string" // Caminho do arquivo de log (opcional)
   },
 
-  "projects": []                // Referências a outros projetos (futuro)
+  "projects": [] // Referências a outros projetos (futuro)
 }
 ```
 
@@ -1616,6 +1665,7 @@ Referência completa de todos os campos do arquivo de configuração:
 **Causa:** Versão do Node.js abaixo de 22. O módulo `node:sqlite` é nativo apenas no Node 22+.
 
 **Solução:**
+
 ```bash
 node --version   # Confirme que é v22+
 # Se for v20 ou v21, atualize para v22
@@ -1630,6 +1680,7 @@ node --version   # Confirme que é v22+
 **Causa:** O `.inception.json` não existe no diretório atual ou nos diretórios pai.
 
 **Solução:**
+
 ```bash
 # Certifique-se de estar na pasta correta:
 ls .inception.json    # deve existir
@@ -1643,6 +1694,7 @@ node apps/cli/dist/index.js init
 **Causa:** Caminho incorreto no comando. Você está em `inception-v2-rabelus/ai-auctions` tentando acessar `../inception-v2/apps/cli/...` — o caminho extra `inception-v2` não existe.
 
 **Solução:**
+
 ```bash
 # Estando em: D:\Sandbox\inception-v2-rabelus\ai-auctions\
 node ../apps/cli/dist/index.js start
@@ -1654,6 +1706,7 @@ node ../apps/cli/dist/index.js start
 **Causa:** O `.inception.json` tem JSON inválido ou campos incorretos.
 
 **Solução:**
+
 ```bash
 # Valide o JSON:
 cat .inception.json | node -e "process.stdin.resume();let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{JSON.parse(d);console.log('JSON válido')}catch(e){console.error('JSON inválido:',e.message)}})"
@@ -1667,6 +1720,7 @@ node apps/cli/dist/index.js init --force
 **Causa:** A chave de API não está configurada.
 
 **Solução:**
+
 ```json
 // No .inception.json, adicione:
 {
@@ -1683,6 +1737,7 @@ node apps/cli/dist/index.js init --force
 **Causa:** Timeout do provider, problema de rede, ou rate limit.
 
 **Solução:**
+
 - Pressione `Ctrl+C` para sair
 - Verifique sua conexão com a internet
 - Verifique se a chave de API está válida
@@ -1701,6 +1756,7 @@ node apps/cli/dist/index.js init --force
 **Causa:** O `AgentLoop` é inicializado com a missão no boot e não se atualiza mid-session automaticamente.
 
 **Solução:** Após criar a missão inline, encerre e reinicie o agente com:
+
 ```bash
 node apps/cli/dist/index.js mission start <id-da-missão>
 ```
@@ -1710,6 +1766,7 @@ node apps/cli/dist/index.js mission start <id-da-missão>
 **Causa:** Código fonte com erros ou dependências desatualizadas.
 
 **Solução:**
+
 ```bash
 # Limpar e reinstalar:
 pnpm clean
@@ -1722,6 +1779,7 @@ pnpm build
 **Causa:** O campo `language` não foi configurado como `pt-BR`.
 
 **Solução:** No `.inception.json`:
+
 ```json
 {
   "agent": {
@@ -1795,6 +1853,6 @@ pnpm build
 
 ---
 
-*Guia mantido pela equipe Rabelus Lab — Inception Framework v2.0*
-*Última atualização: 2026-03-23*
-*Para reportar erros ou sugerir melhorias: abra uma issue no repositório*
+_Guia mantido pela equipe Rabelus Lab — Inception Framework v2.0_
+_Última atualização: 2026-03-23_
+_Para reportar erros ou sugerir melhorias: abra uma issue no repositório_

@@ -21,6 +21,7 @@ ss-0.1 identificou 12 gaps e ~87% de implementação. O plano de governança exi
 ## Scope
 
 ### Dentro:
+
 - Criar branch `feat/governance` a partir de `feat/mission-system`
 - Criar `_gov/` com toda a hierarquia de diretórios
 - Escrever `_gov/governance-spec.md` (documento norte, ~300 linhas)
@@ -32,6 +33,7 @@ ss-0.1 identificou 12 gaps e ~87% de implementação. O plano de governança exi
 - Criar `.gitkeep` em todos os diretórios vazios
 
 ### Fora:
+
 - Código fonte (sprint 2)
 - Mover arquivos de audit (ss-0.3)
 - Atualizar memórias Claude (ss-0.5)
@@ -40,6 +42,7 @@ ss-0.1 identificou 12 gaps e ~87% de implementação. O plano de governança exi
 ## Spec Técnica
 
 ### Arquivos a criar:
+
 ```
 _gov/
 ├── governance-spec.md
@@ -77,6 +80,7 @@ _gov/
 ### Arquivos a modificar: nenhum (apenas criação)
 
 ### Arquivos a NÃO tocar:
+
 - Qualquer código fonte
 - `.eslintrc.cjs` (ss-0.6)
 - `docs/audit-research/` (ss-0.3)
@@ -84,12 +88,14 @@ _gov/
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [x] `find _gov -type f | sort` — lista completa de arquivos
 - [x] `governance-spec.md` contém 10 seções
 - [x] `roadmap.md` cobre sprints 0-5 e gaps G1-G12
 - [x] Todos os `brief.md` das 6 SS existem
 
 ### Testes do Usuário (manual):
+
 - [ ] Revisar `_gov/governance-spec.md` — confirmar que é o "norte" correto
 - [ ] Revisar `_gov/roadmap.md` — confirmar gaps e sprints
 

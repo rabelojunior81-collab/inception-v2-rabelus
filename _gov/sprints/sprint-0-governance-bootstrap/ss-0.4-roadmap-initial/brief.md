@@ -21,21 +21,25 @@ Após criar a estrutura `_gov/` (ss-0.2), o roadmap deve existir para que qualqu
 ## Scope
 
 ### Dentro:
+
 - `_gov/roadmap.md` com tabela de status de todas as sprints
 - Tabela detalhada de SS por sprint
 - Checklists de conclusão por sprint
 - Tabela consolidada de gaps (G1-G12)
 
 ### Fora:
+
 - Conteúdo de cada sprint — em seus respectivos `plan.md`
 - Briefs e handoffs — nas pastas de cada SS
 
 ## Spec Técnica
 
 ### Arquivos a criar:
+
 - `_gov/roadmap.md` (documento vivo)
 
 ### Arquivos a modificar:
+
 - `_gov/roadmap.md` deve ser atualizado a cada início e fim de SS
 
 ### Arquivos a NÃO tocar: todos os outros
@@ -43,12 +47,14 @@ Após criar a estrutura `_gov/` (ss-0.2), o roadmap deve existir para que qualqu
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [x] `roadmap.md` contém tabela com 6 sprints (0-5)
 - [x] Cada sprint tem status, branch e datas
 - [x] Gaps G1-G12 listados com sprint/SS de resolução
 - [x] Checklists de conclusão para cada sprint
 
 ### Testes do Usuário (manual):
+
 - [ ] Confirmar que o roadmap reflete o entendimento correto do projeto
 
 ## Commit Message

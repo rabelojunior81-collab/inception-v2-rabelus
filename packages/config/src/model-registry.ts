@@ -150,48 +150,24 @@ async function _doFetch(
       );
 
     case 'kimi':
-      return _fetchOpenAICompat(
-        baseUrl ?? 'https://api.moonshot.ai/v1',
-        apiKey,
-        signal
-      );
+      return _fetchOpenAICompat(baseUrl ?? 'https://api.moonshot.ai/v1', apiKey, signal);
 
     case 'kimi-coding':
-      return _fetchOpenAICompat(
-        baseUrl ?? 'https://api.kimi.com/coding/v1',
-        apiKey,
-        signal
-      );
+      return _fetchOpenAICompat(baseUrl ?? 'https://api.kimi.com/coding/v1', apiKey, signal);
 
     case 'zai':
     case 'zai-coding':
-      return _fetchOpenAICompat(
-        baseUrl ?? 'https://api.z.ai/api/paas/v4',
-        apiKey,
-        signal
-      );
+      return _fetchOpenAICompat(baseUrl ?? 'https://api.z.ai/api/paas/v4', apiKey, signal);
 
     case 'openrouter':
-      return _fetchOpenAICompat(
-        baseUrl ?? 'https://openrouter.ai/api/v1',
-        apiKey,
-        signal
-      );
+      return _fetchOpenAICompat(baseUrl ?? 'https://openrouter.ai/api/v1', apiKey, signal);
 
     case 'kilo':
-      return _fetchOpenAICompat(
-        baseUrl ?? 'https://api.kilo.ai/v1',
-        apiKey,
-        signal
-      );
+      return _fetchOpenAICompat(baseUrl ?? 'https://api.kilo.ai/v1', apiKey, signal);
 
     case 'ollama':
       // Ollama Cloud usa endpoint OpenAI-compat com Bearer
-      return _fetchOpenAICompat(
-        baseUrl ?? 'https://ollama.com/v1',
-        apiKey,
-        signal
-      );
+      return _fetchOpenAICompat(baseUrl ?? 'https://ollama.com/v1', apiKey, signal);
 
     case 'ollama-local':
       // Ollama local: GET /api/tags (formato diferente, sem auth)
@@ -241,7 +217,10 @@ async function _fetchAnthropic(
   return data
     .filter(
       (m): m is { id: string; display_name?: string } =>
-        m !== null && typeof m === 'object' && 'id' in m && typeof (m as Record<string, unknown>)['id'] === 'string'
+        m !== null &&
+        typeof m === 'object' &&
+        'id' in m &&
+        typeof (m as Record<string, unknown>)['id'] === 'string'
     )
     .map((m) => ({
       id: m.id,
@@ -284,7 +263,10 @@ async function _fetchOpenAICompat(
   return data
     .filter(
       (m): m is { id: string } =>
-        m !== null && typeof m === 'object' && 'id' in m && typeof (m as Record<string, unknown>)['id'] === 'string'
+        m !== null &&
+        typeof m === 'object' &&
+        'id' in m &&
+        typeof (m as Record<string, unknown>)['id'] === 'string'
     )
     .map((m) => ({
       id: m.id,
@@ -353,7 +335,10 @@ async function _fetchOllamaLocal(signal: AbortSignal): Promise<ModelOption[] | n
   return data
     .filter(
       (m): m is { name: string } =>
-        m !== null && typeof m === 'object' && 'name' in m && typeof (m as Record<string, unknown>)['name'] === 'string'
+        m !== null &&
+        typeof m === 'object' &&
+        'name' in m &&
+        typeof (m as Record<string, unknown>)['name'] === 'string'
     )
     .map((m) => ({
       id: m.name,

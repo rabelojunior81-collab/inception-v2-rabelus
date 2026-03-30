@@ -21,21 +21,25 @@ Enriquecer `SECURITY.md` com referência ao `SecurityManager` real implementado,
 ## Scope
 
 ### Dentro:
+
 - Adicionar seção "Implementação de Segurança" no SECURITY.md
 - Referenciar `packages/security/src/security-manager.ts`
 - Documentar os gates de aprovação do AgentLoop
 - Documentar o modelo de confiança (approvalGate, sandbox, pairing)
 
 ### Fora:
+
 - Modificar o SecurityManager em si
 - Criar novos mecanismos de segurança
 
 ## Spec Técnica
 
 ### Arquivo a modificar:
+
 - `SECURITY.md` (raiz)
 
 ### Seções a adicionar:
+
 1. **Runtime Security Gates** — ApprovalGate, AutonomyLevel
 2. **SecurityManager** — link para código + o que protege (SSRF, path traversal, injection, pairing)
 3. **Configuração** — como configurar `security` no `.inception.json`
@@ -43,11 +47,13 @@ Enriquecer `SECURITY.md` com referência ao `SecurityManager` real implementado,
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `SECURITY.md` menciona `packages/security/src/security-manager.ts`
 - [ ] `SECURITY.md` menciona ApprovalGate
 - [ ] `SECURITY.md` menciona SSRF, path traversal, command injection
 
 ### Testes do Usuário (manual):
+
 - [ ] Confirmar que é útil para um desenvolvedor entender o modelo de segurança
 
 ## Commit Message

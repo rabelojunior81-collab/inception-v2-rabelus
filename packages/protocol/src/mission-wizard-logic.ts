@@ -20,12 +20,7 @@ export type MissionType =
 
 export type TechStack = 'node' | 'python' | 'go' | 'docker' | 'browser' | 'api' | 'sql' | 'nosql';
 
-export type Methodology =
-  | 'exploratory'
-  | 'tdd'
-  | 'research-first'
-  | 'sprint'
-  | 'autonomous';
+export type Methodology = 'exploratory' | 'tdd' | 'research-first' | 'sprint' | 'autonomous';
 
 export type Skill =
   | 'web-scraping'
@@ -72,7 +67,8 @@ export const MISSION_TYPE_DESCRIPTIONS: Record<MissionType, string> = {
   analysis: 'Examinar código, dados ou sistemas existentes para identificar padrões ou problemas',
   automation: 'Criar scripts ou pipelines que automatizam processos repetitivos',
   refactor: 'Melhorar qualidade, estrutura ou performance do código sem alterar o comportamento',
-  investigation: 'Depurar ou diagnosticar um problema, rastreando a causa raiz e propondo correções',
+  investigation:
+    'Depurar ou diagnosticar um problema, rastreando a causa raiz e propondo correções',
 };
 
 export const TECH_STACK_LABELS: Record<TechStack, string> = {
@@ -235,7 +231,8 @@ export function getWizardSteps(): WizardStep[] {
       id: 'rules',
       order: 8,
       title: 'Regras da Missão',
-      prompt: 'Adicione regras ou restrições específicas da missão (separadas por vírgula, ou deixe vazio para pular):',
+      prompt:
+        'Adicione regras ou restrições específicas da missão (separadas por vírgula, ou deixe vazio para pular):',
       inputType: 'list',
       required: false,
       hint: 'ex: "Nunca deletar dados de produção", "Sempre escrever testes antes da implementação"',
@@ -261,9 +258,7 @@ export interface WizardValidationResult {
   readonly errors: string[];
 }
 
-export function validateMissionInput(
-  input: Partial<MissionWizardInput>
-): WizardValidationResult {
+export function validateMissionInput(input: Partial<MissionWizardInput>): WizardValidationResult {
   const errors: string[] = [];
 
   if (input.name === undefined || input.name.trim().length === 0) {
@@ -285,7 +280,9 @@ export function validateMissionInput(
   if (!input.type) {
     errors.push('Tipo de missão é obrigatório.');
   } else if (!validTypes.includes(input.type)) {
-    errors.push(`Tipo de missão inválido: "${input.type}". Deve ser um dos: ${validTypes.join(', ')}.`);
+    errors.push(
+      `Tipo de missão inválido: "${input.type}". Deve ser um dos: ${validTypes.join(', ')}.`
+    );
   }
 
   if (input.description === undefined || input.description.trim().length === 0) {

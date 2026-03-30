@@ -21,17 +21,20 @@ Adicionar seção "Known Gaps" ao `CHANGELOG.md` documentando os gaps G1-G5 (os 
 ## Scope
 
 ### Dentro:
+
 - Adicionar seção "Known Gaps" no `CHANGELOG.md`
 - Documentar G1-G5 (HIGH e MEDIUM) — os de maior impacto
 - Mencionar Sprint 2 como resolução de G1, G2, G4
 
 ### Fora:
+
 - Reescrever entradas existentes do CHANGELOG
 - Documentar G6-G12 (já cobertos em HANDOFF.md e roadmap)
 
 ## Spec Técnica
 
 ### Arquivo a modificar:
+
 - `CHANGELOG.md` (raiz)
 
 ### Estrutura a adicionar (no topo, antes das versões):
@@ -41,12 +44,12 @@ Adicionar seção "Known Gaps" ao `CHANGELOG.md` documentando os gaps G1-G5 (os 
 
 Funcionalidades presentes na interface mas sem implementação completa:
 
-| ID | Descrição | Severidade | Resolução |
-|----|-----------|------------|-----------|
-| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | Sprint 2 |
-| G2 | Rate limiting configurado mas não aplicado no AgentLoop | MEDIUM | Sprint 2 |
-| G4 | InceptionRuntime não conectado ao ChannelManager em `start.ts` | MEDIUM | Sprint 2 |
-| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI | MEDIUM | Sprint 2 |
+| ID  | Descrição                                                                  | Severidade | Resolução |
+| --- | -------------------------------------------------------------------------- | ---------- | --------- |
+| G1  | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH       | Sprint 2  |
+| G2  | Rate limiting configurado mas não aplicado no AgentLoop                    | MEDIUM     | Sprint 2  |
+| G4  | InceptionRuntime não conectado ao ChannelManager em `start.ts`             | MEDIUM     | Sprint 2  |
+| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI        | MEDIUM     | Sprint 2  |
 
 Ver `_gov/roadmap.md` para rastreamento completo (G1-G12).
 ```
@@ -54,6 +57,7 @@ Ver `_gov/roadmap.md` para rastreamento completo (G1-G12).
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `CHANGELOG.md` tem seção "Known Gaps"
 - [ ] G1, G2, G4, G11 mencionados
 - [ ] Link para `_gov/roadmap.md`

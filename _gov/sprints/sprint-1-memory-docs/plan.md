@@ -10,14 +10,14 @@
 
 ## Sub-sprints
 
-| SS | Nome | Gaps resolve | Status | Paralela? |
-|----|------|-------------|--------|-----------|
-| ss-1.1 | sync-claude-memories | G10 | ⏳ pending | com 1.2, 1.3, 1.4 |
-| ss-1.2 | handoff-update | G12 | ⏳ pending | com 1.1, 1.3, 1.4 |
-| ss-1.3 | guia-gaps-update | G1 (doc) | ⏳ pending | com 1.1, 1.2, 1.4 |
-| ss-1.4 | security-md-update | — | ⏳ pending | com 1.1, 1.2, 1.3 |
-| ss-1.5 | changelog-sync | G1-G5 | ⏳ pending | depois 1.2 |
-| ss-1.6 | version-alignment | G6 | ⏳ pending | depois 1.1 |
+| SS     | Nome                 | Gaps resolve | Status     | Paralela?         |
+| ------ | -------------------- | ------------ | ---------- | ----------------- |
+| ss-1.1 | sync-claude-memories | G10          | ⏳ pending | com 1.2, 1.3, 1.4 |
+| ss-1.2 | handoff-update       | G12          | ⏳ pending | com 1.1, 1.3, 1.4 |
+| ss-1.3 | guia-gaps-update     | G1 (doc)     | ⏳ pending | com 1.1, 1.2, 1.4 |
+| ss-1.4 | security-md-update   | —            | ⏳ pending | com 1.1, 1.2, 1.3 |
+| ss-1.5 | changelog-sync       | G1-G5        | ⏳ pending | depois 1.2        |
+| ss-1.6 | version-alignment    | G6           | ⏳ pending | depois 1.1        |
 
 **SS 1.1, 1.2, 1.3, 1.4 podem rodar em paralelo.**
 **SS 1.5 depende de 1.2. SS 1.6 depende de 1.1.**
@@ -26,13 +26,13 @@
 
 ## Arquivos Críticos
 
-| Arquivo | Gap | O que fazer |
-|---------|-----|-------------|
-| `HANDOFF.md` | G12 | Documentar G1-G5 explicitamente |
-| `SECURITY.md` | — | Link para `security-manager.ts` + documentar gates |
-| `CHANGELOG.md` | G1-G5 | Adicionar seção "Known Gaps" |
-| `docs/GUIA.md` | G1 | Marcar `/task done` como display-only |
-| `packages/*/package.json` | G6 | Versão `2.0.0` unificada |
+| Arquivo                   | Gap   | O que fazer                                        |
+| ------------------------- | ----- | -------------------------------------------------- |
+| `HANDOFF.md`              | G12   | Documentar G1-G5 explicitamente                    |
+| `SECURITY.md`             | —     | Link para `security-manager.ts` + documentar gates |
+| `CHANGELOG.md`            | G1-G5 | Adicionar seção "Known Gaps"                       |
+| `docs/GUIA.md`            | G1    | Marcar `/task done` como display-only              |
+| `packages/*/package.json` | G6    | Versão `2.0.0` unificada                           |
 
 ---
 

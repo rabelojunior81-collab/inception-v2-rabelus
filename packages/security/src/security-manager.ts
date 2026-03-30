@@ -59,9 +59,7 @@ export class SecurityManager implements ISecurityManager {
     bucket.lastRefill = now;
 
     if (bucket.tokens < 1) {
-      throw new Error(
-        `Rate limit exceeded for "${key}" (limit: ${maxPerMinute} req/min)`
-      );
+      throw new Error(`Rate limit exceeded for "${key}" (limit: ${maxPerMinute} req/min)`);
     }
 
     bucket.tokens -= 1;

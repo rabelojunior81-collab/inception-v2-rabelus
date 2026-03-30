@@ -75,13 +75,13 @@ We aim to respond within 48 hours and will keep you updated on our progress.
 
 The `SecurityManager` class is the central security enforcement point, fully implemented and applied to every tool execution:
 
-| Protection | What it does |
-|-----------|-------------|
-| **SSRF prevention** | Blocks requests to private IP ranges (10.x, 172.16-31.x, 192.168.x, localhost variants) |
-| **Path traversal** | Rejects `..` sequences, null bytes, and symlink escapes outside `workspacePath` |
-| **Command injection** | Validates shell commands against an explicit `allowedCommands` allowlist |
-| **Pairing authentication** | Generates and validates one-time pairing codes for remote channels (HTTP, Telegram) |
-| **URL allowlist** | HTTP tools check URLs against `allowedUrls` config before any request |
+| Protection                 | What it does                                                                            |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| **SSRF prevention**        | Blocks requests to private IP ranges (10.x, 172.16-31.x, 192.168.x, localhost variants) |
+| **Path traversal**         | Rejects `..` sequences, null bytes, and symlink escapes outside `workspacePath`         |
+| **Command injection**      | Validates shell commands against an explicit `allowedCommands` allowlist                |
+| **Pairing authentication** | Generates and validates one-time pairing codes for remote channels (HTTP, Telegram)     |
+| **URL allowlist**          | HTTP tools check URLs against `allowedUrls` config before any request                   |
 
 ### Approval Gates (`packages/agent/src/agent-loop.ts`)
 

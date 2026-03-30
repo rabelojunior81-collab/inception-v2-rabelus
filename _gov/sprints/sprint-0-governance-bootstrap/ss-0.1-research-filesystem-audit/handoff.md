@@ -15,44 +15,44 @@ Auditoria concluída via 3 agentes Explore paralelos — o projeto está ~87% im
 
 ### Mapa de Implementação
 
-| Package | Status | Observação |
-|---------|--------|------------|
-| `packages/types` | ✅ completo | 200+ tipos, 35+ providers no enum |
-| `packages/core` | ✅ completo | Runtime, DI, EventBus, ChannelManager, Errors |
-| `packages/config` | ✅ completo | Zod schemas, cosmiconfig, model-registry |
-| `packages/security` | ✅ completo | SSRF, path traversal, command injection, pairing |
-| `packages/agent` | ✅ completo | ReAct loop, ApprovalGate, ContextBuilder, SlashHandler |
-| `packages/memory` | ✅ completo | SQLite + FTS5 + vector, DAG compaction, embeddings |
-| `packages/protocol` | ✅ completo | MissionProtocol SQLite, wizard-logic, config-mapper |
-| `packages/channels/cli` | ✅ completo | Ink TUI: App, InputBox, MessageList, StatusBar |
-| `packages/channels/telegram` | ✅ completo | grammY, webhook, approval inline keyboard |
-| `packages/channels/http` | ✅ completo | SSE + REST, Bearer auth, CORS |
-| `packages/channels/discord` | ⚠️ stub | `export {}` — Sprint 4 |
-| `packages/tools/filesystem` | ✅ completo | read, write, list, exists, stat + guardPath() |
-| `packages/tools/shell` | ✅ completo | RunCommand + allowlist |
-| `packages/tools/http` | ✅ completo | HttpGet + HttpPost + URL allowlist |
-| `packages/tools/browser` | ⚠️ stub | placeholder — Sprint 4 |
-| `packages/tools/memory` | ⚠️ stub | redirect pendente — Sprint 2 |
-| Providers (12) | ✅ completo | Todos com streaming + tool calls |
-| `apps/cli` | ✅ completo | init, start, status, config, mission |
-| `apps/daemon` | ✅ completo | headless HTTP, graceful shutdown |
+| Package                      | Status      | Observação                                             |
+| ---------------------------- | ----------- | ------------------------------------------------------ |
+| `packages/types`             | ✅ completo | 200+ tipos, 35+ providers no enum                      |
+| `packages/core`              | ✅ completo | Runtime, DI, EventBus, ChannelManager, Errors          |
+| `packages/config`            | ✅ completo | Zod schemas, cosmiconfig, model-registry               |
+| `packages/security`          | ✅ completo | SSRF, path traversal, command injection, pairing       |
+| `packages/agent`             | ✅ completo | ReAct loop, ApprovalGate, ContextBuilder, SlashHandler |
+| `packages/memory`            | ✅ completo | SQLite + FTS5 + vector, DAG compaction, embeddings     |
+| `packages/protocol`          | ✅ completo | MissionProtocol SQLite, wizard-logic, config-mapper    |
+| `packages/channels/cli`      | ✅ completo | Ink TUI: App, InputBox, MessageList, StatusBar         |
+| `packages/channels/telegram` | ✅ completo | grammY, webhook, approval inline keyboard              |
+| `packages/channels/http`     | ✅ completo | SSE + REST, Bearer auth, CORS                          |
+| `packages/channels/discord`  | ⚠️ stub     | `export {}` — Sprint 4                                 |
+| `packages/tools/filesystem`  | ✅ completo | read, write, list, exists, stat + guardPath()          |
+| `packages/tools/shell`       | ✅ completo | RunCommand + allowlist                                 |
+| `packages/tools/http`        | ✅ completo | HttpGet + HttpPost + URL allowlist                     |
+| `packages/tools/browser`     | ⚠️ stub     | placeholder — Sprint 4                                 |
+| `packages/tools/memory`      | ⚠️ stub     | redirect pendente — Sprint 2                           |
+| Providers (12)               | ✅ completo | Todos com streaming + tool calls                       |
+| `apps/cli`                   | ✅ completo | init, start, status, config, mission                   |
+| `apps/daemon`                | ✅ completo | headless HTTP, graceful shutdown                       |
 
 ### 12 Gaps Identificados
 
-| ID | Gap | Severidade |
-|----|-----|------------|
-| G1 | `/task done/add/note` sem persistência | HIGH |
-| G2 | Rate limiting não aplicado no AgentLoop | MEDIUM |
-| G3 | `sandbox: 'none'` sem implementação | LOW |
-| G4 | InceptionRuntime não conectado ao ChannelManager | MEDIUM |
-| G5 | 9 ProviderId sem pacote | LOW |
-| G6 | Versionamento 2.0.0 vs 0.0.0 | MEDIUM |
-| G7 | `.eslintrc.cjs` não commitado | LOW |
-| G8 | CI incompleto (sem audit, coverage, triggers) | MEDIUM |
-| G9 | `docs/en|pt|es|zh` vazios | LOW |
-| G10 | Memórias Claude obsoletas | HIGH |
-| G11 | `packages/tools/memory/` stub | MEDIUM |
-| G12 | HANDOFF.md falso positivo | HIGH |
+| ID  | Gap                                              | Severidade |
+| --- | ------------------------------------------------ | ---------- | --- | ---------- | --- |
+| G1  | `/task done/add/note` sem persistência           | HIGH       |
+| G2  | Rate limiting não aplicado no AgentLoop          | MEDIUM     |
+| G3  | `sandbox: 'none'` sem implementação              | LOW        |
+| G4  | InceptionRuntime não conectado ao ChannelManager | MEDIUM     |
+| G5  | 9 ProviderId sem pacote                          | LOW        |
+| G6  | Versionamento 2.0.0 vs 0.0.0                     | MEDIUM     |
+| G7  | `.eslintrc.cjs` não commitado                    | LOW        |
+| G8  | CI incompleto (sem audit, coverage, triggers)    | MEDIUM     |
+| G9  | `docs/en                                         | pt         | es  | zh` vazios | LOW |
+| G10 | Memórias Claude obsoletas                        | HIGH       |
+| G11 | `packages/tools/memory/` stub                    | MEDIUM     |
+| G12 | HANDOFF.md falso positivo                        | HIGH       |
 
 ## O que NÃO foi Feito (e por quê)
 

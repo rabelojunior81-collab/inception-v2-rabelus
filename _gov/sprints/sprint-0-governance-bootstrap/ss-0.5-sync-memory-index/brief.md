@@ -21,11 +21,13 @@ As memórias Claude dizem "~8% implementado" e listam packages como "vazios". Is
 ## Scope
 
 ### Dentro:
+
 - Reescrever `project_inception_v2.md` — estado real, ~87%, gaps G1-G12
 - Reescrever `project_mission_system.md` — sistema implementado; G1 como gap conhecido
 - Atualizar `MEMORY.md` — adicionar entrada para `_gov/governance-spec.md` e `_gov/roadmap.md`
 
 ### Fora:
+
 - Memórias de outros projetos
 - Arquivos fora do diretório de memória Claude
 
@@ -51,6 +53,7 @@ As memórias Claude dizem "~8% implementado" e listam packages como "vazios". Is
    - Adicionar referência a `_gov/roadmap.md`
 
 ### Arquivos a NÃO tocar:
+
 - `feedback_language.md`
 - `user_rabelus.md`
 - `project_brainstorm_decisions.md`
@@ -59,12 +62,14 @@ As memórias Claude dizem "~8% implementado" e listam packages como "vazios". Is
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `project_inception_v2.md` não contém "8%"
 - [ ] `project_inception_v2.md` menciona G1-G12
 - [ ] `project_mission_system.md` menciona que wizard está implementado
 - [ ] `MEMORY.md` tem entradas para `_gov/`
 
 ### Testes do Usuário (manual):
+
 - [ ] Abrir nova sessão Claude no projeto → verificar que entendimento inicial é correto
 
 ## Commit Message

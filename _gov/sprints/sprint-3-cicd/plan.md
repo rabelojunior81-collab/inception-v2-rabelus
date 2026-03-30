@@ -25,15 +25,15 @@ O plano original tinha apenas 4 SS focadas só no ci.yml. A auditoria profunda r
 
 ## Sub-sprints
 
-| SS | Nome | Gaps resolve | Dependência | Paralela com |
-|----|------|-------------|-------------|--------------|
-| ss-3.1 | fix-gitattributes | G14 | — | todas |
-| ss-3.2 | fix-commitlintrc | G15 | — | todas |
-| ss-3.3 | fix-husky-hooks | G16 | depois 3.2 | — |
-| ss-3.4 | fix-eslint-warnings | G18 | — | 3.1, 3.2 |
-| ss-3.5 | ci-quality-gates | G8, G21 | depois Sprint 2 | 3.1, 3.2, 3.4 |
-| ss-3.6 | missing-tests | G19 | depois Sprint 2 | 3.1, 3.2, 3.4, 3.5 |
-| ss-3.7 | ci-badges | — | depois 3.5 | — |
+| SS     | Nome                | Gaps resolve | Dependência     | Paralela com       |
+| ------ | ------------------- | ------------ | --------------- | ------------------ |
+| ss-3.1 | fix-gitattributes   | G14          | —               | todas              |
+| ss-3.2 | fix-commitlintrc    | G15          | —               | todas              |
+| ss-3.3 | fix-husky-hooks     | G16          | depois 3.2      | —                  |
+| ss-3.4 | fix-eslint-warnings | G18          | —               | 3.1, 3.2           |
+| ss-3.5 | ci-quality-gates    | G8, G21      | depois Sprint 2 | 3.1, 3.2, 3.4      |
+| ss-3.6 | missing-tests       | G19          | depois Sprint 2 | 3.1, 3.2, 3.4, 3.5 |
+| ss-3.7 | ci-badges           | —            | depois 3.5      | —                  |
 
 ---
 
@@ -41,18 +41,18 @@ O plano original tinha apenas 4 SS focadas só no ci.yml. A auditoria profunda r
 
 ### ss-3.1 — fix-gitattributes (G14)
 
-| Arquivo | Mudança |
-|---------|---------|
+| Arquivo                 | Mudança                                          |
+| ----------------------- | ------------------------------------------------ |
 | `.gitattributes` (novo) | `* text=auto eol=lf` — força LF em todo checkout |
-| `.gitattributes` | `*.sh text eol=lf` — scripts POSIX sempre LF |
-| `.gitattributes` | `*.bat text eol=crlf` — arquivos Windows CRLF |
+| `.gitattributes`        | `*.sh text eol=lf` — scripts POSIX sempre LF     |
+| `.gitattributes`        | `*.bat text eol=crlf` — arquivos Windows CRLF    |
 
 **Verificação:** `git diff --check` após commit não deve emitir warnings de whitespace.
 
 ### ss-3.2 — fix-commitlintrc (G15)
 
-| Arquivo | Mudança |
-|---------|---------|
+| Arquivo                     | Mudança                                              |
+| --------------------------- | ---------------------------------------------------- |
 | `.commitlintrc.json` (novo) | `{ "extends": ["@commitlint/config-conventional"] }` |
 
 **Verificação:** `echo "feat: test" | pnpm commitlint` deve passar; `echo "invalid" | pnpm commitlint` deve falhar.
@@ -61,19 +61,19 @@ O plano original tinha apenas 4 SS focadas só no ci.yml. A auditoria profunda r
 
 Husky v9 — sem header `#!/usr/bin/env sh` + `. "$HOME/.huskyrc"`. Apenas os comandos diretamente.
 
-| Arquivo | Conteúdo |
-|---------|----------|
-| `.husky/pre-commit` (novo) | `pnpm lint-staged` |
+| Arquivo                    | Conteúdo                      |
+| -------------------------- | ----------------------------- |
+| `.husky/pre-commit` (novo) | `pnpm lint-staged`            |
 | `.husky/commit-msg` (novo) | `pnpm commitlint --edit "$1"` |
 
 **Verificação:** commit com mensagem inválida deve falhar no hook; arquivos staged sujos devem ser lintados antes do commit.
 
 ### ss-3.4 — fix-eslint-warnings (G18)
 
-| Arquivo | Mudança |
-|---------|---------|
+| Arquivo         | Mudança                                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `.eslintrc.cjs` | Remover a regra `@typescript-eslint/explicit-function-return-type` duplicada (mantém apenas uma ocorrência no override correto) |
-| `.eslintrc.cjs` | Avaliar warnings e converter os resolvíveis para `error` ou `off` baseado em decisão consciente |
+| `.eslintrc.cjs` | Avaliar warnings e converter os resolvíveis para `error` ou `off` baseado em decisão consciente                                 |
 
 **Nota:** 443 warnings são aceitáveis temporariamente se documentados. O bloqueador real é a regra duplicada que causa confusão de precedência.
 
@@ -81,16 +81,17 @@ Husky v9 — sem header `#!/usr/bin/env sh` + `. "$HOME/.huskyrc"`. Apenas os co
 
 ### ss-3.5 — ci-quality-gates (G8, G21)
 
-| Arquivo | Mudança |
-|---------|---------|
-| `.github/workflows/ci.yml` | Adicionar `pnpm audit --audit-level=high` no job `lint-and-typecheck` |
-| `.github/workflows/ci.yml` | Adicionar `pnpm vitest run --coverage` no job `test` |
-| `.github/workflows/ci.yml` | Upload coverage como artefato GitHub Actions |
-| `.github/workflows/ci.yml` | Adicionar `cache: 'pnpm'` em todos os `actions/setup-node@v4` para compartilhar cache |
+| Arquivo                    | Mudança                                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `.github/workflows/ci.yml` | Adicionar `pnpm audit --audit-level=high` no job `lint-and-typecheck`                            |
+| `.github/workflows/ci.yml` | Adicionar `pnpm vitest run --coverage` no job `test`                                             |
+| `.github/workflows/ci.yml` | Upload coverage como artefato GitHub Actions                                                     |
+| `.github/workflows/ci.yml` | Adicionar `cache: 'pnpm'` em todos os `actions/setup-node@v4` para compartilhar cache            |
 | `.github/workflows/ci.yml` | Adicionar triggers: `feat/mission-system`, `feat/governance`, `feat/gov-sprint-*`, `ss/sprint-*` |
 | `.github/workflows/ci.yml` | Remover execuções duplicadas de `pnpm build` (G21 — 3 builds → 1 build com artefato reutilizado) |
 
 **Vulnerabilidades conhecidas (4 — todas transitivas):**
+
 - lodash ×2 (moderate) — via dependências externas
 - yaml (moderate) — via dependências externas
 - tmp (low) — via dependências externas
@@ -100,25 +101,26 @@ Husky v9 — sem header `#!/usr/bin/env sh` + `. "$HOME/.huskyrc"`. Apenas os co
 ### ss-3.6 — missing-tests (G19)
 
 **Estado atual:** 91 testes em `agent`, `memory`, `security`, `filesystem`. Zero em:
+
 - `packages/protocol/` — SQLite CRUD não testado
 - `packages/core/` — Runtime, ChannelManager não testados
 - `packages/config/` — Loader, validator não testados
 - `packages/channels/cli/` — Channel, App não testados
 
-| Arquivo | O que testar |
-|---------|-------------|
+| Arquivo                                          | O que testar                                                          |
+| ------------------------------------------------ | --------------------------------------------------------------------- |
 | `packages/protocol/src/mission-protocol.test.ts` | CRUD: create/read mission, updateTaskStatus, addTask, addJournalEntry |
-| `packages/core/src/runtime.test.ts` | start/stop, registerChannelManager, lifecycle |
-| `packages/config/src/loader.test.ts` | resolveConfig, missing file error, partial config |
-| `packages/channels/cli/src/channel.test.ts` | setSlashHandler, pushSystemMessage, setWizardInputHandler |
+| `packages/core/src/runtime.test.ts`              | start/stop, registerChannelManager, lifecycle                         |
+| `packages/config/src/loader.test.ts`             | resolveConfig, missing file error, partial config                     |
+| `packages/channels/cli/src/channel.test.ts`      | setSlashHandler, pushSystemMessage, setWizardInputHandler             |
 
 **Meta:** 91 → 130+ testes; cobertura dos fluxos críticos de runtime.
 
 ### ss-3.7 — ci-badges (—)
 
-| Arquivo | Mudança |
-|---------|---------|
-| `README.md` | Badge `[![CI](...)` apontando para o workflow |
+| Arquivo     | Mudança                                            |
+| ----------- | -------------------------------------------------- |
+| `README.md` | Badge `[![CI](...)` apontando para o workflow      |
 | `README.md` | Badge `[![Coverage](...)` apontando para relatório |
 
 ---

@@ -23,20 +23,24 @@ Esta SS é **independente** e pode ser executada a qualquer momento sem bloquear
 ## Scope
 
 ### Dentro:
+
 - Verificar conteúdo atual de `.eslintrc.cjs` com `git diff`
 - Confirmar que `pnpm lint` retorna 0 erros após a mudança
 - Commitar a mudança em `feat/mission-system`
 
 ### Fora:
+
 - Modificar qualquer outra regra ESLint
 - Mudar o comportamento de `apps/**` além do `no-console`
 
 ## Spec Técnica
 
 ### Arquivos a modificar:
+
 - `.eslintrc.cjs` — já modificado, apenas commitar
 
 ### Verificação antes do commit:
+
 ```bash
 git diff .eslintrc.cjs          # confirmar override no-console
 git status .eslintrc.cjs        # confirmar que está modificado
@@ -48,11 +52,13 @@ pnpm lint                       # deve retornar 0 warnings/errors
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `git diff .eslintrc.cjs` mostra override `no-console: off` para `apps/**`
 - [ ] `pnpm lint` → 0 erros
 - [ ] `git log --oneline -1` mostra commit com mensagem correta
 
 ### Testes do Usuário (manual):
+
 - [ ] Confirmar que `inception start` não gera warnings ESLint
 
 ## Commit Message

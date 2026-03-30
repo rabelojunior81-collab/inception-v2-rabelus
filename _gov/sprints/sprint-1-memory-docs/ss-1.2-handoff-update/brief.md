@@ -21,21 +21,25 @@ Reescrever `HANDOFF.md` para documentar explicitamente os gaps G1-G12, o estado 
 ## Scope
 
 ### Dentro:
+
 - Reescrever `HANDOFF.md` na raiz do projeto
 - Documentar estado real: ~87% implementado
 - Listar explicitamente G1-G12 com severidade e sprint de resolução
 - Apontar para `_gov/governance-spec.md` como norte
 
 ### Fora:
+
 - Código fonte
 - Outros arquivos de docs
 
 ## Spec Técnica
 
 ### Arquivo a modificar:
+
 - `HANDOFF.md` (raiz do projeto)
 
 ### Estrutura nova:
+
 1. Cabeçalho: data, branch, estado geral
 2. O que está implementado (tabela ~87%)
 3. Gaps conhecidos (G1-G12) — seção proeminente
@@ -46,11 +50,13 @@ Reescrever `HANDOFF.md` para documentar explicitamente os gaps G1-G12, o estado 
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `HANDOFF.md` menciona G1, G2, G4, G11 explicitamente (HIGH/MEDIUM gaps)
 - [ ] `HANDOFF.md` referencia `_gov/governance-spec.md`
 - [ ] `HANDOFF.md` tem seção "Gaps Conhecidos"
 
 ### Testes do Usuário (manual):
+
 - [ ] Confirmar que o HANDOFF.md seria útil para um desenvolvedor novo
 
 ## Commit Message

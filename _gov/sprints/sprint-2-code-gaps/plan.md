@@ -11,6 +11,7 @@
 ## Por que o plano original estava errado
 
 O plano original listava ss-2.3 impl-rate-limit diretamente, sem perceber que:
+
 1. `SecurityManager` é criado em `start.ts:74-83` mas **a instância é descartada** (`new SecurityManager({...})` sem `const sm =`)
 2. `AgentLoopConfig` não tem campo `securityManager` — impossível passar a instância ao loop
 3. Sem esses dois itens (G13+G17), qualquer `checkRateLimit()` nunca seria chamado
@@ -21,15 +22,15 @@ O plano original listava ss-2.3 impl-rate-limit diretamente, sem perceber que:
 
 ## Sub-sprints
 
-| SS | Nome | Gaps | Dependência | Paralela com |
-|----|------|------|-------------|--------------|
-| ss-2.1 | spec-security-and-slash | todos (spec) | — PRIMEIRO | — |
-| ss-2.2 | fix-securitymanager-wiring | G13, G17 | depois 2.1 | — |
-| ss-2.3 | impl-slash-persistence | G1 | depois 2.2 | 2.4, 2.5, 2.6 |
-| ss-2.4 | impl-rate-limit | G2 | depois 2.2 | 2.3, 2.5, 2.6 |
-| ss-2.5 | fix-execution-context-urls | G20 | depois 2.2 | 2.3, 2.4, 2.6 |
-| ss-2.6 | fix-runtime-lifecycle | G4 | depois 2.2 | 2.3, 2.4, 2.5 |
-| ss-2.7 | fix-memory-tools-package | G11 | independente | todas |
+| SS     | Nome                       | Gaps         | Dependência  | Paralela com  |
+| ------ | -------------------------- | ------------ | ------------ | ------------- |
+| ss-2.1 | spec-security-and-slash    | todos (spec) | — PRIMEIRO   | —             |
+| ss-2.2 | fix-securitymanager-wiring | G13, G17     | depois 2.1   | —             |
+| ss-2.3 | impl-slash-persistence     | G1           | depois 2.2   | 2.4, 2.5, 2.6 |
+| ss-2.4 | impl-rate-limit            | G2           | depois 2.2   | 2.3, 2.5, 2.6 |
+| ss-2.5 | fix-execution-context-urls | G20          | depois 2.2   | 2.3, 2.4, 2.6 |
+| ss-2.6 | fix-runtime-lifecycle      | G4           | depois 2.2   | 2.3, 2.4, 2.5 |
+| ss-2.7 | fix-memory-tools-package   | G11          | independente | todas         |
 
 ---
 
@@ -37,29 +38,29 @@ O plano original listava ss-2.3 impl-rate-limit diretamente, sem perceber que:
 
 ### ss-2.2 — fix-securitymanager-wiring (G13 + G17)
 
-| Arquivo | Linha | Mudança |
-|---------|-------|---------|
-| `apps/cli/src/commands/start.ts` | 74 | `new SecurityManager({...})` → `const securityManager = new SecurityManager({...})` |
-| `packages/agent/src/agent-loop.ts` | ~30 | Adicionar `securityManager?: SecurityManager` a `AgentLoopConfig` |
-| `apps/cli/src/commands/start.ts` | ~116 | Passar `securityManager` no `new AgentLoop({...})` |
+| Arquivo                            | Linha | Mudança                                                                             |
+| ---------------------------------- | ----- | ----------------------------------------------------------------------------------- |
+| `apps/cli/src/commands/start.ts`   | 74    | `new SecurityManager({...})` → `const securityManager = new SecurityManager({...})` |
+| `packages/agent/src/agent-loop.ts` | ~30   | Adicionar `securityManager?: SecurityManager` a `AgentLoopConfig`                   |
+| `apps/cli/src/commands/start.ts`   | ~116  | Passar `securityManager` no `new AgentLoop({...})`                                  |
 
 ### ss-2.3 — impl-slash-persistence (G1)
 
 `IMissionProtocol` não tem `addTask()` nem `addJournalEntry()` — apenas `updateTaskStatus()`.
 
-| Arquivo | Mudança |
-|---------|---------|
-| `packages/types/src/protocol.ts` | Adicionar `addTask(missionId, description)` + `addJournalEntry(missionId, text)` à interface |
-| `packages/protocol/src/mission-protocol.ts` | Implementar os dois métodos (INSERT SQLite) |
-| `packages/agent/src/slash-handler.ts` | Adicionar `missionProtocol?: IMissionProtocol` a `SlashCommandContext`; chamar os métodos em `/task done`, `/task add`, `/note` |
-| `apps/cli/src/commands/start.ts` | Passar `missionProtocol` ao `SlashCommandContext` |
+| Arquivo                                     | Mudança                                                                                                                         |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/types/src/protocol.ts`            | Adicionar `addTask(missionId, description)` + `addJournalEntry(missionId, text)` à interface                                    |
+| `packages/protocol/src/mission-protocol.ts` | Implementar os dois métodos (INSERT SQLite)                                                                                     |
+| `packages/agent/src/slash-handler.ts`       | Adicionar `missionProtocol?: IMissionProtocol` a `SlashCommandContext`; chamar os métodos em `/task done`, `/task add`, `/note` |
+| `apps/cli/src/commands/start.ts`            | Passar `missionProtocol` ao `SlashCommandContext`                                                                               |
 
 ### ss-2.4 — impl-rate-limit (G2)
 
-| Arquivo | Mudança |
-|---------|---------|
-| `packages/security/src/security-manager.ts` | Implementar `checkRateLimit(key: string): void` com token-bucket in-memory |
-| `packages/agent/src/agent-loop.ts` | Chamar `this.cfg.securityManager?.checkRateLimit(...)` antes de `provider.generate()` |
+| Arquivo                                     | Mudança                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `packages/security/src/security-manager.ts` | Implementar `checkRateLimit(key: string): void` com token-bucket in-memory            |
+| `packages/agent/src/agent-loop.ts`          | Chamar `this.cfg.securityManager?.checkRateLimit(...)` antes de `provider.generate()` |
 
 ### ss-2.5 — fix-execution-context-urls (G20)
 
@@ -67,23 +68,23 @@ O plano original listava ss-2.3 impl-rate-limit diretamente, sem perceber que:
 `agent-loop.ts:205` **já tem** `urls: this.cfg.allowedUrls` no ExecutionContext.
 O gap real é que `start.ts` nunca passa `allowedUrls` ao construtor do AgentLoop.
 
-| Arquivo | Linha | Mudança |
-|---------|-------|---------|
+| Arquivo                          | Linha                          | Mudança                                                    |
+| -------------------------------- | ------------------------------ | ---------------------------------------------------------- |
 | `apps/cli/src/commands/start.ts` | 111-123 (construtor AgentLoop) | Adicionar `allowedUrls: cfg.security.network.allowedHosts` |
 
 ### ss-2.6 — fix-runtime-lifecycle (G4)
 
-| Arquivo | Mudança |
-|---------|---------|
-| `packages/core/src/runtime.ts` | Adicionar `registerChannelManager(cm: ChannelManager)` + coordenar lifecycle em `start()`/`stop()` |
-| `apps/cli/src/commands/start.ts` | Chamar `runtime.registerChannelManager(channelManager)` antes de `runtime.start()` |
+| Arquivo                          | Mudança                                                                                            |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `packages/core/src/runtime.ts`   | Adicionar `registerChannelManager(cm: ChannelManager)` + coordenar lifecycle em `start()`/`stop()` |
+| `apps/cli/src/commands/start.ts` | Chamar `runtime.registerChannelManager(channelManager)` antes de `runtime.start()`                 |
 
 ### ss-2.7 — fix-memory-tools-package (G11)
 
-| Arquivo | Mudança |
-|---------|---------|
+| Arquivo                              | Mudança                                                                 |
+| ------------------------------------ | ----------------------------------------------------------------------- |
 | `packages/tools/memory/src/index.ts` | Substituir `export {}` por re-exports de `@rabeluslab/inception-memory` |
-| `packages/tools/memory/package.json` | Adicionar `@rabeluslab/inception-memory: workspace:*` em dependencies |
+| `packages/tools/memory/package.json` | Adicionar `@rabeluslab/inception-memory: workspace:*` em dependencies   |
 
 ---
 

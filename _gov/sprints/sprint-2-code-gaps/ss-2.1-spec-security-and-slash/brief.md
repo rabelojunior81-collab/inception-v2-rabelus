@@ -22,6 +22,7 @@ Auditoria profunda revelou estado real dos arquivos (não o que estava documenta
 ## Scope
 
 ### Dentro
+
 - ss-2.2: G13 (SecurityManager orphaned) + G17 (AgentLoopConfig sem securityManager)
 - ss-2.3: G1 (slash commands display-only)
 - ss-2.4: G2 (rate limiting não implementado)
@@ -30,6 +31,7 @@ Auditoria profunda revelou estado real dos arquivos (não o que estava documenta
 - ss-2.7: G11 (tools/memory stub)
 
 ### Fora
+
 - Novos testes (Sprint 3, ss-3.6)
 - Husky/commitlint (Sprint 3)
 - Discord/Browser stubs (Sprint 4)
@@ -41,6 +43,7 @@ Auditoria profunda revelou estado real dos arquivos (não o que estava documenta
 ### ss-2.2 — fix-securitymanager-wiring (G13 + G17)
 
 **Problema raiz:**
+
 ```typescript
 // start.ts:74-83 — ATUAL (ERRADO)
 new SecurityManager({
@@ -54,6 +57,7 @@ new SecurityManager({
 ```
 
 **Mudança 1 — `apps/cli/src/commands/start.ts:74`**
+
 ```typescript
 // Antes:
 new SecurityManager({ ... });
@@ -63,19 +67,22 @@ const securityManager = new SecurityManager({ ... });
 ```
 
 **Mudança 2 — `packages/agent/src/agent-loop.ts` (interface AgentLoopConfig)**
+
 ```typescript
 // Adicionar após allowedUrls?: readonly string[]:
 readonly securityManager?: SecurityManager;
 ```
+
 Import necessário: `import type { SecurityManager } from '@rabeluslab/inception-security';`
 
 **Mudança 3 — `apps/cli/src/commands/start.ts:111-123` (construtor AgentLoop)**
+
 ```typescript
 const agentLoop = new AgentLoop({
   // ... campos existentes ...
   allowedCommands: cfg.security.execution.allowedCommands,
   allowedPaths: cfg.security.filesystem.allowedPaths,
-  securityManager,  // ← adicionar
+  securityManager, // ← adicionar
 });
 ```
 
@@ -87,6 +94,7 @@ const agentLoop = new AgentLoop({
 
 **Mudança 1 — `packages/types/src/protocol.ts`**
 Adicionar ao `IMissionProtocol` (após `updateTaskStatus`):
+
 ```typescript
 addTask(missionId: string, description: string): Promise<Task>;
 addJournalEntry(missionId: string, text: string): Promise<void>;
@@ -94,6 +102,7 @@ addJournalEntry(missionId: string, text: string): Promise<void>;
 
 **Mudança 2 — `packages/protocol/src/schema.ts`**
 Adicionar tabela `notes` ao `PROTOCOL_SCHEMA_SQL`:
+
 ```sql
 CREATE TABLE IF NOT EXISTS notes (
   id         TEXT PRIMARY KEY,
@@ -106,6 +115,7 @@ CREATE INDEX IF NOT EXISTS idx_notes_mission ON notes(mission_id);
 
 **Mudança 3 — `packages/protocol/src/mission-protocol.ts`**
 Implementar os dois métodos:
+
 ```typescript
 async addTask(missionId: string, description: string): Promise<Task> {
   const id = generateId('task');
@@ -132,26 +142,34 @@ async addJournalEntry(missionId: string, text: string): Promise<void> {
 **Mudança 4 — `packages/agent/src/slash-handler.ts`**
 
 a) Adicionar ao `SlashCommandContext`:
+
 ```typescript
 missionProtocol?: IMissionProtocol;
 ```
+
 Import: `import type { IMissionProtocol } from '@rabeluslab/inception-types';`
 
 b) Mudar `handleSlashCommand` para `async`:
+
 ```typescript
 export async function handleSlashCommand(
   input: string,
-  ctx: SlashCommandContext,
-): Promise<SlashCommandResult>
+  ctx: SlashCommandContext
+): Promise<SlashCommandResult>;
 ```
 
 c) `/task done`: buscar task por texto parcial + chamar `updateTaskStatus`:
+
 ```typescript
 if (sub === 'done') {
   if (!ctx.activeMission || !ctx.missionProtocol) {
-    return { type: 'display', output: '[Task concluída] ' + rest + '\n(sem missão ativa)', handled: true };
+    return {
+      type: 'display',
+      output: '[Task concluída] ' + rest + '\n(sem missão ativa)',
+      handled: true,
+    };
   }
-  const task = ctx.activeMission.tasks.find(t =>
+  const task = ctx.activeMission.tasks.find((t) =>
     t.description.toLowerCase().includes(rest.toLowerCase())
   );
   if (task) {
@@ -165,6 +183,7 @@ if (sub === 'done') {
 ```
 
 d) `/task add`:
+
 ```typescript
 if (sub === 'add') {
   if (!ctx.activeMission || !ctx.missionProtocol) {
@@ -176,6 +195,7 @@ if (sub === 'add') {
 ```
 
 e) `/note`:
+
 ```typescript
 case 'note': {
   if (!ctx.activeMission || !ctx.missionProtocol) {
@@ -192,11 +212,13 @@ Verificar que `IMissionProtocol` re-exportado (ou garantir que types package est
 **Mudança 6 — `apps/cli/src/commands/start.ts`**
 
 a) Criar `missionProtocol` antes de `slashCtx`:
+
 ```typescript
 const missionProtocol = new MissionProtocol(join(homedir(), '.inception', 'missions.db'));
 ```
 
 b) Adicionar ao `slashCtx()`:
+
 ```typescript
 const slashCtx = (): SlashCommandContext => ({
   activeMission: currentMission,
@@ -209,6 +231,7 @@ const slashCtx = (): SlashCommandContext => ({
 ```
 
 c) Mudar o slash handler para await:
+
 ```typescript
 cliChannel.setSlashHandler(async (cmd: string) => {
   // ...
@@ -229,6 +252,7 @@ d) Verificar tipo `setSlashHandler` no CliChannel — pode precisar aceitar hand
 **Verificar primeiro:** `packages/types/src/security.ts` — interface `ISecurityManager`. Se `checkRateLimit` não está lá, adicionar antes de implementar.
 
 **Mudança 1 — `packages/types/src/security.ts`** (se necessário)
+
 ```typescript
 // Na interface ISecurityManager:
 checkRateLimit(key: string): void; // throws RateLimitError se excedido
@@ -237,6 +261,7 @@ checkRateLimit(key: string): void; // throws RateLimitError se excedido
 **Mudança 2 — `packages/security/src/security-manager.ts`**
 
 Token-bucket in-memory (simples, sem dependência externa):
+
 ```typescript
 private readonly buckets = new Map<string, { tokens: number; lastRefill: number }>();
 
@@ -272,6 +297,7 @@ checkRateLimit(key: string): void {
 
 **Mudança 3 — `packages/agent/src/agent-loop.ts`**
 Antes de `provider.generate(request)` (linha ~170):
+
 ```typescript
 this.cfg.securityManager?.checkRateLimit(`provider:${this.cfg.model}`);
 const response = await this.cfg.provider.generate(request);
@@ -284,11 +310,12 @@ const response = await this.cfg.provider.generate(request);
 **Problema raiz:** `start.ts` não passa `allowedUrls` ao AgentLoop. `agent-loop.ts:205` já usa `this.cfg.allowedUrls`.
 
 **Mudança 1 — `apps/cli/src/commands/start.ts:111-123`**
+
 ```typescript
 const agentLoop = new AgentLoop({
   // ... campos existentes ...
   allowedPaths: cfg.security.filesystem.allowedPaths,
-  allowedUrls: cfg.security.network.allowedHosts,  // ← adicionar
+  allowedUrls: cfg.security.network.allowedHosts, // ← adicionar
   securityManager,
 });
 ```
@@ -302,16 +329,19 @@ const agentLoop = new AgentLoop({
 **Mudança 1 — `packages/core/src/runtime.ts`**
 
 a) Adicionar import:
+
 ```typescript
 import type { ChannelManager } from './channel-manager.js';
 ```
 
 b) Adicionar campo privado:
+
 ```typescript
 private channelManager: ChannelManager | undefined;
 ```
 
 c) Adicionar método público:
+
 ```typescript
 registerChannelManager(cm: ChannelManager): void {
   this.channelManager = cm;
@@ -319,6 +349,7 @@ registerChannelManager(cm: ChannelManager): void {
 ```
 
 d) Atualizar `start()`:
+
 ```typescript
 async start(): Promise<void> {
   // ...
@@ -335,6 +366,7 @@ async start(): Promise<void> {
 ```
 
 e) Atualizar `stop()`:
+
 ```typescript
 async stop(): Promise<void> {
   // ...
@@ -351,6 +383,7 @@ async stop(): Promise<void> {
 **Mudança 2 — `apps/cli/src/commands/start.ts`**
 
 a) Após criar `channelManager`:
+
 ```typescript
 runtime.registerChannelManager(channelManager);
 ```
@@ -358,6 +391,7 @@ runtime.registerChannelManager(channelManager);
 b) Remover o `await channelManager.startAll()` standalone (runtime.start() faz isso agora).
 
 c) Na função `shutdown()`:
+
 ```typescript
 const shutdown = async (): Promise<void> => {
   cliChannel.setRuntimeState('Encerrando...');
@@ -377,6 +411,7 @@ const shutdown = async (): Promise<void> => {
 **Verificar:** onde as tools reais estão exportadas em `packages/memory`.
 
 **Mudança 1 — `packages/tools/memory/src/index.ts`**
+
 ```typescript
 export {
   MemorySearchTool,

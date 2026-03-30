@@ -29,7 +29,9 @@ export class CliChannel implements IChannel {
   private readonly errorHandlers: ((err: Error) => void)[] = [];
   private readonly stateHandlers: ((state: ChannelState) => void)[] = [];
   private inkInstance: ReturnType<typeof render> | undefined;
-  private slashHandler: ((cmd: string) => SlashCommandResult | Promise<SlashCommandResult>) | undefined;
+  private slashHandler:
+    | ((cmd: string) => SlashCommandResult | Promise<SlashCommandResult>)
+    | undefined;
   private wizardInputHandler: ((text: string) => void | Promise<void>) | undefined;
 
   // Mutable UI state — updated via setState()
@@ -169,7 +171,9 @@ export class CliChannel implements IChannel {
    * Quando o usuário digita um comando (exceto /stop e /exit),
    * o handler é invocado e o output é exibido como mensagem do sistema.
    */
-  setSlashHandler(handler: (cmd: string) => SlashCommandResult | Promise<SlashCommandResult>): void {
+  setSlashHandler(
+    handler: (cmd: string) => SlashCommandResult | Promise<SlashCommandResult>
+  ): void {
     this.slashHandler = handler;
   }
 
@@ -188,9 +192,7 @@ export class CliChannel implements IChannel {
       const maybePromise = this.wizardInputHandler(text);
       if (maybePromise instanceof Promise) {
         maybePromise.catch((err: unknown) => {
-          this.errorHandlers.forEach((h) =>
-            h(err instanceof Error ? err : new Error(String(err)))
-          );
+          this.errorHandlers.forEach((h) => h(err instanceof Error ? err : new Error(String(err))));
         });
       }
       return;
@@ -254,9 +256,7 @@ export class CliChannel implements IChannel {
       resultOrPromise
         .then((result) => pushOutput(result.output))
         .catch((err: unknown) => {
-          pushOutput(
-            `Erro no slash command: ${err instanceof Error ? err.message : String(err)}`
-          );
+          pushOutput(`Erro no slash command: ${err instanceof Error ? err.message : String(err)}`);
         });
     } else {
       pushOutput(resultOrPromise.output);

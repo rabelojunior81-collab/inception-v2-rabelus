@@ -21,17 +21,20 @@ Mover os dois arquivos de auditoria de `docs/audit-research/` para `_gov/archive
 ## Scope
 
 ### Dentro:
+
 - `git mv` de `codex-first-audit.md` → `_gov/archive/audits/2026-03-13-codex-first-audit.md`
 - `git mv` de `claude-sonnet-audit-2026-03-16.md` → `_gov/archive/audits/2026-03-16-claude-sonnet-audit.md`
 - Criar `docs/audit-research/README.md` com redirect e contexto histórico
 
 ### Fora:
+
 - Modificar conteúdo dos audits
 - Deletar qualquer arquivo
 
 ## Spec Técnica
 
 ### Comandos a executar:
+
 ```bash
 git mv "docs/audit-research/codex-first-audit.md" \
        "_gov/archive/audits/2026-03-13-codex-first-audit.md"
@@ -43,6 +46,7 @@ git mv "docs/audit-research/claude-sonnet-audit-2026-03-16.md" \
 ### Arquivos a criar:
 
 `docs/audit-research/README.md`:
+
 ```markdown
 # Auditorias de Código — Arquivo Histórico
 
@@ -66,18 +70,21 @@ o estado atual.
 ### Arquivos a modificar: nenhum (apenas mover + criar redirect)
 
 ### Arquivos a NÃO tocar:
+
 - Conteúdo dos audits em si
 - Qualquer código fonte
 
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `git status` mostra os dois `git mv` staged
 - [ ] `ls _gov/archive/audits/` lista os 2 arquivos
 - [ ] `docs/audit-research/README.md` existe com link correto
 - [ ] `docs/audit-research/` não tem mais `.md` além do README
 
 ### Testes do Usuário (manual):
+
 - [ ] Confirmar que os links no README redirect apontam para os arquivos corretos
 
 ## Commit Message

@@ -12,6 +12,7 @@
 ## 1. O que é este documento
 
 Este é o **Spec de Governança** do Inception Framework v2.0. Ele define:
+
 - Como o desenvolvimento é organizado (sprints + sub-sprints)
 - Como os agentes se comunicam entre sessões (bus de mensagens)
 - As convenções de nomenclatura de tudo
@@ -26,32 +27,32 @@ Este é o **Spec de Governança** do Inception Framework v2.0. Ele define:
 
 ### O que está implementado (~87%)
 
-| Camada | Componentes | Status |
-|--------|-------------|--------|
-| `packages/types` | 200+ tipos, 35+ providers no enum, 10+ channels | ✅ Completo |
-| `packages/core` | Runtime, DI Container, TypedEventBus, ChannelManager, Errors | ✅ Completo |
-| `packages/config` | Zod schemas, cosmiconfig, model-registry (24h cache) | ✅ Completo |
-| `packages/security` | SecurityManager: SSRF, path traversal, command injection, pairing | ✅ Completo |
-| `packages/agent` | ReAct loop, ApprovalGate, ContextBuilder, SystemPrompt, ToolExecutor, SlashHandler | ✅ Completo |
-| `packages/memory` | SQLite + FTS5 + vector, DAG compaction, embeddings (Gemini/Ollama) | ✅ Completo |
-| `packages/protocol` | MissionProtocol SQLite, wizard-logic, config-mapper | ✅ Completo |
-| Providers (12) | anthropic, openai, gemini, ollama, openrouter, gemini-oauth, openai-oauth, bailian, kilo, kimi, opencode-zen, zai | ✅ Todos com streaming + tool calls |
-| `channels/cli` | Ink TUI: App, ApprovalPrompt, InputBox, MessageList, StatusBar | ✅ Completo |
-| `channels/telegram` | grammY, webhook, approval inline keyboard | ✅ Completo |
-| `channels/http` | SSE + REST, Bearer auth, CORS | ✅ Completo |
-| `tools/filesystem` | read, write, list, exists, stat + guardPath() | ✅ Completo |
-| `tools/shell` | RunCommand + allowlist | ✅ Completo |
-| `tools/http` | HttpGet + HttpPost + URL allowlist | ✅ Completo |
-| `apps/cli` | init, start, status, config, mission (create/list/start/status/report/archive) | ✅ Completo |
-| `apps/daemon` | headless HTTP, auto-approval, graceful shutdown | ✅ Completo |
+| Camada              | Componentes                                                                                                       | Status                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `packages/types`    | 200+ tipos, 35+ providers no enum, 10+ channels                                                                   | ✅ Completo                         |
+| `packages/core`     | Runtime, DI Container, TypedEventBus, ChannelManager, Errors                                                      | ✅ Completo                         |
+| `packages/config`   | Zod schemas, cosmiconfig, model-registry (24h cache)                                                              | ✅ Completo                         |
+| `packages/security` | SecurityManager: SSRF, path traversal, command injection, pairing                                                 | ✅ Completo                         |
+| `packages/agent`    | ReAct loop, ApprovalGate, ContextBuilder, SystemPrompt, ToolExecutor, SlashHandler                                | ✅ Completo                         |
+| `packages/memory`   | SQLite + FTS5 + vector, DAG compaction, embeddings (Gemini/Ollama)                                                | ✅ Completo                         |
+| `packages/protocol` | MissionProtocol SQLite, wizard-logic, config-mapper                                                               | ✅ Completo                         |
+| Providers (12)      | anthropic, openai, gemini, ollama, openrouter, gemini-oauth, openai-oauth, bailian, kilo, kimi, opencode-zen, zai | ✅ Todos com streaming + tool calls |
+| `channels/cli`      | Ink TUI: App, ApprovalPrompt, InputBox, MessageList, StatusBar                                                    | ✅ Completo                         |
+| `channels/telegram` | grammY, webhook, approval inline keyboard                                                                         | ✅ Completo                         |
+| `channels/http`     | SSE + REST, Bearer auth, CORS                                                                                     | ✅ Completo                         |
+| `tools/filesystem`  | read, write, list, exists, stat + guardPath()                                                                     | ✅ Completo                         |
+| `tools/shell`       | RunCommand + allowlist                                                                                            | ✅ Completo                         |
+| `tools/http`        | HttpGet + HttpPost + URL allowlist                                                                                | ✅ Completo                         |
+| `apps/cli`          | init, start, status, config, mission (create/list/start/status/report/archive)                                    | ✅ Completo                         |
+| `apps/daemon`       | headless HTTP, auto-approval, graceful shutdown                                                                   | ✅ Completo                         |
 
 ### Stubs explícitos
 
-| Componente | Arquivo | Sprint de resolução |
-|------------|---------|---------------------|
-| Discord channel | `packages/channels/discord/src/index.ts` | Sprint 4 |
-| Browser tool | `packages/tools/browser/src/index.ts` | Sprint 4 |
-| tools/memory package | `packages/tools/memory/src/index.ts` | Sprint 2 (redirect) |
+| Componente           | Arquivo                                  | Sprint de resolução |
+| -------------------- | ---------------------------------------- | ------------------- |
+| Discord channel      | `packages/channels/discord/src/index.ts` | Sprint 4            |
+| Browser tool         | `packages/tools/browser/src/index.ts`    | Sprint 4            |
+| tools/memory package | `packages/tools/memory/src/index.ts`     | Sprint 2 (redirect) |
 
 ---
 
@@ -61,34 +62,34 @@ Este é o **Spec de Governança** do Inception Framework v2.0. Ele define:
 
 ### Gaps Originais
 
-| ID | Gap | Severidade | Status | Sprint | SS |
-|----|-----|------------|--------|--------|----|
-| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | open | Sprint 2 | ss-2.3 |
-| G2 | Rate limiting: `checkRateLimit()` não implementado no SecurityManager | HIGH | open | Sprint 2 | ss-2.4 |
-| G3 | `sandbox: 'none'` sem implementação real em ToolExecutor | LOW | open | Sprint 4 | ss-4.6 (doc) |
-| G4 | `InceptionRuntime.start()` tem TODO comment: canais não inicializados pelo runtime | MEDIUM | open | Sprint 2 | ss-2.5 |
-| G5 | 9 `ProviderId` no enum sem pacote correspondente | LOW | open | Sprint 4 | ss-4.5 |
-| G6 | Versionamento: `types=2.0.0`, todos os outros `0.0.0` | MEDIUM | ✅ done | Sprint 1 | ss-1.6 |
-| G7 | `.eslintrc.cjs` com override `no-console` não commitado | LOW | ✅ done | Sprint 0 | ss-0.6 |
-| G8 | CI sem `pnpm audit`, coverage, triggers, commitlint | MEDIUM | open | Sprint 3 | ss-3.x |
-| G9 | `docs/en\|pt\|es\|zh` — diretórios vazios | LOW | open | Sprint 5 | ss-5.2 |
-| G10 | Memórias Claude obsoletas | HIGH | ✅ done | Sprint 0 | ss-0.5 |
-| G11 | `packages/tools/memory/src/index.ts` stub — re-export pendente | MEDIUM | open | Sprint 2 | ss-2.6 |
-| G12 | `HANDOFF.md` não mencionava gaps | HIGH | ✅ done | Sprint 1 | ss-1.2 |
+| ID  | Gap                                                                                | Severidade | Status  | Sprint   | SS           |
+| --- | ---------------------------------------------------------------------------------- | ---------- | ------- | -------- | ------------ |
+| G1  | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite         | HIGH       | open    | Sprint 2 | ss-2.3       |
+| G2  | Rate limiting: `checkRateLimit()` não implementado no SecurityManager              | HIGH       | open    | Sprint 2 | ss-2.4       |
+| G3  | `sandbox: 'none'` sem implementação real em ToolExecutor                           | LOW        | open    | Sprint 4 | ss-4.6 (doc) |
+| G4  | `InceptionRuntime.start()` tem TODO comment: canais não inicializados pelo runtime | MEDIUM     | open    | Sprint 2 | ss-2.5       |
+| G5  | 9 `ProviderId` no enum sem pacote correspondente                                   | LOW        | open    | Sprint 4 | ss-4.5       |
+| G6  | Versionamento: `types=2.0.0`, todos os outros `0.0.0`                              | MEDIUM     | ✅ done | Sprint 1 | ss-1.6       |
+| G7  | `.eslintrc.cjs` com override `no-console` não commitado                            | LOW        | ✅ done | Sprint 0 | ss-0.6       |
+| G8  | CI sem `pnpm audit`, coverage, triggers, commitlint                                | MEDIUM     | open    | Sprint 3 | ss-3.x       |
+| G9  | `docs/en\|pt\|es\|zh` — diretórios vazios                                          | LOW        | open    | Sprint 5 | ss-5.2       |
+| G10 | Memórias Claude obsoletas                                                          | HIGH       | ✅ done | Sprint 0 | ss-0.5       |
+| G11 | `packages/tools/memory/src/index.ts` stub — re-export pendente                     | MEDIUM     | open    | Sprint 2 | ss-2.6       |
+| G12 | `HANDOFF.md` não mencionava gaps                                                   | HIGH       | ✅ done | Sprint 1 | ss-1.2       |
 
 ### Novos Gaps (Encontrados na Auditoria Profunda 2026-03-25)
 
-| ID | Gap | Severidade | Status | Sprint | SS |
-|----|-----|------------|--------|--------|----|
-| G13 | `SecurityManager` criado mas **DESCARTADO** em `start.ts` (instância nunca armazenada) | **CRITICAL** | open | Sprint 2 | ss-2.2 |
-| G14 | `.gitattributes` **não existe** — warnings LF→CRLF em todo commit Windows | MEDIUM | open | Sprint 3 | ss-3.1 |
-| G15 | `.commitlintrc` **não existe** — commitlint instalado mas sem regras (valida NADA) | MEDIUM | open | Sprint 3 | ss-3.2 |
-| G16 | Husky hooks **não configurados** — `.husky/pre-commit` e `.husky/commit-msg` não existem fora de `_/` | MEDIUM | open | Sprint 3 | ss-3.3 |
-| G17 | `AgentLoopConfig` **sem campo `securityManager`** — impossível aplicar rate limit sem passar a instância | HIGH | open | Sprint 2 | ss-2.2 |
-| G18 | ESLint: `explicit-function-return-type` definido **duas vezes** em conflito + 443 warnings acumulados | LOW | open | Sprint 3 | ss-3.4 |
-| G19 | **Zero testes** para: `packages/protocol`, `packages/core`, `packages/config`, todos os channels, todos os providers | MEDIUM | open | Sprint 3 | ss-3.5 |
-| G20 | `allowedUrls` definido em `SecurityPolicy` mas **não passado** ao `ExecutionContext` em AgentLoop | MEDIUM | open | Sprint 2 | ss-2.5 |
-| G21 | CI executa `pnpm build` **3 vezes** (jobs: lint-and-typecheck, test, build) — sem cache entre jobs | LOW | open | Sprint 3 | ss-3.6 |
+| ID  | Gap                                                                                                                  | Severidade   | Status | Sprint   | SS     |
+| --- | -------------------------------------------------------------------------------------------------------------------- | ------------ | ------ | -------- | ------ |
+| G13 | `SecurityManager` criado mas **DESCARTADO** em `start.ts` (instância nunca armazenada)                               | **CRITICAL** | open   | Sprint 2 | ss-2.2 |
+| G14 | `.gitattributes` **não existe** — warnings LF→CRLF em todo commit Windows                                            | MEDIUM       | open   | Sprint 3 | ss-3.1 |
+| G15 | `.commitlintrc` **não existe** — commitlint instalado mas sem regras (valida NADA)                                   | MEDIUM       | open   | Sprint 3 | ss-3.2 |
+| G16 | Husky hooks **não configurados** — `.husky/pre-commit` e `.husky/commit-msg` não existem fora de `_/`                | MEDIUM       | open   | Sprint 3 | ss-3.3 |
+| G17 | `AgentLoopConfig` **sem campo `securityManager`** — impossível aplicar rate limit sem passar a instância             | HIGH         | open   | Sprint 2 | ss-2.2 |
+| G18 | ESLint: `explicit-function-return-type` definido **duas vezes** em conflito + 443 warnings acumulados                | LOW          | open   | Sprint 3 | ss-3.4 |
+| G19 | **Zero testes** para: `packages/protocol`, `packages/core`, `packages/config`, todos os channels, todos os providers | MEDIUM       | open   | Sprint 3 | ss-3.5 |
+| G20 | `allowedUrls` definido em `SecurityPolicy` mas **não passado** ao `ExecutionContext` em AgentLoop                    | MEDIUM       | open   | Sprint 2 | ss-2.5 |
+| G21 | CI executa `pnpm build` **3 vezes** (jobs: lint-and-typecheck, test, build) — sem cache entre jobs                   | LOW          | open   | Sprint 3 | ss-3.6 |
 
 ### Mapa de Dependências Entre Gaps
 
@@ -128,13 +129,13 @@ inception-v2/_gov/
 
 ### 4.2 Convenções de Nomenclatura
 
-| Artefato | Padrão | Exemplo |
-|----------|--------|---------|
-| Sprint | `sprint-{N}-{slug}` | `sprint-0-governance-bootstrap` |
-| Sub-sprint | `ss-{N}.{M}-{fase}-{alvo}` | `ss-2.2-impl-slash-persistence` |
-| Branch de sprint | `feat/gov-sprint-{N}` | `feat/gov-sprint-2` |
-| Branch de SS | `ss/sprint-{N}/{slug}` | `ss/sprint-0/create-gov-structure` |
-| Bus message | `{YYYY-MM-DD}T{HHMM}-{from}-{to}-{type}-{topic}.md` | `2026-03-25T1430-claude-rabelus-handoff-ss-0.2.md` |
+| Artefato         | Padrão                                              | Exemplo                                            |
+| ---------------- | --------------------------------------------------- | -------------------------------------------------- |
+| Sprint           | `sprint-{N}-{slug}`                                 | `sprint-0-governance-bootstrap`                    |
+| Sub-sprint       | `ss-{N}.{M}-{fase}-{alvo}`                          | `ss-2.2-impl-slash-persistence`                    |
+| Branch de sprint | `feat/gov-sprint-{N}`                               | `feat/gov-sprint-2`                                |
+| Branch de SS     | `ss/sprint-{N}/{slug}`                              | `ss/sprint-0/create-gov-structure`                 |
+| Bus message      | `{YYYY-MM-DD}T{HHMM}-{from}-{to}-{type}-{topic}.md` | `2026-03-25T1430-claude-rabelus-handoff-ss-0.2.md` |
 
 **Fases reconhecidas:** `research` · `spec` · `impl` · `fix` · `refactor` · `docs` · `ci` · `archive` · `sync` · `create`
 
@@ -179,45 +180,60 @@ inception-v2/_gov/
 ---
 id: ss-{N.M}
 sprint: sprint-{N}-{slug}
-fase: {fase}
-alvo: {alvo}
+fase: { fase }
+alvo: { alvo }
 status: pending
-criado-em: {ISO8601}
+criado-em: { ISO8601 }
 branch: ss/sprint-{N}/{slug}
 ---
 
 # Brief: {Título Descritivo}
 
 ## Objetivo
+
 Uma frase: o que esta SS deve entregar.
 
 ## Contexto
+
 Por que agora. O que desbloqueou esta SS.
 
 ## Scope
+
 ### Dentro:
+
 - item
+
 ### Fora (pertence a outra SS):
+
 - item
 
 ## Spec Técnica
+
 ### Arquivos a criar:
+
 ### Arquivos a modificar:
+
 ### Arquivos a NÃO tocar:
 
 ## Validação
+
 ### Testes do Claude (automated):
+
 - [ ] pnpm build
 - [ ] pnpm lint
 - [ ] pnpm typecheck
 - [ ] {teste específico}
+
 ### Testes do Usuário (manual):
+
 - [ ] {ação}
 
 ## Commit Message
+
 {type}({scope}): {descrição}
 
 ## Definition of Done
+
 - [ ] todos os arquivos entregues
 - [ ] todos os testes passando
 - [ ] commit e branch prontos para review
@@ -229,13 +245,14 @@ Por que agora. O que desbloqueou esta SS.
 ---
 id: ss-{N.M}
 status: done | partial | blocked
-concluido-em: {ISO8601}
-commit: {hash}
+concluido-em: { ISO8601 }
+commit: { hash }
 ---
 
 # Handoff: {Título}
 
 ## Resumo Executivo
+
 Uma frase.
 
 ## O que foi Entregue
@@ -253,10 +270,10 @@ Uma frase.
 
 ```markdown
 ---
-de: {claude | rabelus | agent-N}
-para: {claude | rabelus | all}
-tipo: {brief | handoff | request | status | block}
-data: {ISO8601}
+de: { claude | rabelus | agent-N }
+para: { claude | rabelus | all }
+tipo: { brief | handoff | request | status | block }
+data: { ISO8601 }
 ref-ss: ss-{N.M}
 ---
 
@@ -300,11 +317,13 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 ```
 
 Para artefatos de governança, scope é `gov`:
+
 - `chore(gov): create _gov/ governance filesystem`
 - `docs(gov): update roadmap — ss-0.4 done`
 - `fix(eslint): disable no-console for apps/**`
 
 Para gaps de código:
+
 - `fix(agent): impl /task done persistence via MissionProtocol`
 - `feat(security): add token-bucket rate limiting to SecurityManager`
 
@@ -337,17 +356,20 @@ ss-0.6 independente (pode rodar a qualquer momento)
 ## 10. Arquivos Críticos por Sprint
 
 ### Sprint 0
+
 - `.eslintrc.cjs` — G7: commitar override pendente
 - `docs/audit-research/` — mover para `_gov/archive/audits/`
 - `C:\Users\rabel\.claude\projects\...\memory\*.md` — atualizar memórias Claude
 
 ### Sprint 1
+
 - `HANDOFF.md` — G12: documentar gaps G1-G5
 - `SECURITY.md` — enriquecer com SecurityManager real
 - `CHANGELOG.md` — seção Known Gaps
 - `packages/*/package.json` — G6: versão 2.0.0 unificada
 
 ### Sprint 2
+
 - `packages/agent/src/slash-handler.ts` — G1: persistência
 - `packages/types/src/protocol.ts` — G1: `IMissionProtocol.addTask()` + `addJournalEntry()`
 - `packages/protocol/src/mission-protocol.ts` — G1: implementar métodos
@@ -358,13 +380,16 @@ ss-0.6 independente (pode rodar a qualquer momento)
 - `apps/cli/src/tool-registry.ts` — G11: memory tools
 
 ### Sprint 3
+
 - `.github/workflows/ci.yml` — G8: audit, coverage, triggers
 
 ### Sprint 4
+
 - `packages/channels/discord/src/index.ts` — stub → implementação
 - `packages/tools/browser/src/index.ts` — stub → Playwright
 - `packages/tools/memory/src/index.ts` — stub → re-export
 
 ### Sprint 5
+
 - `docs/pt/`, `docs/en/` — G9: index.md
 - Semantic naming review geral

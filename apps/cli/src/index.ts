@@ -72,9 +72,7 @@ program
 
 // ── inception mission ───────────────────────────────────────────────────────
 
-const missionCmd = program
-  .command('mission')
-  .description('Gerencia missões do agente');
+const missionCmd = program.command('mission').description('Gerencia missões do agente');
 
 missionCmd
   .command('create')

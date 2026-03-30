@@ -10,12 +10,12 @@
 
 ## Sub-sprints
 
-| SS | Nome | Gaps resolve | Status | Paralela? |
-|----|------|-------------|--------|-----------|
-| ss-5.1 | archive-audit-research-dir | — | ⏳ pending | com todas |
-| ss-5.2 | populate-docs-structure | G9 | ⏳ pending | com todas |
-| ss-5.3 | naming-normalization | — | ⏳ pending | com todas |
-| ss-5.4 | tests-organization | — | ⏳ pending | com todas |
+| SS     | Nome                       | Gaps resolve | Status     | Paralela? |
+| ------ | -------------------------- | ------------ | ---------- | --------- |
+| ss-5.1 | archive-audit-research-dir | —            | ⏳ pending | com todas |
+| ss-5.2 | populate-docs-structure    | G9           | ⏳ pending | com todas |
+| ss-5.3 | naming-normalization       | —            | ⏳ pending | com todas |
+| ss-5.4 | tests-organization         | —            | ⏳ pending | com todas |
 
 **Todas as SS podem rodar em paralelo.**
 
@@ -23,15 +23,15 @@
 
 ## Arquivos Críticos
 
-| Arquivo | Gap | O que fazer |
-|---------|-----|-------------|
-| `docs/audit-research/` | — | Confirmar que só tem README.md redirect (ss-0.3 deve ter feito) |
-| `docs/pt/index.md` | G9 | Criar com links para GUIA.md em pt-BR |
-| `docs/en/index.md` | G9 | Criar com links para documentação em inglês |
-| `docs/es/index.md` | G9 | Stub com "em breve" |
-| `docs/zh/index.md` | G9 | Stub com "em breve" |
-| `_gov/**` | — | Revisar semantic naming, consistência |
-| `packages/**/tests/` | — | Estrutura coerente de testes |
+| Arquivo                | Gap | O que fazer                                                     |
+| ---------------------- | --- | --------------------------------------------------------------- |
+| `docs/audit-research/` | —   | Confirmar que só tem README.md redirect (ss-0.3 deve ter feito) |
+| `docs/pt/index.md`     | G9  | Criar com links para GUIA.md em pt-BR                           |
+| `docs/en/index.md`     | G9  | Criar com links para documentação em inglês                     |
+| `docs/es/index.md`     | G9  | Stub com "em breve"                                             |
+| `docs/zh/index.md`     | G9  | Stub com "em breve"                                             |
+| `_gov/**`              | —   | Revisar semantic naming, consistência                           |
+| `packages/**/tests/`   | —   | Estrutura coerente de testes                                    |
 
 ---
 

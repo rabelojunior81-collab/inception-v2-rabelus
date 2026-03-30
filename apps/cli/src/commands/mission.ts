@@ -177,10 +177,7 @@ async function runCreate(): Promise<void> {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
 
   try {
-    printHeader(
-      'INCEPTION — NOVA MISSÃO',
-      'Use as opções numeradas para selecionar'
-    );
+    printHeader('INCEPTION — NOVA MISSÃO', 'Use as opções numeradas para selecionar');
 
     const steps = getWizardSteps();
     const partial: Partial<MissionWizardInput> = {};
@@ -294,7 +291,9 @@ async function runCreate(): Promise<void> {
     }
 
     // Ask about starting now
-    const startNow = (await ask(rl, '\n  Deseja iniciar o agente com esta missão agora? [S/n]: ')).toLowerCase();
+    const startNow = (
+      await ask(rl, '\n  Deseja iniciar o agente com esta missão agora? [S/n]: ')
+    ).toLowerCase();
     const shouldStart = !['n', 'nao', 'não', 'no'].includes(startNow);
 
     // Create mission in DB
@@ -353,9 +352,7 @@ async function runList(): Promise<void> {
   }
 
   if (missions.length === 0) {
-    console.log(
-      "\n  Nenhuma missão encontrada. Use 'inception mission create' para criar uma.\n"
-    );
+    console.log("\n  Nenhuma missão encontrada. Use 'inception mission create' para criar uma.\n");
     return;
   }
 
@@ -522,9 +519,8 @@ async function runMissionStatus(id?: string): Promise<void> {
       for (const task of mission.tasks) {
         const icon = taskIcon(task.status);
         const label = taskStatusLabel(task.status);
-        const desc = task.description.length > 48
-          ? task.description.slice(0, 45) + '...'
-          : task.description;
+        const desc =
+          task.description.length > 48 ? task.description.slice(0, 45) + '...' : task.description;
         console.log(`  ${icon} ${desc.padEnd(50)} (${label})`);
       }
     } else {
@@ -628,15 +624,11 @@ async function runReport(id?: string): Promise<void> {
     '',
     '## Tarefas com Falha / Bloqueadas',
     '',
-    failed.length === 0
-      ? '_Nenhuma._'
-      : failed.map((t) => `- [!] ${t.description}`).join('\n'),
+    failed.length === 0 ? '_Nenhuma._' : failed.map((t) => `- [!] ${t.description}`).join('\n'),
     '',
     '## Tarefas Pendentes',
     '',
-    pending.length === 0
-      ? '_Nenhuma._'
-      : pending.map((t) => `- [ ] ${t.description}`).join('\n'),
+    pending.length === 0 ? '_Nenhuma._' : pending.map((t) => `- [ ] ${t.description}`).join('\n'),
     '',
     '## Timeline',
     '',
@@ -691,10 +683,7 @@ async function runArchive(id: string): Promise<void> {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   try {
     const confirm = (
-      await ask(
-        rl,
-        `\n  Arquivar missão '${mission.title}'? Esta ação é irreversível. [s/N]: `
-      )
+      await ask(rl, `\n  Arquivar missão '${mission.title}'? Esta ação é irreversível. [s/N]: `)
     ).toLowerCase();
     rl.close();
 
@@ -723,10 +712,7 @@ export interface MissionOptions {
   config?: string;
 }
 
-export async function runMission(
-  subcommand: string,
-  options: MissionOptions
-): Promise<void> {
+export async function runMission(subcommand: string, options: MissionOptions): Promise<void> {
   switch (subcommand) {
     case 'create':
       await runCreate();

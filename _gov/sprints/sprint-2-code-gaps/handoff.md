@@ -13,15 +13,18 @@ Sprint 2 concluída em um único commit (`ec18560`). Todos os 7 gaps resolvidos.
 ## O que foi Entregue
 
 ### G13 — SecurityManager wiring (CRÍTICO)
+
 - `apps/cli/src/commands/start.ts:74` — `new SecurityManager({...})` → `const securityManager = new SecurityManager({...})`
 - Instância agora é armazenada e propagada
 
 ### G17 — AgentLoopConfig.securityManager
+
 - `packages/agent/src/agent-loop.ts` — campo `securityManager?: ISecurityManager` adicionado
 - Usa `ISecurityManager` de `@rabeluslab/inception-types` (sem nova dependência)
 - `apps/cli/src/commands/start.ts` — `securityManager` passado ao construtor do AgentLoop
 
 ### G2 — Rate Limiting
+
 - `packages/types/src/security.ts` — `checkRateLimit(key: string): void` adicionado a `ISecurityManager`
 - `packages/security/src/security-manager.ts` — token-bucket in-memory implementado
   - Refill proporcional ao tempo elapsed
@@ -30,6 +33,7 @@ Sprint 2 concluída em um único commit (`ec18560`). Todos os 7 gaps resolvidos.
 - `packages/agent/src/agent-loop.ts` — `this.cfg.securityManager?.checkRateLimit(`provider:${this.cfg.model}`)` antes de `provider.generate()`
 
 ### G1 — Slash persistence
+
 - `packages/types/src/protocol.ts` — `IMissionProtocol.addTask()` + `addJournalEntry()` definidos
 - `packages/protocol/src/schema.ts` — tabela `notes` adicionada (id, mission_id, text, created_at)
 - `packages/protocol/src/mission-protocol.ts` — `addTask()` e `addJournalEntry()` implementados
@@ -38,16 +42,19 @@ Sprint 2 concluída em um único commit (`ec18560`). Todos os 7 gaps resolvidos.
 - `apps/cli/src/commands/start.ts` — `missionProtocol` criado uma vez, passado ao `slashCtx()`; wizard inline usa a instância compartilhada; `missionProtocol.close()` no shutdown
 
 ### G20 — allowedUrls wiring
+
 - `apps/cli/src/commands/start.ts` — `allowedUrls: cfg.security.network.allowedHosts` passado ao AgentLoop
 - `agent-loop.ts:205` já tinha `urls: this.cfg.allowedUrls` no ExecutionContext
 
 ### G4 — Runtime lifecycle
+
 - `packages/core/src/runtime.ts` — `registerChannelManager(cm: ChannelManager)` adicionado
 - `runtime.start()` chama `await this.channelManager?.startAll()`
 - `runtime.stop()` chama `await this.channelManager?.stopAll()`
 - `apps/cli/src/commands/start.ts` — `runtime.registerChannelManager(channelManager)` antes de `runtime.start()`; `channelManager.stopAll()` removido do shutdown (runtime coordena)
 
 ### G11 — tools/memory re-export
+
 - `packages/tools/memory/src/index.ts` — `export {}` substituído por re-export das 3 tools de `@rabeluslab/inception-memory`
 - `packages/tools/memory/package.json` já tinha a dep correta
 

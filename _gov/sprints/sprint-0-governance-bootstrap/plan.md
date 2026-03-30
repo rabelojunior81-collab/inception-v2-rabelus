@@ -11,14 +11,14 @@
 
 ## Sub-sprints
 
-| SS | Nome | Status | Commit |
-|----|------|--------|--------|
-| ss-0.1 | research-filesystem-audit | ✅ done | integrado ao bootstrap |
-| ss-0.2 | create-gov-structure | ✅ done | — |
-| ss-0.3 | archive-audits | ⏳ pending | — |
-| ss-0.4 | roadmap-initial | ✅ done | — |
-| ss-0.5 | sync-memory-index | ⏳ pending | — |
-| ss-0.6 | commit-eslint-fix | ⏳ pending | — |
+| SS     | Nome                      | Status     | Commit                 |
+| ------ | ------------------------- | ---------- | ---------------------- |
+| ss-0.1 | research-filesystem-audit | ✅ done    | integrado ao bootstrap |
+| ss-0.2 | create-gov-structure      | ✅ done    | —                      |
+| ss-0.3 | archive-audits            | ⏳ pending | —                      |
+| ss-0.4 | roadmap-initial           | ✅ done    | —                      |
+| ss-0.5 | sync-memory-index         | ⏳ pending | —                      |
+| ss-0.6 | commit-eslint-fix         | ⏳ pending | —                      |
 
 ---
 
@@ -27,6 +27,7 @@
 ### ss-0.1 — research-filesystem-audit ✅
 
 Pesquisa concluída por 3 agentes paralelos (Explore). Mapa definitivo do filesystem:
+
 - 87% implementado (~19 packages reais, 3 stubs explícitos)
 - 12 gaps identificados (G1-G12)
 - Audits obsoletos em `docs/audit-research/` (2026-03-13 e 2026-03-16)
@@ -37,6 +38,7 @@ Handoff integrado ao bootstrap — sem arquivo separado.
 ### ss-0.2 — create-gov-structure ✅
 
 Criados:
+
 - `_gov/governance-spec.md` — documento norte (10 seções)
 - `_gov/roadmap.md` — roadmap vivo (sprints 0-5, gaps G1-G12)
 - `_gov/sprints/sprint-0-governance-bootstrap/plan.md` — este arquivo
@@ -49,6 +51,7 @@ Criados:
 **Pendente.** Ver `ss-0.3-archive-audits/brief.md`.
 
 Ações necessárias:
+
 ```bash
 git mv docs/audit-research/codex-first-audit.md \
        _gov/archive/audits/2026-03-13-codex-first-audit.md
@@ -66,6 +69,7 @@ git mv docs/audit-research/claude-sonnet-audit-2026-03-16.md \
 **Pendente.** Ver `ss-0.5-sync-memory-index/brief.md`.
 
 Memórias a atualizar (externas ao repo):
+
 - `C:\Users\rabel\.claude\projects\...\memory\project_inception_v2.md`
 - `C:\Users\rabel\.claude\projects\...\memory\project_mission_system.md`
 - `C:\Users\rabel\.claude\projects\...\memory\MEMORY.md`

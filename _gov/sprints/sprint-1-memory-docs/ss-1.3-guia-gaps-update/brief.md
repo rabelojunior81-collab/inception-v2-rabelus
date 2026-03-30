@@ -21,19 +21,23 @@ Adicionar seção em `docs/GUIA.md` marcando `/task done`, `/task add` e `/note`
 ## Scope
 
 ### Dentro:
+
 - Adicionar aviso explícito na seção de slash commands em `docs/GUIA.md`
 - Indicar que a persistência será implementada na Sprint 2
 
 ### Fora:
+
 - Outros documentos
 - Código fonte
 
 ## Spec Técnica
 
 ### Arquivo a modificar:
+
 - `docs/GUIA.md`
 
 ### Mudança:
+
 Na seção sobre `/task done`, `/task add`, `/note`, adicionar:
 
 ```markdown
@@ -45,10 +49,12 @@ Na seção sobre `/task done`, `/task add`, `/note`, adicionar:
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `docs/GUIA.md` contém aviso sobre display-only para `/task done`
 - [ ] Link para `_gov/roadmap.md` funciona relativamente
 
 ### Testes do Usuário (manual):
+
 - [ ] Confirmar que o aviso é claro
 
 ## Commit Message

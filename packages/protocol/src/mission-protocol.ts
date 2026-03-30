@@ -266,9 +266,7 @@ export class MissionProtocol implements IMissionProtocol {
         dependencies: '[]',
         tech_status: TechnicalStatus.Stub,
       } as Record<string, SQLInputValue>);
-    const row = this.db
-      .prepare('SELECT * FROM tasks WHERE id = ?')
-      .get(id) as unknown as TaskRow;
+    const row = this.db.prepare('SELECT * FROM tasks WHERE id = ?').get(id) as unknown as TaskRow;
     return rowToTask(row);
   }
 

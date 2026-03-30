@@ -22,22 +22,23 @@ O Inception Framework v2.0 é um **runtime TypeScript-nativo para agentes de IA 
 
 > Funcionalidades com implementação incompleta. Não são bugs — são gaps documentados com sprint de resolução.
 
-| ID | Gap | Severidade | Sprint |
-|----|-----|------------|--------|
-| G1 | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH | Sprint 2 |
-| G2 | Rate limiting configurado mas não aplicado no AgentLoop | MEDIUM | Sprint 2 |
-| G4 | `InceptionRuntime` não conectado ao `ChannelManager` em `start.ts` | MEDIUM | Sprint 2 |
-| G6 | Versionamento inconsistente (`types=2.0.0`, demais `0.0.0`) | MEDIUM | Sprint 1 |
-| G8 | CI sem `pnpm audit`, coverage, triggers completos | MEDIUM | Sprint 3 |
-| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI | MEDIUM | Sprint 2 |
-| G12 | Este `HANDOFF.md` não mencionava gaps — resolvido nesta atualização | HIGH | Sprint 1 ← |
-| G3 | `sandbox: 'none'` sem implementação real | LOW | Sprint 4 |
-| G5 | 9 `ProviderId` no enum sem pacote correspondente | LOW | Sprint 4 |
-| G7 | `.eslintrc.cjs` override `no-console` pendente | LOW | Sprint 0 ✅ |
-| G9 | `docs/en\|pt\|es\|zh` — diretórios vazios | LOW | Sprint 5 |
-| G10 | Memórias Claude obsoletas | HIGH | Sprint 0 ✅ |
+| ID  | Gap                                                                        | Severidade | Sprint      |
+| --- | -------------------------------------------------------------------------- | ---------- | ----------- |
+| G1  | `/task done`, `/task add`, `/note` — display-only, sem persistência SQLite | HIGH       | Sprint 2    |
+| G2  | Rate limiting configurado mas não aplicado no AgentLoop                    | MEDIUM     | Sprint 2    |
+| G4  | `InceptionRuntime` não conectado ao `ChannelManager` em `start.ts`         | MEDIUM     | Sprint 2    |
+| G6  | Versionamento inconsistente (`types=2.0.0`, demais `0.0.0`)                | MEDIUM     | Sprint 1    |
+| G8  | CI sem `pnpm audit`, coverage, triggers completos                          | MEDIUM     | Sprint 3    |
+| G11 | `packages/tools/memory/` stub — memory tools não registradas no CLI        | MEDIUM     | Sprint 2    |
+| G12 | Este `HANDOFF.md` não mencionava gaps — resolvido nesta atualização        | HIGH       | Sprint 1 ←  |
+| G3  | `sandbox: 'none'` sem implementação real                                   | LOW        | Sprint 4    |
+| G5  | 9 `ProviderId` no enum sem pacote correspondente                           | LOW        | Sprint 4    |
+| G7  | `.eslintrc.cjs` override `no-console` pendente                             | LOW        | Sprint 0 ✅ |
+| G9  | `docs/en\|pt\|es\|zh` — diretórios vazios                                  | LOW        | Sprint 5    |
+| G10 | Memórias Claude obsoletas                                                  | HIGH       | Sprint 0 ✅ |
 
 **Stubs explícitos (não são bugs):**
+
 - `packages/channels/discord/` — placeholder, implementação na Sprint 4
 - `packages/tools/browser/` — placeholder Playwright, Sprint 4
 - `packages/tools/memory/` — redirect pendente para `memory/src/tools/`, Sprint 2
@@ -46,11 +47,11 @@ O Inception Framework v2.0 é um **runtime TypeScript-nativo para agentes de IA 
 
 ## Pré-requisitos OBRIGATÓRIOS
 
-| Dependência | Versão mínima | Por quê |
-|-------------|--------------|---------|
-| **Node.js** | **22+** | `node:sqlite` é built-in do Node 22 — versões 20/21 não funcionam |
-| **pnpm** | **8+** | Gerenciador de pacotes do monorepo |
-| **Git** | 2.30+ | Controle de versão |
+| Dependência | Versão mínima | Por quê                                                           |
+| ----------- | ------------- | ----------------------------------------------------------------- |
+| **Node.js** | **22+**       | `node:sqlite` é built-in do Node 22 — versões 20/21 não funcionam |
+| **pnpm**    | **8+**        | Gerenciador de pacotes do monorepo                                |
+| **Git**     | 2.30+         | Controle de versão                                                |
 
 ```bash
 node --version   # deve mostrar v22.x.x ou superior
@@ -162,20 +163,20 @@ inception-v2/
 
 ## O que está implementado (~87%)
 
-| Layer | Package | Status |
-|-------|---------|--------|
-| Tipos | `@rabeluslab/inception-types` | ✅ 200+ interfaces/enums |
-| Config | `@rabeluslab/inception-config` | ✅ Zod schema, loader, model-registry |
-| Core | `@rabeluslab/inception-core` | ✅ Runtime, ChannelManager, DI, EventBus |
-| Memória | `@rabeluslab/inception-memory` | ✅ SQLite + FTS5 + vector + DAG compaction |
-| Segurança | `@rabeluslab/inception-security` | ✅ Gates, allowlists, pairing, approval flows |
-| Protocolo | `@rabeluslab/inception-protocol` | ✅ Mission CRUD, wizard, config-mapper |
-| Agente | `@rabeluslab/inception-agent` | ✅ ReAct loop, context, tools, slash commands |
-| Providers | todos os 12 packages | ✅ Anthropic, OpenAI, Gemini, Ollama, Kimi, Z.AI, Bailian, OpenRouter, Kilo, OpenCodeZen + OAuth variants |
-| Canal CLI | `@rabeluslab/inception-channel-cli` | ✅ Ink TUI, wizard inline, slash commands |
-| Canal Telegram | `@rabeluslab/inception-channel-telegram` | ✅ Bot Telegram |
-| Ferramentas | filesystem, shell, http | ✅ Todos funcionais |
-| CLI App | `@rabeluslab/inception` | ✅ init, start, config, status, mission (6 subcomandos) |
+| Layer          | Package                                  | Status                                                                                                    |
+| -------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Tipos          | `@rabeluslab/inception-types`            | ✅ 200+ interfaces/enums                                                                                  |
+| Config         | `@rabeluslab/inception-config`           | ✅ Zod schema, loader, model-registry                                                                     |
+| Core           | `@rabeluslab/inception-core`             | ✅ Runtime, ChannelManager, DI, EventBus                                                                  |
+| Memória        | `@rabeluslab/inception-memory`           | ✅ SQLite + FTS5 + vector + DAG compaction                                                                |
+| Segurança      | `@rabeluslab/inception-security`         | ✅ Gates, allowlists, pairing, approval flows                                                             |
+| Protocolo      | `@rabeluslab/inception-protocol`         | ✅ Mission CRUD, wizard, config-mapper                                                                    |
+| Agente         | `@rabeluslab/inception-agent`            | ✅ ReAct loop, context, tools, slash commands                                                             |
+| Providers      | todos os 12 packages                     | ✅ Anthropic, OpenAI, Gemini, Ollama, Kimi, Z.AI, Bailian, OpenRouter, Kilo, OpenCodeZen + OAuth variants |
+| Canal CLI      | `@rabeluslab/inception-channel-cli`      | ✅ Ink TUI, wizard inline, slash commands                                                                 |
+| Canal Telegram | `@rabeluslab/inception-channel-telegram` | ✅ Bot Telegram                                                                                           |
+| Ferramentas    | filesystem, shell, http                  | ✅ Todos funcionais                                                                                       |
+| CLI App        | `@rabeluslab/inception`                  | ✅ init, start, config, status, mission (6 subcomandos)                                                   |
 
 ---
 
@@ -204,19 +205,19 @@ node apps/cli/dist/index.js mission archive <id>    # arquivar missão encerrada
 
 ### Slash Commands (dentro do agente)
 
-| Comando | Ação |
-|---------|------|
-| `/mission` | Exibe missão ativa e progresso |
-| `/mission create` | Abre wizard inline **dentro do chat** (sem sair do agente) |
-| `/task list` | Lista tasks pendentes |
-| `/task done <texto>` | Marca task concluída |
-| `/task add <desc>` | Adiciona nova task |
-| `/note <texto>` | Entrada no journal |
-| `/rules` | Regras ativas da missão |
-| `/pause` | Salva estado e encerra graciosamente |
-| `/status` | Estado: provider, modelo, tokens, missão |
-| `/stop` | Cancela wizard em andamento |
-| `/help` | Lista todos os comandos |
+| Comando              | Ação                                                       |
+| -------------------- | ---------------------------------------------------------- |
+| `/mission`           | Exibe missão ativa e progresso                             |
+| `/mission create`    | Abre wizard inline **dentro do chat** (sem sair do agente) |
+| `/task list`         | Lista tasks pendentes                                      |
+| `/task done <texto>` | Marca task concluída                                       |
+| `/task add <desc>`   | Adiciona nova task                                         |
+| `/note <texto>`      | Entrada no journal                                         |
+| `/rules`             | Regras ativas da missão                                    |
+| `/pause`             | Salva estado e encerra graciosamente                       |
+| `/status`            | Estado: provider, modelo, tokens, missão                   |
+| `/stop`              | Cancela wizard em andamento                                |
+| `/help`              | Lista todos os comandos                                    |
 
 ---
 
@@ -264,21 +265,21 @@ O `/mission create` dentro do agente opera sem conflito com o Ink (que controla 
 
 ## Providers — Slugs e Configuração
 
-| Slug | Provider | Autenticação |
-|------|----------|-------------|
-| `anthropic` | Anthropic Claude | `ANTHROPIC_API_KEY` |
-| `openai` | OpenAI | `OPENAI_API_KEY` |
-| `openai-oauth` | ChatGPT Plus/Pro | OAuth token |
-| `gemini` | Google Gemini | `GEMINI_API_KEY` |
-| `ollama` | Ollama local ou cloud | `OLLAMA_BASE_URL` (opcional) |
-| `kimi` | Kimi PAYG (Moonshot AI) | `KIMI_API_KEY` |
-| `kimi-coding` | Kimi Coding Plan | `KIMI_API_KEY` |
-| `zai` | Z.AI PAYG (Zhipu) | `ZAI_API_KEY` |
-| `zai-coding` | Z.AI Coding Plan | `ZAI_API_KEY` |
-| `bailian` | Bailian Coding Plan | `BAILIAN_API_KEY` |
-| `bailian-payg` | Bailian PAYG (DashScope) | `BAILIAN_API_KEY` |
-| `openrouter` | OpenRouter (300+ modelos) | `OPENROUTER_API_KEY` |
-| `kilo` | Kilo gateway | `KILO_API_KEY` |
+| Slug           | Provider                  | Autenticação                 |
+| -------------- | ------------------------- | ---------------------------- |
+| `anthropic`    | Anthropic Claude          | `ANTHROPIC_API_KEY`          |
+| `openai`       | OpenAI                    | `OPENAI_API_KEY`             |
+| `openai-oauth` | ChatGPT Plus/Pro          | OAuth token                  |
+| `gemini`       | Google Gemini             | `GEMINI_API_KEY`             |
+| `ollama`       | Ollama local ou cloud     | `OLLAMA_BASE_URL` (opcional) |
+| `kimi`         | Kimi PAYG (Moonshot AI)   | `KIMI_API_KEY`               |
+| `kimi-coding`  | Kimi Coding Plan          | `KIMI_API_KEY`               |
+| `zai`          | Z.AI PAYG (Zhipu)         | `ZAI_API_KEY`                |
+| `zai-coding`   | Z.AI Coding Plan          | `ZAI_API_KEY`                |
+| `bailian`      | Bailian Coding Plan       | `BAILIAN_API_KEY`            |
+| `bailian-payg` | Bailian PAYG (DashScope)  | `BAILIAN_API_KEY`            |
+| `openrouter`   | OpenRouter (300+ modelos) | `OPENROUTER_API_KEY`         |
+| `kilo`         | Kilo gateway              | `KILO_API_KEY`               |
 
 ---
 
@@ -286,22 +287,22 @@ O `/mission create` dentro do agente opera sem conflito com o Ink (que controla 
 
 ### Níveis de Autonomia
 
-| Nível | Comportamento |
-|-------|--------------|
-| `Readonly` | Apenas lê e sugere — nunca escreve, nunca executa |
-| `Supervised` | Age, mas pede aprovação para ações destrutivas *(padrão)* |
-| `Full` | Age autonomamente — use apenas em ambientes controlados |
+| Nível        | Comportamento                                             |
+| ------------ | --------------------------------------------------------- |
+| `Readonly`   | Apenas lê e sugere — nunca escreve, nunca executa         |
+| `Supervised` | Age, mas pede aprovação para ações destrutivas _(padrão)_ |
+| `Full`       | Age autonomamente — use apenas em ambientes controlados   |
 
 ### Gates de Qualidade (IEP)
 
-| Gate | Código | Significado |
-|------|--------|-------------|
-| TypeScript Gate | G-TS | Tipos corretos, sem `any` |
-| Design Gate | G-DI | Decisões de design validadas |
-| Security Gate | G-SEC | Segurança verificada |
-| UX Gate | G-UX | Experiência do usuário aprovada |
-| Release Gate | G-REL | Pronto para release |
-| AI Gate | G-AI | Comportamento do agente validado |
+| Gate            | Código | Significado                      |
+| --------------- | ------ | -------------------------------- |
+| TypeScript Gate | G-TS   | Tipos corretos, sem `any`        |
+| Design Gate     | G-DI   | Decisões de design validadas     |
+| Security Gate   | G-SEC  | Segurança verificada             |
+| UX Gate         | G-UX   | Experiência do usuário aprovada  |
+| Release Gate    | G-REL  | Pronto para release              |
+| AI Gate         | G-AI   | Comportamento do agente validado |
 
 ---
 
@@ -361,15 +362,15 @@ pnpm build
 
 ## Documentação de Referência
 
-| Documento | Conteúdo |
-|-----------|---------|
-| [_gov/governance-spec.md](_gov/governance-spec.md) | **Documento norte** — estado real, gaps, governança |
-| [_gov/roadmap.md](_gov/roadmap.md) | Roadmap vivo de todas as 6 sprints |
-| [docs/GUIA.md](docs/GUIA.md) | Guia completo pt-BR "De Zero à Missão Concluída" |
-| [docs/missions/mission-system.md](docs/missions/mission-system.md) | Spec técnica do sistema de missões |
-| [docs/audit-research/README.md](docs/audit-research/README.md) | Redirect para auditorias históricas em `_gov/archive/audits/` |
-| [CHANGELOG.md](CHANGELOG.md) | Histórico completo de mudanças |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Guia de contribuição |
+| Documento                                                          | Conteúdo                                                      |
+| ------------------------------------------------------------------ | ------------------------------------------------------------- |
+| [\_gov/governance-spec.md](_gov/governance-spec.md)                | **Documento norte** — estado real, gaps, governança           |
+| [\_gov/roadmap.md](_gov/roadmap.md)                                | Roadmap vivo de todas as 6 sprints                            |
+| [docs/GUIA.md](docs/GUIA.md)                                       | Guia completo pt-BR "De Zero à Missão Concluída"              |
+| [docs/missions/mission-system.md](docs/missions/mission-system.md) | Spec técnica do sistema de missões                            |
+| [docs/audit-research/README.md](docs/audit-research/README.md)     | Redirect para auditorias históricas em `_gov/archive/audits/` |
+| [CHANGELOG.md](CHANGELOG.md)                                       | Histórico completo de mudanças                                |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                                 | Guia de contribuição                                          |
 
 ---
 

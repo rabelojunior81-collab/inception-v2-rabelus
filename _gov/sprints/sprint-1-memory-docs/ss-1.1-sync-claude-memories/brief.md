@@ -12,7 +12,7 @@ branch: feat/gov-sprint-1
 
 ## Objetivo
 
-Reescrever os arquivos de memória Claude para refletir o estado real (~87% implementado, 12 gaps, sistema _gov/ ativo). Resolve G10.
+Reescrever os arquivos de memória Claude para refletir o estado real (~87% implementado, 12 gaps, sistema \_gov/ ativo). Resolve G10.
 
 ## Contexto
 
@@ -21,7 +21,8 @@ Executada como ss-0.5 durante a Sprint 0 (os dois sprints foram concluídos na m
 ## Scope
 
 ### Dentro:
-- `project_inception_v2.md` — estado real, 87%, gaps G1-G12, _gov/
+
+- `project_inception_v2.md` — estado real, 87%, gaps G1-G12, \_gov/
 - `project_mission_system.md` — implementado, G1 como gap conhecido
 - `MEMORY.md` — entradas atualizadas
 

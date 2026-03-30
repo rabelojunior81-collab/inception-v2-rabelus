@@ -5,10 +5,7 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-import {
-  AgentLoop,
-  handleSlashCommand,
-} from '@rabeluslab/inception-agent';
+import { AgentLoop, handleSlashCommand } from '@rabeluslab/inception-agent';
 import type { PendingApproval, SlashCommandContext } from '@rabeluslab/inception-agent';
 import { CliChannel } from '@rabeluslab/inception-channel-cli';
 import { loadConfig, refreshModelsInBackground } from '@rabeluslab/inception-config';
@@ -181,16 +178,26 @@ export async function runStart(options: StartOptions): Promise<void> {
     function applyAnswer(step: WizardStep, raw: string): void {
       if (step.inputType === 'text') {
         switch (step.id) {
-          case 'name': partial.name = raw.trim(); break;
-          case 'description': partial.description = raw.trim(); break;
+          case 'name':
+            partial.name = raw.trim();
+            break;
+          case 'description':
+            partial.description = raw.trim();
+            break;
         }
       } else if (step.inputType === 'select') {
         const idx = parseInt(raw, 10) - 1;
         const val = step.options?.[idx]?.value ?? step.options?.[0]?.value ?? '';
         switch (step.id) {
-          case 'type': partial.type = val as MissionWizardInput['type']; break;
-          case 'methodology': partial.methodology = val as MissionWizardInput['methodology']; break;
-          case 'autonomyLevel': partial.autonomyLevel = val as MissionWizardInput['autonomyLevel']; break;
+          case 'type':
+            partial.type = val as MissionWizardInput['type'];
+            break;
+          case 'methodology':
+            partial.methodology = val as MissionWizardInput['methodology'];
+            break;
+          case 'autonomyLevel':
+            partial.autonomyLevel = val as MissionWizardInput['autonomyLevel'];
+            break;
         }
       } else if (step.inputType === 'multiselect') {
         const parts = raw ? raw.split(/[\s,+]+/).filter(Boolean) : [];
@@ -201,14 +208,22 @@ export async function runStart(options: StartOptions): Promise<void> {
           })
           .filter((v): v is string => v !== undefined);
         switch (step.id) {
-          case 'techStack': partial.techStack = selected as MissionWizardInput['techStack']; break;
-          case 'skills': partial.skills = selected as MissionWizardInput['skills']; break;
+          case 'techStack':
+            partial.techStack = selected as MissionWizardInput['techStack'];
+            break;
+          case 'skills':
+            partial.skills = selected as MissionWizardInput['skills'];
+            break;
         }
       } else if (step.inputType === 'list') {
         const items = raw ? raw.split(/\s*,\s*/).filter(Boolean) : [];
         switch (step.id) {
-          case 'rules': partial.rules = items; break;
-          case 'initialTasks': partial.initialTasks = items; break;
+          case 'rules':
+            partial.rules = items;
+            break;
+          case 'initialTasks':
+            partial.initialTasks = items;
+            break;
         }
       }
     }
@@ -276,10 +291,10 @@ export async function runStart(options: StartOptions): Promise<void> {
         cliChannel.setActiveMission(mission.title);
         cliChannel.pushSystemMessage(
           `✓ Missão criada: "${mission.title}"\n` +
-          `  ID: ${mission.id}\n` +
-          `  Tasks: ${mission.tasks.length}\n` +
-          `  Autonomia: ${mission.autonomyLevel}\n\n` +
-          `O agente agora opera no contexto desta missão.`
+            `  ID: ${mission.id}\n` +
+            `  Tasks: ${mission.tasks.length}\n` +
+            `  Autonomia: ${mission.autonomyLevel}\n\n` +
+            `O agente agora opera no contexto desta missão.`
         );
       } catch (err) {
         cliChannel.pushSystemMessage(

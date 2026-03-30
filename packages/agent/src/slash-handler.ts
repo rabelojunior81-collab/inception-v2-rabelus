@@ -35,7 +35,7 @@ const HELP_TEXT = `Comandos disponíveis:
 
 function formatMission(mission: Mission): string {
   const pending = mission.tasks.filter(
-    (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress,
+    (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress
   );
   const completed = mission.tasks.filter((t) => t.status === TaskStatus.Completed);
 
@@ -59,7 +59,7 @@ function formatMission(mission: Mission): string {
 
 function formatTaskList(mission: Mission): string {
   const pending = mission.tasks.filter(
-    (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress,
+    (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress
   );
 
   if (pending.length === 0) {
@@ -108,7 +108,7 @@ function formatStatus(ctx: SlashCommandContext): string {
   if (ctx.activeMission) {
     const m = ctx.activeMission;
     const pending = m.tasks.filter(
-      (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress,
+      (t) => t.status === TaskStatus.Pending || t.status === TaskStatus.InProgress
     ).length;
     lines.push(`Missão:   ${m.title} [${m.status}] — ${pending} task(s) pendente(s)`);
   } else {
@@ -120,7 +120,7 @@ function formatStatus(ctx: SlashCommandContext): string {
 
 export async function handleSlashCommand(
   input: string,
-  ctx: SlashCommandContext,
+  ctx: SlashCommandContext
 ): Promise<SlashCommandResult> {
   const trimmed = input.trim();
 
@@ -182,7 +182,11 @@ export async function handleSlashCommand(
               TaskStatus.Completed
             );
           }
-          return { type: 'display', output: `[Task concluída e persistida] ${rest}`, handled: true };
+          return {
+            type: 'display',
+            output: `[Task concluída e persistida] ${rest}`,
+            handled: true,
+          };
         }
         return {
           type: 'display',
@@ -197,7 +201,11 @@ export async function handleSlashCommand(
         }
         if (ctx.activeMission && ctx.missionProtocol) {
           await ctx.missionProtocol.addTask(ctx.activeMission.id, rest);
-          return { type: 'display', output: `[Task adicionada e persistida] ${rest}`, handled: true };
+          return {
+            type: 'display',
+            output: `[Task adicionada e persistida] ${rest}`,
+            handled: true,
+          };
         }
         return {
           type: 'display',
@@ -253,6 +261,10 @@ export async function handleSlashCommand(
       };
 
     default:
-      return { type: 'unknown', output: `Comando desconhecido: /${cmd}. Use /help para ver os disponíveis.`, handled: false };
+      return {
+        type: 'unknown',
+        output: `Comando desconhecido: /${cmd}. Use /help para ver os disponíveis.`,
+        handled: false,
+      };
   }
 }

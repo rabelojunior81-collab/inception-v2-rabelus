@@ -16,13 +16,13 @@ O plano original tinha 6 SS incluindo `fix-tools-memory-package`. Esse item foi 
 
 ## Sub-sprints
 
-| SS | Nome | Gaps resolve | Dependência | Paralela com |
-|----|------|-------------|-------------|--------------|
-| ss-4.1 | spec-discord-channel | G5 (spec) | — | ss-4.3 |
-| ss-4.2 | impl-discord-channel | G5 | depois 4.1 | — |
-| ss-4.3 | spec-browser-tool | — (spec) | — | ss-4.1 |
-| ss-4.4 | impl-browser-tool | — | depois 4.3 | depois 4.2 |
-| ss-4.5 | cleanup-provider-enum | G3, G5 | — | todas |
+| SS     | Nome                  | Gaps resolve | Dependência | Paralela com |
+| ------ | --------------------- | ------------ | ----------- | ------------ |
+| ss-4.1 | spec-discord-channel  | G5 (spec)    | —           | ss-4.3       |
+| ss-4.2 | impl-discord-channel  | G5           | depois 4.1  | —            |
+| ss-4.3 | spec-browser-tool     | — (spec)     | —           | ss-4.1       |
+| ss-4.4 | impl-browser-tool     | —            | depois 4.3  | depois 4.2   |
+| ss-4.5 | cleanup-provider-enum | G3, G5       | —           | todas        |
 
 **ss-4.1 e ss-4.3 podem rodar em paralelo (são specs).**
 **ss-4.2 e ss-4.4 rodam em paralelo entre si (após suas specs).**
@@ -36,14 +36,15 @@ O plano original tinha 6 SS incluindo `fix-tools-memory-package`. Esse item foi 
 
 Estado atual: `packages/channels/discord/src/index.ts` é `export {}`.
 
-| Arquivo | O que fazer |
-|---------|-------------|
+| Arquivo                                  | O que fazer                                           |
+| ---------------------------------------- | ----------------------------------------------------- |
 | `packages/channels/discord/src/index.ts` | Implementar `DiscordChannel` implementando `IChannel` |
-| `packages/channels/discord/package.json` | Adicionar `discord.js: ^14` em dependencies |
+| `packages/channels/discord/package.json` | Adicionar `discord.js: ^14` em dependencies           |
 
 **Padrão de referência:** `packages/channels/telegram/src/index.ts`
 
 **Spec técnica (brief ss-4.1):**
+
 - Implementar `IChannel`: `send()`, `onMessage()`, `start()`, `stop()`
 - Usar `discord.js v14` (slash commands + reactions)
 - Suporte a approval via reactions/buttons (padrão `ApprovalPrompt`)
@@ -54,12 +55,13 @@ Estado atual: `packages/channels/discord/src/index.ts` é `export {}`.
 
 Estado atual: `packages/tools/browser/src/index.ts` é `export {}`.
 
-| Arquivo | O que fazer |
-|---------|-------------|
-| `packages/tools/browser/src/index.ts` | Implementar `BrowserTool` com Playwright |
+| Arquivo                               | O que fazer                                |
+| ------------------------------------- | ------------------------------------------ |
+| `packages/tools/browser/src/index.ts` | Implementar `BrowserTool` com Playwright   |
 | `packages/tools/browser/package.json` | Adicionar `playwright: ^1` em dependencies |
 
 **Spec técnica (brief ss-4.3):**
+
 - Tools: `BrowserNavigate`, `BrowserScreenshot`, `BrowserClick`, `BrowserFill`, `BrowserSelect`
 - `SecurityManager.validateNetworkRequest()` antes de qualquer `page.goto()`
 - Contexto isolado por sessão (novo `BrowserContext` por AgentLoop)
@@ -71,13 +73,14 @@ Estado atual: `packages/tools/browser/src/index.ts` é `export {}`.
 Estado atual: 9 `ProviderId` no enum sem pacote correspondente:
 `openrouter`, `kilo`, `groq`, `together`, `anyscale`, `deepseek`, `mistral`, `cohere`, `perplexity`
 
-| Arquivo | O que fazer |
-|---------|-------------|
-| `packages/types/src/providers.ts` | Adicionar JSDoc `@future` + link de decisão para os 9 |
-| `docs/decisions/provider-stubs.md` (novo) | Documento explicando por que existem no enum sem implementação |
-| `packages/types/src/providers.ts` | `sandbox: 'none'` — adicionar JSDoc `@unimplemented` com referência ao G3 |
+| Arquivo                                   | O que fazer                                                               |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `packages/types/src/providers.ts`         | Adicionar JSDoc `@future` + link de decisão para os 9                     |
+| `docs/decisions/provider-stubs.md` (novo) | Documento explicando por que existem no enum sem implementação            |
+| `packages/types/src/providers.ts`         | `sandbox: 'none'` — adicionar JSDoc `@unimplemented` com referência ao G3 |
 
 **Formato JSDoc:**
+
 ```typescript
 /** @future Planned provider — not yet implemented. See docs/decisions/provider-stubs.md */
 openrouter = 'openrouter',

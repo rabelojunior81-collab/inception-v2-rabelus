@@ -43,17 +43,17 @@ O wizard (`inception mission create`) é interativo e segue o mesmo padrão do `
 
 ### Mapeamento Orgânico (Skill → Configuração)
 
-| Escolha no wizard | Efeito automático |
-|---|---|
-| tipo `Web Scraping` | HttpGetTool + HttpPostTool habilitados, browser MCP sugerido |
-| tipo `Development` | ReadFileTool + WriteFileTool + RunCommandTool, git na allowlist |
-| techStack `Python` | python, pip, venv, pytest adicionados em `allowedCommands` |
-| techStack `Docker` | docker, docker-compose, kubectl adicionados |
-| skill `Deploy/DevOps` | gh, ssh, scp, rsync adicionados |
-| autonomia `Full` | `AutonomyLevel.Full`, approval gates desativados |
-| autonomia `Supervised` | `AutonomyLevel.Supervised`, gates ativos para tools destrutivas |
-| metodologia `TDD` | contexto TDD injetado no system prompt |
-| metodologia `Research-First` | modo Auditor (A) primeiro, depois Executor (B) |
+| Escolha no wizard            | Efeito automático                                               |
+| ---------------------------- | --------------------------------------------------------------- |
+| tipo `Web Scraping`          | HttpGetTool + HttpPostTool habilitados, browser MCP sugerido    |
+| tipo `Development`           | ReadFileTool + WriteFileTool + RunCommandTool, git na allowlist |
+| techStack `Python`           | python, pip, venv, pytest adicionados em `allowedCommands`      |
+| techStack `Docker`           | docker, docker-compose, kubectl adicionados                     |
+| skill `Deploy/DevOps`        | gh, ssh, scp, rsync adicionados                                 |
+| autonomia `Full`             | `AutonomyLevel.Full`, approval gates desativados                |
+| autonomia `Supervised`       | `AutonomyLevel.Supervised`, gates ativos para tools destrutivas |
+| metodologia `TDD`            | contexto TDD injetado no system prompt                          |
+| metodologia `Research-First` | modo Auditor (A) primeiro, depois Executor (B)                  |
 
 ---
 
@@ -61,18 +61,18 @@ O wizard (`inception mission create`) é interativo e segue o mesmo padrão do `
 
 Quando o agente está rodando (`inception start` ou `inception mission start <id>`), o usuário pode digitar:
 
-| Comando | Ação |
-|---|---|
-| `/mission` | Exibe missão ativa: título, progresso, tasks |
-| `/mission create` | Abre o wizard de missão **dentro do chat** (sem readline, sem pausar o Ink) |
-| `/task list` | Lista tasks pendentes da missão ativa |
-| `/task done <texto>` | Marca task como concluída no banco |
-| `/task add <desc>` | Cria nova task na missão ativa |
-| `/note <texto>` | Persiste entrada no journal da missão |
-| `/rules` | Exibe regras e restrições ativas |
-| `/pause` | Salva estado da missão e encerra graciosamente |
-| `/status` | Estado geral: provider, modelo, tokens, missão, tools |
-| `/stop` | Cancela wizard em andamento e retorna ao modo de chat normal |
+| Comando              | Ação                                                                        |
+| -------------------- | --------------------------------------------------------------------------- |
+| `/mission`           | Exibe missão ativa: título, progresso, tasks                                |
+| `/mission create`    | Abre o wizard de missão **dentro do chat** (sem readline, sem pausar o Ink) |
+| `/task list`         | Lista tasks pendentes da missão ativa                                       |
+| `/task done <texto>` | Marca task como concluída no banco                                          |
+| `/task add <desc>`   | Cria nova task na missão ativa                                              |
+| `/note <texto>`      | Persiste entrada no journal da missão                                       |
+| `/rules`             | Exibe regras e restrições ativas                                            |
+| `/pause`             | Salva estado da missão e encerra graciosamente                              |
+| `/status`            | Estado geral: provider, modelo, tokens, missão, tools                       |
+| `/stop`              | Cancela wizard em andamento e retorna ao modo de chat normal                |
 
 ### Wizard Inline — Como Funciona
 
@@ -102,17 +102,17 @@ O sistema mantém um cache de modelos disponíveis em `~/.inception/models-cache
 
 ### Endpoints por provider
 
-| Provider | Endpoint |
-|---|---|
-| Anthropic | `GET /v1/models` (Bearer token) |
-| OpenAI | `GET /v1/models` |
-| Ollama | `GET http://localhost:11434/api/tags` |
-| Google Gemini | `GET /v1beta/models` |
-| OpenRouter | `GET /v1/models` |
-| Kimi / Moonshot | `GET /v1/models` |
-| Z.AI | `GET /api/paas/v4/models` |
-| Bailian / DashScope | `GET /compatible-mode/v1/models` |
-| Outros OpenAI-compat | `GET /v1/models` |
+| Provider             | Endpoint                              |
+| -------------------- | ------------------------------------- |
+| Anthropic            | `GET /v1/models` (Bearer token)       |
+| OpenAI               | `GET /v1/models`                      |
+| Ollama               | `GET http://localhost:11434/api/tags` |
+| Google Gemini        | `GET /v1beta/models`                  |
+| OpenRouter           | `GET /v1/models`                      |
+| Kimi / Moonshot      | `GET /v1/models`                      |
+| Z.AI                 | `GET /api/paas/v4/models`             |
+| Bailian / DashScope  | `GET /compatible-mode/v1/models`      |
+| Outros OpenAI-compat | `GET /v1/models`                      |
 
 ---
 
@@ -122,11 +122,11 @@ O sistema mantém um cache de modelos disponíveis em `~/.inception/models-cache
 
 Schema em `packages/protocol/src/schema.ts`. Tabelas:
 
-| Tabela | Conteúdo |
-|--------|----------|
+| Tabela     | Conteúdo                                                                     |
+| ---------- | ---------------------------------------------------------------------------- |
 | `missions` | Registro completo de cada missão (título, tipo, status, autonomia, metadata) |
-| `tasks` | Tasks associadas a cada missão (status, technicalStatus, gate, dependências) |
-| `journal` | Entradas imutáveis de journal (snapshots arquivados, relatórios finais) |
+| `tasks`    | Tasks associadas a cada missão (status, technicalStatus, gate, dependências) |
+| `journal`  | Entradas imutáveis de journal (snapshots arquivados, relatórios finais)      |
 
 **Caminho padrão:** `~/.inception/missions.db`
 
@@ -165,16 +165,17 @@ packages/channels/cli/src/
 
 ### Fases e Branches
 
-| Fase | Branch | Snapshot Tag |
-|------|--------|-------------|
-| 0 — ESLint CI | `feat/mission-system` | `snapshot/mission/phase-0` |
-| 1 — Protocol | `feat/mission-system` | `snapshot/mission/phase-1` |
-| 2 — CLI Commands | `feat/mission-system` | `snapshot/mission/phase-2` |
+| Fase               | Branch                | Snapshot Tag               |
+| ------------------ | --------------------- | -------------------------- |
+| 0 — ESLint CI      | `feat/mission-system` | `snapshot/mission/phase-0` |
+| 1 — Protocol       | `feat/mission-system` | `snapshot/mission/phase-1` |
+| 2 — CLI Commands   | `feat/mission-system` | `snapshot/mission/phase-2` |
 | 3 — Slash Commands | `feat/mission-system` | `snapshot/mission/phase-3` |
-| 4 — Auto-Update | `feat/mission-system` | `snapshot/mission/phase-4` |
-| 5 — Integração | `feat/mission-system` | `snapshot/mission/phase-5` |
+| 4 — Auto-Update    | `feat/mission-system` | `snapshot/mission/phase-4` |
+| 5 — Integração     | `feat/mission-system` | `snapshot/mission/phase-5` |
 
 ### Rollback
+
 ```bash
 git reset --hard snapshot/mission/phase-N
 ```
@@ -191,11 +192,11 @@ git reset --hard snapshot/mission/phase-N
 
 ## Modos do Agente (IMP)
 
-| Modo | Código | Quando usar |
-|------|--------|-------------|
-| Auditor | A | Planejamento, análise, sem execução |
-| Executor | B | Implementação ativa |
-| Archivist | C | Consolidação, preservação no journal |
-| Verifier | D | Leitura apenas (SAGRADO — nunca modifica) |
+| Modo      | Código | Quando usar                               |
+| --------- | ------ | ----------------------------------------- |
+| Auditor   | A      | Planejamento, análise, sem execução       |
+| Executor  | B      | Implementação ativa                       |
+| Archivist | C      | Consolidação, preservação no journal      |
+| Verifier  | D      | Leitura apenas (SAGRADO — nunca modifica) |
 
 A metodologia `Research-First` inicia o agente no modo **A** (Auditor) e faz transição para **B** (Executor) após o plano estar validado.

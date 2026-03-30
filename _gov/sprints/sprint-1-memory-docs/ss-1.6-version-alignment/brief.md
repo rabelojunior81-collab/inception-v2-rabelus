@@ -21,16 +21,19 @@ Atualizar todos os `package.json` do monorepo para `version: "2.0.0"`, eliminand
 ## Scope
 
 ### Dentro:
+
 - Todos os `package.json` dentro de `packages/`, `channels/`, `tools/`, `apps/`
 - Root `package.json` (já em 2.0.0 — confirmar)
 
 ### Fora:
+
 - `node_modules`
 - `package-lock.json` / `pnpm-lock.yaml` (são gerados)
 
 ## Spec Técnica
 
 ### Abordagem:
+
 Usar script para encontrar todos os package.json e atualizar `"version": "0.0.0"` para `"version": "2.0.0"`.
 
 ```bash
@@ -40,19 +43,23 @@ grep -r '"version": "0.0.0"' --include="package.json" -l \
 ```
 
 ### Arquivos a modificar:
+
 Todos os `package.json` com `"version": "0.0.0"` — estimativa: ~20 arquivos.
 
 ### Arquivos a NÃO tocar:
+
 - `pnpm-lock.yaml`
 - `node_modules/**`
 
 ## Validação
 
 ### Testes do Claude (automated):
+
 - [ ] `grep -r '"version": "0.0.0"' --include="package.json" --exclude-dir=node_modules` retorna vazio
 - [ ] `pnpm build` → verde após a mudança
 
 ### Testes do Usuário (manual):
+
 - [ ] `pnpm -r exec cat package.json | grep '"version"'` mostra todos em 2.0.0
 
 ## Commit Message

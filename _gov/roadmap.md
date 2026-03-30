@@ -2,9 +2,9 @@
 
 > Atualizado ao início e fim de cada sub-sprint. Fonte da verdade sobre o estado do desenvolvimento.
 
-**Última atualização:** 2026-03-27
-**Sprint ativa:** Sprint 6 — CI Fixes (em andamento)
-**Branch ativa:** `feat/gov-sprint-6` → PR para `main`
+**Última atualização:** 2026-03-30
+**Sprint ativa:** Sprint 7 — Format Compliance (em andamento)
+**Branch ativa:** `feat/gov-sprint-6` → PR para `main` (PR#2)
 
 ---
 
@@ -19,6 +19,7 @@
 | Sprint 4 | Stubs                   | ✅ done | `feat/gov-sprint-4` | 2026-03-26 | 2026-03-26 |
 | Sprint 5 | Filesystem Sanitization | ✅ done | `feat/gov-sprint-5` | 2026-03-26 | 2026-03-26 |
 | Sprint 6 | CI Fixes — Audit-driven | ✅ done | `feat/gov-sprint-6` | 2026-03-27 | 2026-03-27 |
+| Sprint 7 | Format Compliance       | 🔄 wip  | `feat/gov-sprint-6` | 2026-03-30 | —          |
 
 ---
 
@@ -421,3 +422,31 @@ passado por erros introduzidos nas sprints de governança.
 | G19 | Zero testes para protocol, core, config, channels, providers | 3      | ss-3.6 | ✅ done (feat/gov-sprint-3) |
 | G20 | allowedUrls não passado ao AgentLoop/ExecutionContext        | 2      | ss-2.5 | ✅ done (ec18560)           |
 | G21 | CI executa pnpm build 3x sem cache entre jobs                | 3      | ss-3.5 | ✅ done (feat/gov-sprint-3) |
+| C1  | ESLint import/no-unresolved — artifact paths incompleto      | 6      | ss-6.1 | ✅ done (feat/gov-sprint-6) |
+| C2  | pnpm test:coverage falha — @vitest/coverage-v8 ausente       | 6      | ss-6.2 | ✅ done (feat/gov-sprint-6) |
+| C3  | 4 testes "no error = success" sem assertions reais           | 6      | ss-6.3 | ✅ done (feat/gov-sprint-6) |
+| C4  | pnpm format:check falha — 41 arquivos CRLF vs LF             | 7      | ss-7.1 | 🔄 wip                      |
+
+---
+
+## Sprint 7: Format Compliance
+
+**Objetivo:** Corrigir falha de `pnpm format:check` em CI — 41 arquivos gerados no Windows têm
+CRLF enquanto Prettier exige LF (`"endOfLine": "lf"`).
+**Origem:** Descoberta após CI `lint-and-typecheck` continuar falhando pós-Sprint 6.
+
+| SS     | Nome                | Resolve | Paralela? |
+| ------ | ------------------- | ------- | --------- |
+| ss-7.1 | prettier-format-fix | C4      | única     |
+
+### Checklist de Conclusão Sprint 7
+
+```
+[x] pnpm format executado — 41 arquivos normalizados para LF
+[ ] pnpm format:check → exit 0
+[ ] pnpm lint → 0 errors (sem regressão)
+[ ] pnpm typecheck → 30/30 (sem regressão)
+[ ] pnpm test → 131 testes (sem regressão)
+[ ] CI lint-and-typecheck → ✅
+[ ] PR#2 mergeado para main
+```
